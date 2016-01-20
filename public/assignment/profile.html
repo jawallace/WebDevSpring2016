@@ -1,0 +1,111 @@
+<html>
+	
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Profile | Form Maker</title>
+
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link rel="stylesheet" href="/assignment/css/main.css">
+	<head>
+
+	<body>
+		
+		<!-- Page header and top level navigation -->
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<header class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            			<span class="sr-only">Toggle navigation</span>
+            			<span class="icon-bar"></span>
+            			<span class="icon-bar"></span>
+            			<span class="icon-bar"></span>
+          			</button>	
+					<a class="navbar-brand">Form Maker</a>
+				</header>
+			
+				<section id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#">Username</a></li>
+						<li><a href="#">Logout</a></li>
+					</ul>
+				</section>
+			</div>
+		</nav>
+
+		<!-- Page content -->
+		<section class="container-fluid">
+			<div class="row">
+                <nav class="col-sm-3 col-md-2 sidebar">
+                    <ul class="nav nav-sidebar">
+                        <li><a href="./home.html">Home</a></li>
+                        <li class="active"><a href="./profile.html">Profile</a></li>
+                        <li><a href="./admin.html">Admin</a></li>
+                        <li><a href="./forms.html">Forms</a></li>
+                    </ul>
+                </nav>
+                
+                <section class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    <header>
+                        <h1 class="page-header">Profile</h1>
+                    </header>
+
+                    <form class="form-horizontal">
+                        <!-- Username input -->
+                        <div class="form-group">
+                            <label for="username" class="col-sm-2 control-label">Username</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="username" placeholder="Username">
+                            </div>
+                        </div>
+                        
+                        <!-- Password input -->
+                        <div class="form-group">
+                            <label for="password" class="col-sm-2 control-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="password" placeholder="Password">
+                            </div>
+                        </div>
+                        
+                        <!-- First name input -->
+                        <div class="form-group">
+                            <label for="fname" class="col-sm-2 control-label">First Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="fname" placeholder="First Name">
+                            </div>
+                        </div>
+                        
+                        <!-- Last name input -->
+                        <div class="form-group">
+                            <label for="lname" class="col-sm-2 control-label">Last Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="lname" placeholder="Last Name">
+                            </div>
+                        </div>
+                        
+                        <!-- Email input -->
+                        <div class="form-group">
+                            <label for="email" class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="email" placeholder="Email">
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <a href="./profile.html" class="btn btn-default">Update</a>
+                            </div>
+                        </div>
+                    </form>
+				</section>
+			</div>
+		</section>
+	</body>
+
+	<!-- Javascripts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</html>
