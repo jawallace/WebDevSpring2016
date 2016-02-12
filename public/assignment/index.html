@@ -1,0 +1,40 @@
+<html ng-app="FormBuilderApp">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Form Maker</title>
+
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        <link rel="stylesheet" href="/assignment/css/dashboard.css">
+        <link rel="stylesheet" href="/assignment/css/styles.css">
+	<head>
+
+	<body>
+		<div ng-include="'header/header.view.html'"></div>
+        <section class="container-fluid">
+            <div class="row">
+                <nav class="col-sm-3 col-md-2 sidebar">
+                    <div ng-include="'sidebar/sidebar.view.html'"></div>
+                </nav>
+
+                <section class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    <div ui-view></div>
+                </section>
+            </div>
+        </section>
+	</body>
+
+	<!-- Javascripts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" 
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" 
+            crossorigin="anonymous">
+    </script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js"></script>
+
+    <script src="app.js"></script>
+    <script src="config.js"></script>
+</html>
