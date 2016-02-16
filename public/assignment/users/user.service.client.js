@@ -112,8 +112,9 @@
                 var theUser = self.users[i];
                 
                 if (theUser['_id'] === id) {
-                    for (prop in user) {
+                    for (var prop in user) {
                         if (user.hasOwnProperty(prop)) {
+                            console.log(prop);
                             theUser[prop] = user[prop];
                         }
                     }
