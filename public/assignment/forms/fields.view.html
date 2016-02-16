@@ -1,246 +1,217 @@
-<html>
-	
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+<header>
+    <h1 class="page-header">Forms : Registration Form</h1>
+</header>
 
-        <title>Forms | Form Maker</title>
+<nav>
+    <ul class="nav nav-tabs">
+        <li role="presentation"><a href="./forms.html">Forms</a></li>
+        <li role="presentation" class="active"><a href="javascript:void()">Fields</a></li>
+    </ul>
+</nav>
 
-		<!-- Stylesheets -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-        <link rel="stylesheet" href="/assignment/css/dashboard.css">
-        <link rel="stylesheet" href="/assignment/css/main.css">
-	<head>
+<div class="tab-content">
+    <div role="tab-panel" class="tab-pane active">
+       
+        <form>
+            <!-- First Name Control -->
+            <div class="form-group">
+                <label for="fname">First Name</label>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="fname" placeholder="First Name">
+                    </div>
+                    <div class="col-sm-3 btn-group" role="group">
+                        <button class="btn btn-default" type="button" title="Edit Field">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Clone Field">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Remove Field">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Reorder Field">
+                            <span class="glyphicon glyphicon-align-justify"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-	<body>
-		
-		<!-- Page content -->
-		<section class="container-fluid">
-			<div class="row">
-                <section class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <header>
-                        <h1 class="page-header">Forms : Registration Form</h1>
-                    </header>
+            <!-- Last Name Control -->
+            <div class="form-group">
+                <label for="lname">Last Name</label>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="lname" placeholder="Last Name">
+                    </div>
+                    <div class="col-sm-3 btn-group" role="group">
+                        <button class="btn btn-default" type="button" title="Edit Field">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Clone Field">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Remove Field">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Reorder Field">
+                            <span class="glyphicon glyphicon-align-justify"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DoB Control -->
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" id="dob">
+                    </div>
+                    <div class="col-sm-3 btn-group" role="group">
+                        <button class="btn btn-default" type="button" title="Edit Field">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Clone Field">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Remove Field">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Reorder Field">
+                            <span class="glyphicon glyphicon-align-justify"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-                    <nav>
-                        <ul class="nav nav-tabs">
-                            <li role="presentation"><a href="./forms.html">Forms</a></li>
-                            <li role="presentation" class="active"><a href="javascript:void()">Fields</a></li>
-                        </ul>
-                    </nav>
-
-                    <div class="tab-content">
-                        <div role="tab-panel" class="tab-pane active">
-                           
-                            <form>
-                                <!-- First Name Control -->
-                                <div class="form-group">
-                                    <label for="fname">First Name</label>
-                                    <div class="row">
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="fname" placeholder="First Name">
-                                        </div>
-                                        <div class="col-sm-3 btn-group" role="group">
-                                            <button class="btn btn-default" type="button" title="Edit Field">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Clone Field">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Remove Field">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Reorder Field">
-                                                <span class="glyphicon glyphicon-align-justify"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Last Name Control -->
-                                <div class="form-group">
-                                    <label for="lname">Last Name</label>
-                                    <div class="row">
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="lname" placeholder="Last Name">
-                                        </div>
-                                        <div class="col-sm-3 btn-group" role="group">
-                                            <button class="btn btn-default" type="button" title="Edit Field">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Clone Field">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Remove Field">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Reorder Field">
-                                                <span class="glyphicon glyphicon-align-justify"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- DoB Control -->
-                                <div class="form-group">
-                                    <label for="dob">Date of Birth</label>
-                                    <div class="row">
-                                        <div class="col-sm-9">
-                                            <input type="date" class="form-control" id="dob">
-                                        </div>
-                                        <div class="col-sm-3 btn-group" role="group">
-                                            <button class="btn btn-default" type="button" title="Edit Field">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Clone Field">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Remove Field">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Reorder Field">
-                                                <span class="glyphicon glyphicon-align-justify"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Gender Control -->
-                                <div class="form-group">
-                                    <label for="gender">Gender</label>
-                                    <div class="row">
-                                        <div class="col-sm-9">
-                                            <select class="form-control" id="gender">
-                                                <option>Male</option>
-                                                <option>Female</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-3 btn-group" role="group">
-                                            <button class="btn btn-default" type="button" title="Edit Field">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Clone Field">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Remove Field">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Reorder Field">
-                                                <span class="glyphicon glyphicon-align-justify"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Roles Control -->
-                                <div class="form-group">
-                                    <label>Roles</label>
-                                    <div class="row">
-                                        <div class="col-sm-9">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" value="" checked>
-                                                    Admin
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" value="">
-                                                    Student 
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" value="" checked>
-                                                    User 
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3 btn-group" role="group">
-                                            <button class="btn btn-default" type="button" title="Edit Field">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Clone Field">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Remove Field">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Reorder Field">
-                                                <span class="glyphicon glyphicon-align-justify"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- License Control -->
-                                <div class="form-group">
-                                    <label>License Agreement</label>
-                                    <div class="row">
-                                        <div class="col-sm-9">
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="license" id="licenseYes" value="licenseYes" checked>
-                                                    Yes 
-                                                </label>
-                                            </div>
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="license" id="licenseNo" value="licenseNo">
-                                                    No
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-3 btn-group" role="group">
-                                            <button class="btn btn-default" type="button" title="Edit Field">
-                                                <span class="glyphicon glyphicon-pencil"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Clone Field">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Remove Field">
-                                                <span class="glyphicon glyphicon-remove"></span>
-                                            </button>
-                                            <button class="btn btn-default" type="button" title="Reorder Field">
-                                                <span class="glyphicon glyphicon-align-justify"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <hr />
-
-                                <!-- New Field Control -->
-                                <div class="form-group">
-                                    <label>Add New Field</label>
-                                    <div class="row">
-                                        <div class="col-sm-9">
-                                            <select class="form-control" id="newField">
-                                                <option>Single Line Text</option>
-                                                <option>Date</option>
-                                                <option>Dropdown</option>
-                                                <option>Checkboxes</option>
-                                                <option>Radio Buttons</option>
-                                                <option>Paragraph Text Field</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-3 btn-group" role="group">
-                                            <button class="btn btn-default" type="button">
-                                                <span class="glyphicon glyphicon-plus"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                            </form>
+            <!-- Gender Control -->
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <select class="form-control" id="gender">
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 btn-group" role="group">
+                        <button class="btn btn-default" type="button" title="Edit Field">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Clone Field">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Remove Field">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Reorder Field">
+                            <span class="glyphicon glyphicon-align-justify"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Roles Control -->
+            <div class="form-group">
+                <label>Roles</label>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="" checked>
+                                Admin
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="">
+                                Student 
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="" checked>
+                                User 
+                            </label>
                         </div>
                     </div>
-				</section>
-			</div>
-		</section>
-	</body>
+                    <div class="col-sm-3 btn-group" role="group">
+                        <button class="btn btn-default" type="button" title="Edit Field">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Clone Field">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Remove Field">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Reorder Field">
+                            <span class="glyphicon glyphicon-align-justify"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- License Control -->
+            <div class="form-group">
+                <label>License Agreement</label>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="license" id="licenseYes" value="licenseYes" checked>
+                                Yes 
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="license" id="licenseNo" value="licenseNo">
+                                No
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 btn-group" role="group">
+                        <button class="btn btn-default" type="button" title="Edit Field">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Clone Field">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Remove Field">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                        <button class="btn btn-default" type="button" title="Reorder Field">
+                            <span class="glyphicon glyphicon-align-justify"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-	<!-- Javascripts -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-</html>
+            <hr />
+
+            <!-- New Field Control -->
+            <div class="form-group">
+                <label>Add New Field</label>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <select class="form-control" id="newField">
+                            <option>Single Line Text</option>
+                            <option>Date</option>
+                            <option>Dropdown</option>
+                            <option>Checkboxes</option>
+                            <option>Radio Buttons</option>
+                            <option>Paragraph Text Field</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3 btn-group" role="group">
+                        <button class="btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+</div>

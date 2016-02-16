@@ -1,99 +1,70 @@
-<html>
-	
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+<header>
+    <h1 class="page-header">Admin</h1>
+</header>
 
-        <title>Admin | Form Maker</title>
+<section>
+    <header>
+        <h3 class="sub-header">Users</h3>
+    </header>
 
-		<!-- Stylesheets -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-        <link rel="stylesheet" href="/assignment/css/dashboard.css">
-        <link rel="stylesheet" href="/assignment/css/main.css">
-	<head>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><span class="caret"></span> Username</th>
+                    <th><span class="caret"></span> Password</th>
+                    <th><span class="caret"></span> Role</th>
+                    <th><span class="caret"></span> Action</th>
+                </tr>
+                
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" id="username" placeholder="Username">
+                    </td>
+                    <td>
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" id="role" placeholder="Role 1, Role 2">
+                    </td>
+                    <td class="text-center table-controls">
+                        <a href="#"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
+                </tr>
+            </thead>
 
-	<body>
-
-		<!-- Page content -->
-		<section class="container-fluid">
-			<div class="row">
-                <section class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                    <header>
-                        <h1 class="page-header">Admin</h1>
-                    </header>
-
-                    <section>
-                        <header>
-                            <h3 class="sub-header">Users</h3>
-                        </header>
-
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th><span class="caret"></span> Username</th>
-                                        <th><span class="caret"></span> Password</th>
-                                        <th><span class="caret"></span> Role</th>
-                                        <th><span class="caret"></span> Action</th>
-                                    </tr>
-                                    
-                                    <tr>
-                                        <td>
-                                            <input type="text" class="form-control" id="username" placeholder="Username">
-                                        </td>
-                                        <td>
-                                            <input type="password" class="form-control" id="password" placeholder="Password">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" id="role" placeholder="Role 1, Role 2">
-                                        </td>
-                                        <td class="text-center table-controls">
-                                            <a href="#"><span class="glyphicon glyphicon-plus"></span></a>
-                                            <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                                        </td>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <tr>
-                                        <td>alice</td>
-                                        <td></td>
-                                        <td>student</td>
-                                        <td class="text-center table-controls">
-                                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                                        </td>
-                                    </tr>
-                                    
-                                    <tr>
-                                        <td>bob</td>
-                                        <td></td>
-                                        <td>faculty | admin</td>
-                                        <td class="text-center table-controls">
-                                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                                        </td>
-                                    </tr>
-                                   
-                                    <tr>
-                                        <td>charlie</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-center table-controls">
-                                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                                            <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-				</section>
-			</div>
-		</section>
-	</body>
-
-	<!-- Javascripts -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-</html>
+            <tbody>
+                <tr>
+                    <td>alice</td>
+                    <td></td>
+                    <td>student</td>
+                    <td class="text-center table-controls">
+                        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>bob</td>
+                    <td></td>
+                    <td>faculty | admin</td>
+                    <td class="text-center table-controls">
+                        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td>charlie</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-center table-controls">
+                        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

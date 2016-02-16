@@ -1,5 +1,5 @@
 <!-- Page header and top level navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="HeaderController as header">
     <div class="container-fluid">
         <header class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -13,8 +13,8 @@
     
         <section id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="./register.html">Register</a></li>
-                <li><a href="./login.html">Login</a></li>
+                <li ui-sref-active="active"><a ui-sref="register">Register</a></li>
+                <li ui-sref-active="active"><a ui-sref="login">Login</a></li>
                 <li><a href="#">Username</a></li>
                 <li><a href="#">Logout</a></li>
             </ul>
