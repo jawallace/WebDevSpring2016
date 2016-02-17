@@ -86,10 +86,11 @@
                 
                 if (user['_id'] === id) {
                     index = i;
+                    break;
                 }
             }
 
-            if (index) {
+            if (index !== undefined) {
                 self.users.splice(index, 1);
             }
 

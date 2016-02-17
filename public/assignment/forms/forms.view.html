@@ -11,7 +11,7 @@
 
 <div class="tab-content">
     <div role="tab-panel" class="tab-pane active">
-        <div class="table-responsive">
+        <div class="table-responsive" ng-controller="FormsController as FormsCtrl">
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -20,37 +20,21 @@
                     </tr>
                     <tr>
                         <td>
-                            <input type="text" class="form-control" id="form-name" placeholder="Name">
+                            <input type="text" class="form-control" ng-model="FormsCtrl.formName" placeholder="Name">
                         </td>
                         <td class="text-center table-controls">
-                            <a href="#"><span class="glyphicon glyphicon-plus"></span></a>
-                            <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a ng-click="FormsCtrl.addForm()"><span class="glyphicon glyphicon-plus"></span></a>
+                            <a ng-click="FormsCtrl.updateForm()"><span class="glyphicon glyphicon-pencil"></span></a>
                         </td>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td><a href="./form-fields.html">Registration Form</a></td>
+                    <tr ng-repeat="form in FormsCtrl.forms">
+                        <td><a href="./form-fields.html">{{ form.title }}</a></td>
                         <td class="text-center table-controls">
-                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                            <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td><a href="./form-fields.html">Contact List</a></td>
-                        <td class="text-center table-controls">
-                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                            <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                        </td>
-                    </tr>
-                   
-                    <tr>
-                        <td><a href="./form-fields.html">To Do List</a></td>
-                        <td class="text-center table-controls">
-                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                            <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a ng-click="FormsCtrl.deleteForm($index)"><span class="glyphicon glyphicon-remove"></span></a>
+                            <a ng-click="FormsCtrl.selectForm($index)"><span class="glyphicon glyphicon-pencil"></span></a>
                         </td>
                     </tr>
                 </tbody>
