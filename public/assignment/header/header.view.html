@@ -1,5 +1,5 @@
 <!-- Page header and top level navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="HeaderController as header">
+<nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="HeaderController as HeaderCtrl">
     <div class="container-fluid">
         <header class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -12,11 +12,15 @@
         </header>
     
         <section id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" ng-if="HeaderCtrl.isLoggedIn === false">
                 <li ui-sref-active="active"><a ui-sref="register">Register</a></li>
                 <li ui-sref-active="active"><a ui-sref="login">Login</a></li>
-                <li><a href="#">Username</a></li>
-                <li><a href="#">Logout</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" ng-if="HeaderCtrl.isLoggedIn === true">
+                <li><a>{{ HeaderCtrl.username }}</a></li>
+                <li><a ui-sref="profile">Profile</a></li>
+                <li><a ng-click="HeaderCtrl.logout()" href="javascript:void(0)">Logout</a></li>
+                <li ng-show="HeaderCtrl.isAdmin === true"><a ui-sref="admin">Admin</a></li>
             </ul>
         </section>
     </div>
