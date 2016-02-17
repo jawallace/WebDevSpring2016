@@ -4,6 +4,8 @@
     angular.module('FormBuilderApp')
            .controller('HeaderController', HeaderController);
 
+    HeaderController.$inject = [ '$rootScope', '$state' ];
+
     function HeaderController($rootScope, $state) {
         var vm = this;
 

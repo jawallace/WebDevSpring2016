@@ -4,6 +4,8 @@
     angular.module('FormBuilderApp')
            .controller('LoginController', LoginController);
 
+    LoginController.$inject = [ 'UserService', '$rootScope', '$state' ];
+
     function LoginController(UserService, $rootScope, $state) {
         var vm = this;
         

@@ -4,6 +4,8 @@
     angular.module('FormBuilderApp')
            .controller('FormsController', FormsController);
 
+    FormsController.$inject = [ 'FormService', '$rootScope' ];
+
     function FormsController(FormService, $rootScope) {
         var vm = this;
         

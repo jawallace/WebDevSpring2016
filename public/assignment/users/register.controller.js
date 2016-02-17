@@ -4,6 +4,8 @@
     angular.module('FormBuilderApp')
            .controller('RegisterController', RegisterController);
 
+    RegisterController.$inject = [ '$rootScope', '$state', 'UserService' ];
+
     function RegisterController($rootScope, $state, UserService) {
         var vm = this;
         

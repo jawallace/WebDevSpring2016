@@ -4,6 +4,8 @@
     angular.module('FormBuilderApp')
            .controller('ProfileController', ProfileController);
 
+    ProfileController.$inject = [ '$rootScope', 'UserService' ];
+
     function ProfileController($rootScope, UserService) {
         var vm = this;
        

@@ -4,6 +4,8 @@
     angular.module('FormBuilderApp')
            .controller('SidebarController', SidebarController);
 
+    SidebarController.$inject = [ '$rootScope' ];
+
     function SidebarController($rootScope) {
         var vm = this;
         
