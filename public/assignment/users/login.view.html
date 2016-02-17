@@ -2,12 +2,12 @@
     <h1 class="page-header">Login</h1>
 </header>
 
-<form class="form-horizontal" ng-controller="LoginController as loginCtrl">
+<form class="form-horizontal">
     <!-- Username input -->
     <div class="form-group">
         <label for="username" class="col-sm-2 control-label">Username</label>
         <div class="col-sm-10">
-            <input type="text" class="form-control" ng-model="loginCtrl.user.username" placeholder="Username">
+            <input type="text" class="form-control" ng-model="vm.user.username" placeholder="Username">
         </div>
     </div>
     
@@ -15,14 +15,14 @@
     <div class="form-group">
         <label for="password" class="col-sm-2 control-label">Password</label>
         <div class="col-sm-10">
-            <input type="password" class="form-control" ng-model="loginCtrl.user.password" placeholder="Password">
+            <input type="password" class="form-control" ng-model="vm.user.password" placeholder="Password">
         </div>
     </div>
 
     <!-- Login Button -->
     <div class="form-group">
         <div class="col-sm-10 col-sm-offset-2">
-            <button class="btn btn-primary btn-block" ng-click="loginCtrl.login(loginCtrl.user)">Login</a>
+            <button class="btn btn-primary btn-block" ng-click="vm.login(vm.user)">Login</a>
         </div>
     </div>
 </form>
