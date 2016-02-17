@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    angular.module('FormBuilderApp')
-           .controller('MainController', MainController);
+    angular
+        .module('FormBuilderApp')
+        .controller('MainController', MainController);
 
     MainController.$inject = [ '$state', '$rootScope' ];
 

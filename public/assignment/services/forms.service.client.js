@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    angular.module('FormBuilderApp')
-           .factory('FormService', FormService);
+    angular
+        .module('FormBuilderApp')
+        .factory('FormService', FormService);
 
     function FormService() {
         var theForms = [];

@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    angular.module('FormBuilderApp')
-           .controller('SidebarController', SidebarController);
+    angular
+        .module('FormBuilderApp')
+        .controller('SidebarController', SidebarController);
 
     SidebarController.$inject = [ '$rootScope' ];
 

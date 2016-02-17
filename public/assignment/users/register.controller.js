@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    angular.module('FormBuilderApp')
-           .controller('RegisterController', RegisterController);
+    angular
+        .module('FormBuilderApp')
+        .controller('RegisterController', RegisterController);
 
     RegisterController.$inject = [ '$rootScope', '$state', 'UserService' ];
 

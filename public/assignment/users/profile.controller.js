@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    angular.module('FormBuilderApp')
-           .controller('ProfileController', ProfileController);
+    angular
+        .module('FormBuilderApp')
+        .controller('ProfileController', ProfileController);
 
     ProfileController.$inject = [ '$rootScope', 'UserService' ];
 

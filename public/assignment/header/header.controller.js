@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    angular.module('FormBuilderApp')
-           .controller('HeaderController', HeaderController);
+    angular
+        .module('FormBuilderApp')
+        .controller('HeaderController', HeaderController);
 
     HeaderController.$inject = [ '$rootScope', '$state' ];
 

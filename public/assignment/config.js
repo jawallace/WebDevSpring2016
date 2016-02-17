@@ -1,8 +1,9 @@
 (function() {
     'use strict';
 
-    angular.module('FormBuilderApp')
-           .config(Configuration);
+    angular
+        .module('FormBuilderApp')
+        .config(Configuration);
 
     function Configuration($stateProvider, $urlRouterProvider) {
        
