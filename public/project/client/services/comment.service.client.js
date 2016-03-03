@@ -114,7 +114,7 @@
             callback(this.comments);
         }
 
-        function updateComment(commentId, newComment) {
+        function updateComment(commentId, newComment, callback) {
             var length = this.comments.length;
             
             var theComment;

@@ -1,8 +1,8 @@
 (function () {
     'use strict';
     
-    module
-        .angular('TheBookClub')
+    angular 
+        .module('TheBookClub')
         .controller('CRUDController', CRUDController);
 
     function CRUDController() {

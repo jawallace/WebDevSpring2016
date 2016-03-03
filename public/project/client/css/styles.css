@@ -33,3 +33,9 @@
 .book-cover {
 	text-align: center;
 }
+
+/** Table Styles **/
+td.table-controls {
+    vertical-align: middle !important;
+}
+
