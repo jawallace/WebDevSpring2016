@@ -1,19 +1,35 @@
 /**
- * Styles for Form Maker
+ * Styles for The Book Club
  *
  */
 
 
 /**
- * Table styles
+ * Search Result Styles
  */
-td.table-controls {
-    vertical-align: middle !important;
+.book {
+    border-bottom: 1px solid black;
+    padding: 40px 0;
+    color: #595959;
 }
 
-/**
- * Tab Styles
- */
-.tab-content {
-    padding: 20px 10px;
+.book-title {
+    color: black;
+    font-size: 1.5em; 
+    margin-right: 10px;
+}
+
+.book-description {
+    margin-top: 10px;
+}
+
+.msg {
+    font-style: italic;
+    color: #595959;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.book-cover {
+	text-align: center;
 }

@@ -14,14 +14,12 @@
                 url: '/',
                 templateUrl: 'views/home/home.view.html'
             })
-        /*
             .state('search', {
                 url: '/search',
-                templateUrl: 'users/register.view.html',
-                controller: 'RegisterController',
+                templateUrl: 'views/search/search.view.html',
+                controller: 'SearchController',
                 controllerAs: 'vm'
             })
-        */
         ;
             
     }

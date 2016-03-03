@@ -1,0 +1,41 @@
+<header>
+    <h1 class="page-header">Search Google Books API</h1>
+</header>
+
+<div class="col-sm-10 col-sm-offset-1">
+    <form class="form-horizontal" ng-submit="vm.search(vm.query, 0)">
+		<div class="row row-eq-height">
+			<div class="col-md-11 col-sm-8">
+				<input type="text" class="form-control" ng-model="vm.query" placeholder="e.g. Consider Phlebas, Iain M. Banks">
+			</div>
+			<div class="col-md-1 col-sm-4">
+				<img src="https://books.google.com/googlebooks/images/poweredby.png">
+			</div>
+		</div>
+    </form>
+
+    <div class="msg" ng-show="vm.msg">{{ vm.msg }}</div>
+
+    <div class="row book" ng-repeat="book in vm.results">
+        <div class="col-sm-2 book-cover">
+            <img ng-src="{{ book.cover.thumb }}">
+        </div>
+
+        <div class="col-sm-10">
+            <div>
+                <span class="book-title">{{ book.title }} <span ng-if="book.subtitle">({{ book.subtitle }})</span></span> 
+                {{ book.authors.join(", ") }}
+            </div>
+
+            <div>
+                <span ng-if="book.publisher">{{ book.publisher }} |<span> 
+                <span ng-if="book.date">{{ book.date | date }} |<span>
+                <span ng-if="book.pages">{{ book.pages }} pages</span>
+            </div>
+
+            <div class="book-description">
+                {{ book.description }}
+            </div>
+        </div>
+    </div>
+<div>
