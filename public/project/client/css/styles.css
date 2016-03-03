@@ -1,0 +1,19 @@
+/**
+ * Styles for Form Maker
+ *
+ */
+
+
+/**
+ * Table styles
+ */
+td.table-controls {
+    vertical-align: middle !important;
+}
+
+/**
+ * Tab Styles
+ */
+.tab-content {
+    padding: 20px 10px;
+}
