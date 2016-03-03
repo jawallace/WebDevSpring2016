@@ -20,6 +20,18 @@
                 controller: 'SearchController',
                 controllerAs: 'vm'
             })
+            .state('crud', {
+                url: '/crud',
+                templateUrl: 'views/crud/crud.view.html',
+                controller: 'CRUDController',
+                controllerAs: 'vm'
+            })
+            .state('crud.comments', {
+                url: '/comments',
+                templateUrl: 'views/crud/comments/comments.view.html',
+                controller: 'CRUDCommentsController',
+                controllerAs: 'vm'
+            })
         ;
             
     }
