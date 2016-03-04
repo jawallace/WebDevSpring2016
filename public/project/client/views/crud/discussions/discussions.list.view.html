@@ -1,0 +1,38 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Topic</th>
+            <th>Actions</th>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" class="form-control" ng-model="vm.selected.id" disabled>
+            </td>
+            <td>
+                <select class="form-control" ng-model="vm.selected.userDetails" ng-options="user.firstName for user in vm.users">
+            </td>
+            <td>
+                <input type="text" class="form-control" ng-model="vm.selected.topic" placeholder="Topic text">
+            </td>
+            <td class="table-controls text-center">
+                <a ng-click="vm.addDiscussion()"><span class="glyphicon glyphicon-plus"></span></a>
+                <a ng-click="vm.updateDiscussion()"><span class="glyphicon glyphicon-pencil"></span></a>
+            </td>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr ng-repeat="discussion in vm.discussions">
+            <td class="text-center">{{ discussion.id }}</td>
+            <td>{{ discussion.userDetails.firstName }}</td>
+            <td><a href="/discussions/{{ discussion.id }}">{{ discussion.topic }}</a></td>
+            <td class="table-controls text-center">
+                <a ng-click="vm.deleteDiscussion(discussion)"><span class="glyphicon glyphicon-remove"></span></a>
+                <a ng-click="vm.selectDiscussion($index)"><span class="glyphicon glyphicon-pencil"></span></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+

@@ -32,6 +32,16 @@
                 controller: 'CRUDCommentsController',
                 controllerAs: 'vm'
             })
+            .state('crud.discussions', {
+                url: '/discussions',
+                templateUrl: 'views/crud/discussions/discussions.view.html'
+            })
+            .state('crud.discussions.list', {
+                url: '/list',
+                templateUrl: 'views/crud/discussions/discussions.list.view.html',
+                controller: 'DiscussionListController',
+                controllerAs: 'vm'
+            });
         ;
             
     }
