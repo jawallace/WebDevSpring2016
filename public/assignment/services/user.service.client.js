@@ -28,7 +28,7 @@
             theUsers.push({ '_id': 234, firstName: "Bob", lastName: "Hope", username: "bob", password: "bob", roles: ["admin"] });
             theUsers.push({ '_id': 345, firstName: "Charlie", lastName: "Brown", username: "charlie", password: "charlie", roles: ["faculty"] });
             theUsers.push({ '_id': 456, firstName: "Dan", lastName: "Craig", username: "dan", password: "dan", roles: ["faculty", "admin"] });
-            theUsers.push({ '_id': 567, firstName: "Edward", lastName: "Norton", username: "ed", password: "ed": roles: ["student"] });
+            theUsers.push({ '_id': 567, firstName: "Edward", lastName: "Norton", username: "ed", password: "ed", roles: ["student"] });
         }
 
         /**
