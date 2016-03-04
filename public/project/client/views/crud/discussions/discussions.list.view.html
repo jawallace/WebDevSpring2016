@@ -27,7 +27,7 @@
         <tr ng-repeat="discussion in vm.discussions">
             <td class="text-center">{{ discussion.id }}</td>
             <td>{{ discussion.userDetails.firstName }}</td>
-            <td><a href="/discussions/{{ discussion.id }}">{{ discussion.topic }}</a></td>
+            <td><a ui-sref="crud.discussions.details({ id: discussion.id })">{{ discussion.topic }}</a></td>
             <td class="table-controls text-center">
                 <a ng-click="vm.deleteDiscussion(discussion)"><span class="glyphicon glyphicon-remove"></span></a>
                 <a ng-click="vm.selectDiscussion($index)"><span class="glyphicon glyphicon-pencil"></span></a>

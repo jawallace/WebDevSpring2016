@@ -23,6 +23,7 @@
             comments: comments,
             createComment: createComment,
             getAllComments: getAllComments,
+            getCommentById: getCommentById,
             getCommentsForUser: getCommentsForUser,
             deleteComment: deleteComment,
             updateComment: updateComment
@@ -77,6 +78,20 @@
 
         function getAllComments(callback) {
             callback(comments); 
+        }
+       
+        function getCommentById(id, callback) {
+            var length = this.comments.length;
+            for (var i = 0; i < length; i++) {
+                var theComment = this.comments[i];
+                
+                if (theComment.id === id) {
+                    callback(theComment);
+                    return;
+                }
+            }
+
+            callback(null);
         }
 
         function getCommentsForUser(userId, callback) {

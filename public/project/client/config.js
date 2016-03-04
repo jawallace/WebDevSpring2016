@@ -7,7 +7,8 @@
 
     function Configuration($stateProvider, $urlRouterProvider) {
        
-        $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.when('/crud/discussions', '/crud/discussions/list');
 
         $stateProvider
             .state('home', {
@@ -34,14 +35,20 @@
             })
             .state('crud.discussions', {
                 url: '/discussions',
-                templateUrl: 'views/crud/discussions/discussions.view.html'
+                templateUrl: 'views/crud/discussions/discussions.view.html',
             })
             .state('crud.discussions.list', {
                 url: '/list',
                 templateUrl: 'views/crud/discussions/discussions.list.view.html',
                 controller: 'DiscussionListController',
                 controllerAs: 'vm'
-            });
+            })
+            .state('crud.discussions.details', {
+                url: '/details/:id',
+                templateUrl: 'views/crud/discussions/discussions.details.view.html',
+                controller: 'DiscussionDetailsController',
+                controllerAs: 'vm'
+            })
         ;
             
     }
