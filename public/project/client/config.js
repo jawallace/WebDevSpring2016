@@ -9,6 +9,7 @@
        
         $urlRouterProvider.otherwise('/');
         $urlRouterProvider.when('/crud/discussions', '/crud/discussions/list');
+        $urlRouterProvider.when('/crud/readings', '/crud/readings/list');
 
         $stateProvider
             .state('home', {
@@ -47,6 +48,16 @@
                 url: '/details/:id',
                 templateUrl: 'views/crud/discussions/discussions.details.view.html',
                 controller: 'DiscussionDetailsController',
+                controllerAs: 'vm'
+            })
+            .state('crud.readings', {
+                url: '/readings',
+                templateUrl: 'views/crud/readings/readings.view.html'
+            })
+            .state('crud.readings.list', {
+                url: '/list',
+                templateUrl: 'views/crud/readings/readings.list.view.html',
+                controller: 'ReadingListController',
                 controllerAs: 'vm'
             })
         ;

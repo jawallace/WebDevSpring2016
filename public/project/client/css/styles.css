@@ -84,3 +84,7 @@ td.table-controls {
 .discussion-new-comment textarea {
     resize: none;
 }
+
+a {
+    cursor: pointer;
+}

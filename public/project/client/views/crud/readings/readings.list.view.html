@@ -1,0 +1,43 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Book ID</th>
+            <th>Actions</th>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" class="form-control" ng-model="vm.selected.id" disabled>
+            </td>
+            <td>
+                <input type="date" class="form-control" ng-model="vm.selected.startDate">
+            </td>
+            <td>
+                <input type="date" class="form-control" ng-model="vm.selected.endDate">
+            </td>
+            <td>
+                <input type="text" class="form-control" ng-model="vm.selected.book">
+            </td>
+            <td class="table-controls text-center">
+                <a ng-click="vm.addReading()"><span class="glyphicon glyphicon-plus"></span></a>
+                <a ng-click="vm.updateReading()"><span class="glyphicon glyphicon-pencil"></span></a>
+            </td>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr ng-repeat="reading in vm.readings">
+            <td class="text-center">{{ reading.id }}</td>
+            <td class="text-center">{{ reading.startDate | date }}</td>
+            <td class="text-center">{{ reading.endDate | date }}</td>
+            <td class="text-center"><a ui-sref="crud.readings.details({ id: reading.id })">{{ reading.book }}</a></td>
+            <td class="table-controls text-center">
+                <a ng-click="vm.deleteReading(reading)"><span class="glyphicon glyphicon-remove"></span></a>
+                <a ng-click="vm.selectReading($index)"><span class="glyphicon glyphicon-pencil"></span></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
