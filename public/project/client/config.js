@@ -77,6 +77,12 @@
                 controller: 'GroupListController',
                 controllerAs: 'vm'
             })
+            .state('crud.groups.details', {
+                url: '/details/:id',
+                templateUrl: 'views/crud/groups/groups.details.view.html',
+                controller: 'GroupDetailsController',
+                controllerAs: 'vm'
+            })
         ;
             
     }

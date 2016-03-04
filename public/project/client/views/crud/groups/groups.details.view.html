@@ -1,0 +1,27 @@
+<h4>{{ vm.name }}</h4>
+
+<div class="row">
+    <div class="col-md-5 col-sm-12">
+        <h5>Readings</h5>
+        
+        <div class="row" ng-repeat="reading in vm.readings">
+            <div class="col-sm-12">
+                <a ui-sref="crud.readings.details({ id: reading })">{{ reading }}</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-5 col-sm-12">
+        <h5>Members</h5>
+        <div class="row" ng-repeat="admin in vm.admins">
+            <div class="col-sm-12">
+                {{ admin.username }} (Admin)
+            </div>
+        </div>
+        <div class="row" ng-repeat="member in vm.members">
+            <div class="col-sm-12">
+                {{ member.username }} 
+            </div>
+        </div>
+    </div>
+</div>
