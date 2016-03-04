@@ -88,3 +88,11 @@ td.table-controls {
 a {
     cursor: pointer;
 }
+
+.text-preview {
+    text-overflow: ellipsis;
+}
+
+.reading-discussions {
+    position: relative;
+}

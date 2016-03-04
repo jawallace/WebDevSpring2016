@@ -60,6 +60,12 @@
                 controller: 'ReadingListController',
                 controllerAs: 'vm'
             })
+            .state('crud.readings.details', {
+                url: '/details/:id',
+                templateUrl: 'views/crud/readings/readings.details.view.html',
+                controller: 'ReadingDetailsController',
+                controllerAs: 'vm'
+            })
         ;
             
     }

@@ -1,0 +1,39 @@
+<section>
+    <header>
+        <h4 class="subtitle">Details</h4>
+    </header>
+
+    <div class="row">
+        <div class="col-sm-2 book-cover">
+            <img ng-src="{{ vm.book.cover.thumb }}">
+        </div>
+
+        <div class="col-sm-10">
+            <div class="book-title">{{ vm.book.title }}</div>
+            <div>Start Date: {{ vm.startDate | date }}</div>   
+            <div>End Date: {{ vm.endDate | date }}</div>   
+        </div>
+    </div>
+</section>
+
+<section>
+    <header>
+        <h4 class="subtitle">Discussions</h4>
+    </header>
+
+    <div class="reading-discussions" ng-repeat="discussion in vm.discussions">
+        <div class="discussion-comment-delete">
+            <a ng-click="vm.removeDiscussion(discussion)">
+                <span class="glyphicon glyphicon-remove"></span>
+            </a>
+        </div>
+        <div class="text-preview">
+            <a ui-sref="crud.discussions.details({ id: discussion.id })">
+                {{ discussion.topic }}
+            </a>
+            &nbsp;
+            ({{ discussion.comments.length }} Comments)
+        </div>
+    </div>
+</section>
+
