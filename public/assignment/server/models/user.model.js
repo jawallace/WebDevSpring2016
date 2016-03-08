@@ -17,7 +17,7 @@ module.exports = function() {
     return service;
 
     function activate() {
-        var mockData = require('user.mock.json');
+        var mockData = require('./user.mock.json');
         
         for (var i = 0; i < mockData.length; i++) {
             users.push(mockData[i]);
@@ -25,6 +25,7 @@ module.exports = function() {
     }
 
     function createUser(user) {
+        user['_id'] = new Date().getTime();
         users.push(user);
 
         return users;
@@ -68,7 +69,7 @@ module.exports = function() {
                 }
             }
 
-            return u.user;
+            return users;
         }
     }
 
@@ -77,13 +78,14 @@ module.exports = function() {
 
         if (u) {
             users.splice(u.index, 1);
-            return u.user;
+            return users;
         }
     }
 
     function findUser(id) {
+        console.log(id);
         for (var i = 0; i < users.length; i++) {
-            if (users[i].id === id) {
+            if (users[i]['_id'] === id) {
                 return {
                     index: i,
                     user: users[i]

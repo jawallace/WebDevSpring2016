@@ -16,7 +16,7 @@ module.exports = function() {
     return service;
 
     function activate() {
-        var mockData = require('form.mock.json');
+        var mockData = require('./form.mock.json');
         for (var i = 0; i < mockData.length; i++) {
             forms.push(mockData[i]);
         }
@@ -72,7 +72,7 @@ module.exports = function() {
 
     function findForm(id) {
         for (var i = 0; i < forms.length; i++) {
-            if (forms[i].id === id) {
+            if (forms[i]['_id'] === id) {
                 return {
                     index: i,
                     form: forms[i]
