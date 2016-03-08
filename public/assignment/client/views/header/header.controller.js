@@ -29,7 +29,7 @@
         function updateLoggedInStatus(newValue, oldValue) {
             vm.isLoggedIn = !!newValue;
             vm.username = newValue ? newValue.username : "";
-            vm.isAdmin = newValue && newValue.role === "admin";
+            vm.isAdmin = newValue && newValue.roles.indexOf("admin") > -1;
         }
     }
 
