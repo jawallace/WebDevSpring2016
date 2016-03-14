@@ -1,5 +1,7 @@
 module.exports = function() {
 
+    var utils = require('./util.js')();
+    
     var users = [];
 
     var service = {
@@ -63,12 +65,7 @@ module.exports = function() {
         var u = findUser(id);
 
         if (u) {
-            for (var key in user) {
-                if (user.hasOwnProperty(key)) {
-                    u.user[key] = user[key];    
-                }
-            }
-
+            utils.extend(u.user, user);
             return users;
         }
     }
@@ -83,7 +80,6 @@ module.exports = function() {
     }
 
     function findUser(id) {
-        console.log(id);
         for (var i = 0; i < users.length; i++) {
             if (users[i]['_id'] === id) {
                 return {

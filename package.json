@@ -25,6 +25,7 @@
   "dependencies": {
     "body-parser": "^1.15.0",
     "express": "^3.4.8",
+    "guid": "0.0.12",
     "lru-cache": "^4.0.0",
     "multer": "^1.1.0",
     "request": "^2.69.0"

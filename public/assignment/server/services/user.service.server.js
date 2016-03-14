@@ -1,7 +1,10 @@
 module.exports = function(app, UserModel) {
 
+    var utils = require('./util.js')();
+
     var baseUrl = '/api/assignment/user';
     var idParam = baseUrl + '/:id';
+    var errorMsg = 'User not found';
 
     app.post(baseUrl, createUser);
     app.get(baseUrl, getUser);
@@ -31,25 +34,25 @@ module.exports = function(app, UserModel) {
     function getUserById(req, res) {
         var id = parseInt(req.params.id);
         console.log(id);
-        sendOr404(UserModel.findById(id), res);
+        utils.sendOr404(UserModel.findById(id), res, errorMsg);
     }
 
     function updateUser(req, res) {
         var id = parseInt(req.params.id);
-        sendOr404(UserModel.update(id, req.body), res);
+        utils.sendOr404(UserModel.update(id, req.body), res, errorMsg);
     }
 
     function deleteUser(req, res) {
         var id = parseInt(req.params.id);
-        sendOr404(UserModel.delete(id), res);
+        utils.sendOr404(UserModel.delete(id), res, errorMsg);
     }
 
     function getUserByCredentials(credentials, res) {
-        sendOr404(UserModel.findByCredentials(credentials), res);
+        utils.sendOr404(UserModel.findByCredentials(credentials), res, errorMsg);
     }
 
     function getUserByUsername(username, res) {
-        sendOr404(UserModel.findByUsername(username), res);
+        utils.sendOr404(UserModel.findByUsername(username), res, errorMsg);
     }
 
     function getAllUsers(res) {
@@ -58,11 +61,4 @@ module.exports = function(app, UserModel) {
         res.json(users);
     }
 
-    function sendOr404(result, res) {
-        if (result) {
-            res.json(result);
-        } else {
-            res.status(404).json({ error: 'User not found' });
-        }
-    }
 }

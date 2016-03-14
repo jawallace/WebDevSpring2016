@@ -1,5 +1,7 @@
 module.exports = function() {
-    
+
+    var utils = require('./util.js')();
+
     var forms = [];
 
     var service = {
@@ -7,8 +9,17 @@ module.exports = function() {
         findAll: findAllForms,
         findById: findFormById,
         findFormByTitle: findFormByTitle,
+        findFormsForUser: findFormsForUser,
         update: updateForm,
-        delete: deleteForm
+        delete: deleteForm,
+
+        fields: {
+            create: createField,
+            findAll: findAllFields,
+            findById: findFieldById,
+            update: updateField,
+            delete: deleteField
+        }
     };
 
     activate();
@@ -48,15 +59,17 @@ module.exports = function() {
         }
     }
 
+    function findFormsForUser(userId) {
+        return forms.filter(function(form) {
+            return form.userId === userId;
+        });
+    }
+
     function updateForm(id, form) {
         var f = findForm(id);
 
         if (f) {
-            for (var key in form) {
-                if (form.hasOwnProperty(key)) {
-                    f.form[key] = form[key];
-                }
-            }
+            utils.extend(f.form, form);
             return f.form;
         }
     }
@@ -76,6 +89,54 @@ module.exports = function() {
                 return {
                     index: i,
                     form: forms[i]
+                };
+            }
+        }
+    }
+
+    function createField(form, field) {
+        form.fields.push(field);
+
+        return form.fields;
+    }
+
+    function findAllFields(form) {
+        return form.fields;
+    }
+
+    function findFieldById(form, id) {
+        var f = findField(form, id);
+
+        if (f) {
+            return f.field;
+        }
+    }
+
+    function updateField(form, id, field) {
+        var f = findField(form, id);
+
+        if (f) {
+            utils.extend(f.field, field);
+            return f.field;
+        }
+    }
+
+    function deleteField(form, id) {
+        var f = findField(form, id);
+
+        if (f) {
+            form.fields.splice(f.index, 1);
+            return f.field;
+        }
+    }
+
+    function findField(form, fieldId) {
+        var fields = form.fields;
+        for (var i = 0; i < fields.length; i++) {
+            if (fields[i]['_id'] === fieldId) {
+                return {
+                    field: fields[i],
+                    index: i
                 };
             }
         }
