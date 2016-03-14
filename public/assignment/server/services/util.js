@@ -1,4 +1,5 @@
 module.exports = function() {
+    'use strict';
 
     return {
         sendOr404: sendOr404

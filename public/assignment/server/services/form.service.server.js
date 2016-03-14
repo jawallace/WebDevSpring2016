@@ -1,6 +1,7 @@
 module.exports = function(app, FormModel) {
+    'use strict';
 
-    var utils = require('./util.js');
+    var utils = require('./util.js')();
     var guid = require('guid');
 
     var formUrl = '/api/assignment/form/:formId';

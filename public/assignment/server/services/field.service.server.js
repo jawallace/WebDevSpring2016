@@ -1,19 +1,18 @@
 module.exports = function(app, FormModel) {
+    'use strict';
 
-    var utils = require('./util.js');
+    var utils = require('./util.js')();
     var guid = require('guid');
 
     var baseFieldUrl = '/api/assignment/form/:formId/field';
     var specificFieldUrl = baseFieldUrl + '/:fieldId';
 
-    app.use(baseFieldUrl, ensureFormExists);
+    app.get(baseFieldUrl, ensureFormExists, getFieldsForForm);
+    app.post(baseFieldUrl, ensureFormExists, createFieldForForm);
 
-    app.get(baseFieldUrl, getFieldsForForm);
-    app.post(baseFieldUrl, createFieldForForm);
-
-    app.get(specificFieldUrl, getField);
-    app.delete(specificFieldUrl, deleteField);
-    app.put(specificFieldUrl, updateField);
+    app.get(specificFieldUrl, ensureFormExists, getField);
+    app.delete(specificFieldUrl, ensureFormExists, deleteField);
+    app.put(specificFieldUrl, ensureFormExists, updateField);
 
     function ensureFormExists(req, res, next) {
         var formId = req.params.formId;
@@ -53,8 +52,4 @@ module.exports = function(app, FormModel) {
         utils.sendOr404(FormModel.fields.update(req.form, fieldId, req.body), res, 'Could not delete form');
     }
 
-    function getFieldOrSendError(req, res) {
-
-        return form;
-    }
 }

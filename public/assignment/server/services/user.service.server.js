@@ -1,4 +1,5 @@
 module.exports = function(app, UserModel) {
+    'use strict';
 
     var utils = require('./util.js')();
 
