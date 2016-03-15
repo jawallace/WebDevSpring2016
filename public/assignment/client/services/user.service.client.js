@@ -5,11 +5,13 @@
         .module('FormBuilderApp')
         .factory('UserService', UserService);
 
-    function UserService() {
-        var theUsers = [];
+    UserService.$inject = [ '$http' ];
+    function UserService($http) {
+        
+        var baseUrl = '/api/assignment/user';
 
         var service = {
-            users: theUsers,
+            findByUsername: findByUsername,
             findByUsernameAndPassword: findByUsernameAndPassword,
             findAllUsers: findAllUsers,
             createUser: createUser,
@@ -17,125 +19,70 @@
             deleteUserById: deleteUserById
         };
 
-        activate();
-
         return service;
 
         //////////////////////////////////
        
-        function activate() {
-            theUsers.push({ '_id': 123, firstName: "Alice", lastName: "Wonderland", username: "alice",  password: "alice", roles: ["student"] });
-            theUsers.push({ '_id': 234, firstName: "Bob", lastName: "Hope", username: "bob", password: "bob", roles: ["admin"] });
-            theUsers.push({ '_id': 345, firstName: "Charlie", lastName: "Brown", username: "charlie", password: "charlie", roles: ["faculty"] });
-            theUsers.push({ '_id': 456, firstName: "Dan", lastName: "Craig", username: "dan", password: "dan", roles: ["faculty", "admin"] });
-            theUsers.push({ '_id': 567, firstName: "Edward", lastName: "Norton", username: "ed", password: "ed", roles: ["student"] });
+        function findByUsername(username) {
+            var config = {
+                params: {
+                    username: username
+                }
+            };
+
+            return $http
+                .get(baseUrl, config)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        /**
-         * Find the user with the given username and password.
-         *
-         * Callback will be called with user, or null if not found.
-         *
-         * @param username string, the username to match
-         * @param password string, the password to match 
-         * @param callback fn (user), function that is called when done
-         */
-        function findByUsernameAndPassword(username, password, callback) {
-            var len = this.users.length;
-            for (var i = 0; i < len; i++) {
-                var user = this.users[i];
-                
-                if (user.username === username && user.password === password) {
-                    callback(user);
-                    return;
+        function findByUsernameAndPassword(username, password) {
+            var config = {
+                params: {
+                    username: username,
+                    password: password
                 }
-            }
+            };
 
-            callback(null);
+            return $http
+                .get(baseUrl, config)
+                .then(function (res) {
+                    return res.data;
+                });
         }
             
-        /**
-         * Find all users.
-         *
-         * Callback will be called with an array of users.
-         *
-         * @param callback fn (users), function that is called when done
-         */
-        function findAllUsers(callback) {
-            callback(this.users);
+        function findAllUsers() {
+            return $http
+                .get(baseUrl)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        /**
-         * Create a user with the given information.
-         *
-         * Callback will be called with created user.
-         *
-         * @param user object, the new user object
-         * @param callback fn (user), function that is called when done
-         */
-        function createUser(user, callback) {
-            user['_id'] = (new Date()).getTime();
-            this.users.push(user);
+        function createUser(user) {
+            return $http
+                .post(baseUrl, user)
+                .then(function(res) {
+                    return res.data;
+                });
 
-            callback(user);
         }
 
-        /**
-         * Delete the user with the given id.
-         *
-         * Callback will be called with updated list of users.
-         *
-         * @param callback fn (users), function that is called when done
-         */
-        function deleteUserById(id, callback) {
-            var len = this.users.length;
-            var index;
-
-            for (var i = 0; i < len; i++) {
-                var user = this.users[i];
-                
-                if (user['_id'] === id) {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index !== undefined) {
-                this.users.splice(index, 1);
-            }
-
-            callback(this.users);
+        function deleteUserById(id) {
+            return $http
+                .delete(baseUrl + '/' + id)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        /**
-         * If user with id exists, sets properties of the user to the properties of the provided user object.
-         *
-         * Callback will be called with updated user, or null if no user with the specified id exists.
-         *
-         * @param id integer, the id to find
-         * @param user object, the new user object
-         * @param callback fn (user), function that is called when done
-         */
-        function updateUser(id, user, callback) {
-            var len = this.users.length;
-
-            for (var i = 0; i < len; i++) {
-                var theUser = this.users[i];
-                
-                if (theUser['_id'] === id) {
-                    for (var prop in user) {
-                        if (user.hasOwnProperty(prop)) {
-                            console.log(prop);
-                            theUser[prop] = user[prop];
-                        }
-                    }
-
-                    callback(theUser);
-                    return;
-                }
-            }
-            
-            callback(null);
+        function updateUser(id, user) {
+            return $http
+                .put(baseUrl + '/' + id, user)
+                .then(function(res) {
+                    return res.data;
+                });
         }
     }
         

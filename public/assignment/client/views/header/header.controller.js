@@ -27,6 +27,7 @@
         }
 
         function updateLoggedInStatus(newValue, oldValue) {
+            console.log(newValue);
             vm.isLoggedIn = !!newValue;
             vm.username = newValue ? newValue.username : "";
             vm.isAdmin = newValue && newValue.roles.indexOf("admin") > -1;

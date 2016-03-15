@@ -15,11 +15,13 @@
         vm.register = register;
        
         function register(newUser) {
-            UserService.createUser(newUser, function(user) {
-                $rootScope.user = user;
+            UserService
+                .createUser(newUser)
+                .then(function(user) {
+                    $rootScope.user = user;
 
-                $state.go('profile');
-            });
+                    $state.go('profile');
+                });
         }
 
     }

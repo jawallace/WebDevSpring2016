@@ -24,9 +24,12 @@
 
         function update(user) {
             console.log('update', loggedInUser['_id'], user);
-            UserService.updateUser(loggedInUser['_id'], user, function(updatedUser) {
-                console.log("User, Updated User", loggedInUser, updatedUser);
-            });
+            UserService
+                .updateUser(loggedInUser['_id'], user)
+                .then(function(updatedUser) {
+                    console.log("User, Updated User", loggedInUser, updatedUser);
+                    $rootScope.user = updatedUser;
+                });
         }
     }
 
