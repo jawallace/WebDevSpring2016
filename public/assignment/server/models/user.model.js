@@ -67,7 +67,7 @@ module.exports = function() {
 
         if (u) {
             utils.extend(u.user, user);
-            return users;
+            return u.user;
         }
     }
 
