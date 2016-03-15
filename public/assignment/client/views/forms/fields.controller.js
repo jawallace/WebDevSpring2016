@@ -34,13 +34,16 @@
             FieldService
                 .createFieldForForm(formId, field)
                 .then(function(field) {
-                    console.log(field);
                     vm.fields.push(field);
                 });
         }
 
-        function removeField(field) {
-
+        function removeField(field, $index) {
+            FieldService
+                .deleteFieldFromForm(formId, field['_id'])
+                .then(function(field) {
+                    vm.fields.splice($index, 1); 
+                });
         }
 
         function _populateFieldTypes() {
