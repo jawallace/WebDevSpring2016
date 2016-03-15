@@ -8,6 +8,7 @@
     function Configuration($stateProvider, $urlRouterProvider) {
        
         $urlRouterProvider.otherwise("/");
+        $urlRouterProvider.when('/forms', '/forms/list');
 
         $stateProvider
             .state('home', {
@@ -37,9 +38,21 @@
                 templateUrl: 'views/admin/admin.view.html'
             })
             .state('forms', {
-                url: '/forms',
+                url: '/form',
                 templateUrl: 'views/forms/forms.view.html',
                 controller: 'FormsController',
+                controllerAs: 'vm'
+            })
+            .state('forms.list', {
+                url: '/list',
+                templateUrl: 'views/forms/forms.list.view.html',
+                controller: 'FormsListController',
+                controllerAs: 'vm'
+            })
+            .state('forms.fields', {
+                url: '/:formId',
+                templateUrl: 'views/forms/fields.view.html',
+                controller: 'FieldsController',
                 controllerAs: 'vm'
             });
             

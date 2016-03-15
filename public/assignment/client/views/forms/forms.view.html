@@ -1,44 +1,16 @@
 <header>
-    <h1 class="page-header">Forms</h1>
+    <h1 class="page-header">{{ vm.title }}</h1>
 </header>
 
 <nav>
     <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="javascript:void()">Forms</a></li>
-        <li role="presentation"><a href="./form-fields.html">Fields</a></li>
+        <li role="presentation" ui-sref-active="active"><a ui-sref="forms.list">Forms</a></li>
+        <li role="presentation" ui-sref-active="active"><a ui-sref="forms.fields">Fields</a></li>
     </ul>
 </nav>
 
 <div class="tab-content">
     <div role="tab-panel" class="tab-pane active">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th><span class="caret"></span> Form Name</th>
-                        <th><span class="caret"></span> Action</th>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="text" class="form-control" ng-model="vm.formName" placeholder="Name">
-                        </td>
-                        <td class="text-center table-controls">
-                            <a ng-click="vm.addForm()"><span class="glyphicon glyphicon-plus"></span></a>
-                            <a ng-click="vm.updateForm()"><span class="glyphicon glyphicon-pencil"></span></a>
-                        </td>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr ng-repeat="form in vm.forms">
-                        <td><a href="./form-fields.html">{{ form.title }}</a></td>
-                        <td class="text-center table-controls">
-                            <a ng-click="vm.deleteForm($index)"><span class="glyphicon glyphicon-remove"></span></a>
-                            <a ng-click="vm.selectForm($index)"><span class="glyphicon glyphicon-pencil"></span></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <ui-view>
     </div>
 </div>

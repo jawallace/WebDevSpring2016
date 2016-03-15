@@ -1,0 +1,29 @@
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><span class="caret"></span> Form Name</th>
+                <th><span class="caret"></span> Action</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" class="form-control" ng-model="vm.formName" placeholder="Name">
+                </td>
+                <td class="text-center table-controls">
+                    <a ng-click="vm.addForm()"><span class="glyphicon glyphicon-plus"></span></a>
+                    <a ng-click="vm.updateForm()"><span class="glyphicon glyphicon-pencil"></span></a>
+                </td>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr ng-repeat="form in vm.forms">
+                <td><a ui-sref="forms.fields({ formId: form['_id'] })">{{ form.title }}</a></td>
+                <td class="text-center table-controls">
+                    <a ng-click="vm.deleteForm($index)"><span class="glyphicon glyphicon-remove"></span></a>
+                    <a ng-click="vm.selectForm($index)"><span class="glyphicon glyphicon-pencil"></span></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

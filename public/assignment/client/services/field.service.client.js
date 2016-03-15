@@ -9,7 +9,7 @@
     function FieldService($http) {
 
         var baseFieldUrl = '/api/assignment/form/';
-        var fieldUrl = '/field'/;
+        var fieldUrl = '/field/';
 
         var service = {
             createFieldForForm: createFieldForForm,
@@ -24,15 +24,31 @@
         ////////////////////////
        
         function createFieldForForm(formId, field) {
-            return $http.post(formatUrl(formId), field);
+            return $http
+                .post(formatUrl(formId), field)
+                .then(function(res) {
+                    return res.data;    
+                });
         }
 
         function getFieldsForForm(formId) {
-            return $http.get(formatUrl(formId));
+            var url = formatUrl(formId);
+            console.log(url);
+
+            return $http
+                .get(formatUrl(formId))
+                .then(function(res) {
+                    console.log(res);
+                    return res.data;    
+                });
         }
 
         function getFieldForForm(formId, fieldId) {
-            return $http.get(formatUrl(formId, fieldId));
+            return $http
+                .get(formatUrl(formId, fieldId))
+                .then(function(res) {
+                    return res.data;    
+                });
         }
 
         function deleteFieldFromForm(formId, fieldId) {
@@ -40,7 +56,11 @@
         }
 
         function updateField(formId, fieldId, field) {
-            return $http.put(formatUrl(formId, fieldId), field);
+            return $http
+                .put(formatUrl(formId, fieldId), field)
+                .then(function(res) {
+                    return res.data;    
+                });
         }
 
         function formatUrl(formId, fieldId) {

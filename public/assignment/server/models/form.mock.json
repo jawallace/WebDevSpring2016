@@ -46,7 +46,7 @@
             {
                 "_id": "666", 
                 "label": "Email", 
-                "type": "EMAIL", 
+                "type": "TEXT", 
                 "placeholder": "Email"
             }
         ]
