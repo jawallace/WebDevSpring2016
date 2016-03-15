@@ -18,8 +18,9 @@
         vm.deleteForm = deleteForm;
         vm.updateForm = updateForm;
         vm.selectForm = selectForm;
-        
-        activate($rootScope.user['_id']);
+
+        var userId = $rootScope.user['_id']
+        activate(userId);
 
         /////////////////////////
         

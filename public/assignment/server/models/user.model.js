@@ -29,9 +29,12 @@ module.exports = function() {
 
     function createUser(user) {
         user['_id'] = new Date().getTime();
+        if (user.roles === undefined) {
+            user.roles = [];
+        }
         users.push(user);
 
-        return users;
+        return user;
     }
 
     function findAllUsers() {

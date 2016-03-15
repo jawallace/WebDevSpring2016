@@ -12,7 +12,6 @@
         var baseUserUrl = '/api/assignment/user/';
 
         var service = {
-            forms: theForms,
             createFormForUser: createFormForUser,
             findAllFormsForUser: findAllFormsForUser,
             deleteFormById: deleteFormById,
@@ -24,11 +23,19 @@
         /////////////////////////////
        
         function createFormForUser(userId, form) {
-            return $http.post(baseUserUrl + userId + '/form', form);
+            return $http
+                .post(baseUserUrl + userId + '/form', form)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
         function findAllFormsForUser(userId) {
-            return $http.get(baseUserUrl + userId + '/form');
+            return $http
+                .get(baseUserUrl + userId + '/form')
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
         function deleteFormById(formId) {
@@ -36,7 +43,11 @@
         }
 
         function updateFormById(formId, newForm) {
-            return $http.put(baseFormUrl + '/' + formId, newForm);
+            return $http
+                .put(baseFormUrl + '/' + formId, newForm)
+                .then(function(res) {
+                    return res.data;
+                });
         }
     }
 

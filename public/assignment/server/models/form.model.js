@@ -37,7 +37,7 @@ module.exports = function() {
     function createForm(form) {
         forms.push(form);
 
-        return forms;
+        return form;
     }
 
     function findAllForms() {

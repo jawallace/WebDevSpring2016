@@ -14,9 +14,9 @@ module.exports = function(app, UserModel) {
     app.delete(idParam, deleteUser);
 
     function createUser(req, res) {
-        var users = UserSerivce.create(req.body);
+        var user = UserModel.create(req.body);
 
-        res.send(users);
+        res.send(user);
     }
 
     function getUser(req, res) {
