@@ -98,7 +98,7 @@ module.exports = function() {
     function createField(form, field) {
         form.fields.push(field);
 
-        return form.fields;
+        return field;
     }
 
     function findAllFields(form) {

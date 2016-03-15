@@ -32,13 +32,9 @@
         }
 
         function getFieldsForForm(formId) {
-            var url = formatUrl(formId);
-            console.log(url);
-
             return $http
                 .get(formatUrl(formId))
                 .then(function(res) {
-                    console.log(res);
                     return res.data;    
                 });
         }
