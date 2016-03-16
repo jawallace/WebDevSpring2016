@@ -19,6 +19,7 @@ module.exports = function() {
             findAll: findAllFields,
             findById: findFieldById,
             update: updateField,
+            set: setFields,
             delete: deleteField
         }
     };
@@ -27,6 +28,8 @@ module.exports = function() {
 
     return service;
 
+    //////////////////////////
+    
     function activate() {
         var mockData = require('./form.mock.json');
         for (var i = 0; i < mockData.length; i++) {
@@ -120,6 +123,12 @@ module.exports = function() {
             utils.extend(f.field, field);
             return f.field;
         }
+    }
+    
+    function setFields(form, fields) {
+        form.fields = fields;
+
+        return fields;
     }
 
     function deleteField(form, id) {

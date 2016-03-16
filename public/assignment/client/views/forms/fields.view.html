@@ -1,69 +1,70 @@
 <form>
-    <!-- First Name Control -->
-    <div class="form-group" ng-repeat="field in vm.fields">
-        <label for="fname">{{ field.label }}</label>
-        <div class="row">
-            <div class="col-sm-9">
-                <div ng-switch="field.type">
-                    <!-- single line text -->
-                    <div ng-switch-when="TEXT">
-                        <input type="text" class="form-control" placeholder="{{ field.placeholder }}">
-                    </div>
-
-                    <!-- multi line text -->
-                    <div ng-switch-when="TEXTAREA">
-                        <textarea class="form-control" placeholder="{{ field.placeholder }}"></textarea>
-                    </div>
-                    
-                    <!-- date -->
-                    <div ng-switch-when="DATE">
-                        <input type="date" class="form-control">
-                    </div>
-                    
-                    <!-- dropdown -->
-                    <div ng-switch-when="OPTIONS">
-                        <select class="form-control">
-                            <option ng-repeat="opt in field.options" value="{{ opt.value }}">{{ opt.label }}</option>
-                        </select>
-                    </div>
-
-                    <!-- checkboxes -->
-                    <div ng-switch-when="CHECKBOXES">
-                        <div class="checkbox" ng-repeat="opt in field.options">
-                            <label>
-                                <input type="checkbox">
-                                {{ opt.label }}
-                            </label>
+    <fba-sortable fba-on-change='vm.reorder'>
+        <div class="form-group" ng-repeat="field in vm.fields">
+            <label for="fname">{{ field.label }}</label>
+            <div class="row">
+                <div class="col-sm-9">
+                    <div ng-switch="field.type">
+                        <!-- single line text -->
+                        <div ng-switch-when="TEXT">
+                            <input type="text" class="form-control" placeholder="{{ field.placeholder }}">
                         </div>
-                    </div>
 
-                    <!-- checkboxes -->
-                    <div ng-switch-when="RADIOS">
-                        <div class="radio" ng-repeat="opt in field.options">
-                            <label>
-                                <input type="radio" name="field.label">
-                                {{ opt.label }}
-                            </label>
+                        <!-- multi line text -->
+                        <div ng-switch-when="TEXTAREA">
+                            <textarea class="form-control" placeholder="{{ field.placeholder }}"></textarea>
+                        </div>
+                        
+                        <!-- date -->
+                        <div ng-switch-when="DATE">
+                            <input type="date" class="form-control">
+                        </div>
+                        
+                        <!-- dropdown -->
+                        <div ng-switch-when="OPTIONS">
+                            <select class="form-control">
+                                <option ng-repeat="opt in field.options" value="{{ opt.value }}">{{ opt.label }}</option>
+                            </select>
+                        </div>
+
+                        <!-- checkboxes -->
+                        <div ng-switch-when="CHECKBOXES">
+                            <div class="checkbox" ng-repeat="opt in field.options">
+                                <label>
+                                    <input type="checkbox">
+                                    {{ opt.label }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- checkboxes -->
+                        <div ng-switch-when="RADIOS">
+                            <div class="radio" ng-repeat="opt in field.options">
+                                <label>
+                                    <input type="radio" name="field.label">
+                                    {{ opt.label }}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-3 btn-group" role="group">
-                <button class="btn btn-default" type="button" title="Edit Field">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                </button>
-                <button class="btn btn-default" type="button" title="Clone Field">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </button>
-                <button class="btn btn-default" type="button" title="Remove Field" ng-click="vm.removeField(field, $index)">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </button>
-                <button class="btn btn-default" type="button" title="Reorder Field">
-                    <span class="glyphicon glyphicon-align-justify"></span>
-                </button>
+                <div class="col-sm-3 btn-group js-controls" role="group">
+                    <button class="btn btn-default" type="button" title="Edit Field">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button class="btn btn-default" type="button" title="Clone Field">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                    <button class="btn btn-default" type="button" title="Remove Field" ng-click="vm.removeField(field, $index)">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    <button class="btn btn-default js-handle" type="button" title="Reorder Field">
+                        <span class="glyphicon glyphicon-align-justify"></span>
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+    </fba-sortable>
 
     <hr />
 

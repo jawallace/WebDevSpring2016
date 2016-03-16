@@ -16,7 +16,8 @@
             getFieldsForForm: getFieldsForForm,
             getFieldForForm: getFieldForForm,
             deleteFieldFromForm: deleteFieldFromForm,
-            updateField: updateField
+            updateField: updateField,
+            setFieldsForForm: setFieldsForForm
         };
 
         return service;
@@ -54,6 +55,14 @@
         function updateField(formId, fieldId, field) {
             return $http
                 .put(formatUrl(formId, fieldId), field)
+                .then(function(res) {
+                    return res.data;    
+                });
+        }
+        
+        function setFieldsForForm(formId, fields) {
+            return $http
+                .put(formatUrl(formId), fields)
                 .then(function(res) {
                     return res.data;    
                 });

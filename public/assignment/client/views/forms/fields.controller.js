@@ -16,6 +16,7 @@
 
         vm.addField = addField;
         vm.removeField = removeField;
+        vm.reorder = reorder;
 
         var formId = $stateParams.formId;
         activate(formId);
@@ -43,6 +44,16 @@
                 .deleteFieldFromForm(formId, field['_id'])
                 .then(function(field) {
                     vm.fields.splice($index, 1); 
+                });
+        }
+
+        function reorder(oldIndex, newIndex) {
+            vm.fields.splice(newIndex, 0, vm.fields.splice(oldIndex, 1)[0]);
+            FieldService 
+                .setFieldsForForm(formId, vm.fields)
+                .then(function(fields) {
+                    vm.fields = fields;
+                    console.log('reordered from server!', fields);
                 });
         }
 

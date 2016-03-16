@@ -9,6 +9,7 @@ module.exports = function(app, FormModel) {
 
     app.get(baseFieldUrl, ensureFormExists, getFieldsForForm);
     app.post(baseFieldUrl, ensureFormExists, createFieldForForm);
+    app.put(baseFieldUrl, ensureFormExists, setFieldsForForm);
 
     app.get(specificFieldUrl, ensureFormExists, getField);
     app.delete(specificFieldUrl, ensureFormExists, deleteField);
@@ -34,6 +35,11 @@ module.exports = function(app, FormModel) {
         var field = req.body;
         field['_id'] = guid.raw();
         utils.sendOr404(FormModel.fields.create(req.form, field), res, 'Could not create field');
+    }
+
+    function setFieldsForForm(req, res) {
+        var fields = req.body;
+        utils.sendOr404(FormModel.fields.set(req.form, fields), res, 'Could not set fields');
     }
 
     function getField(req, res) {

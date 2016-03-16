@@ -17,3 +17,7 @@ td.table-controls {
 .tab-content {
     padding: 20px 10px;
 }
+
+.fba-sortable-placeholder {
+    opacity: 0.3;
+}
