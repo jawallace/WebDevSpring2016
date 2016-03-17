@@ -50,7 +50,7 @@
                 controllerAs: 'vm'
             })
             .state('forms.fields', {
-                url: '/:formId',
+                url: '/:formId/fields',
                 templateUrl: 'views/forms/fields.view.html',
                 controller: 'FieldsController',
                 controllerAs: 'vm'
