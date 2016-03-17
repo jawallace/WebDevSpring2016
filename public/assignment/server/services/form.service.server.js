@@ -42,6 +42,9 @@ module.exports = function(app, FormModel) {
 
         form.userId = userId;
         form['_id'] = guid.raw();
+        if (! form.fields) {
+            form.fields = [];
+        }
 
         utils.sendOr404(FormModel.create(form), res, errorMsg);
     }

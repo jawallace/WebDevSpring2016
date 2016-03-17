@@ -36,7 +36,8 @@
 
         function addForm() {
             var form = {
-                'title' : vm.formName    
+                title: vm.formName,
+
             };
 
             FormService

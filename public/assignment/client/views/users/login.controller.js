@@ -15,6 +15,14 @@
         vm.login = login;
 
         function login(user) {
+            if (! user.password) {
+                vm.msg = 'Please enter your password.';
+                return;
+            } else if (! user.username) {
+                vm.msg = 'Please enter your password.';
+                return;
+            }
+
             UserService
                 .findByUsernameAndPassword(user.username, user.password)
                 .then(function(foundUser) {
