@@ -13,10 +13,14 @@
         vm.fieldTypes = _populateFieldTypes();
         vm.fieldType; // type of new field
         vm.fields = []; // the fields in the form 
+        vm.editing = undefined; // the field currently being edited
 
         vm.addField = addField;
         vm.removeField = removeField;
         vm.reorder = reorder;
+        vm.edit = editField;
+        vm.onFinishEdit = onFinishEdit;
+        vm.onCancelEdit = resetEditing;
 
         var formId = $stateParams.formId;
         activate(formId);
@@ -53,8 +57,29 @@
                 .setFieldsForForm(formId, vm.fields)
                 .then(function(fields) {
                     vm.fields = fields;
-                    console.log('reordered from server!', fields);
                 });
+        }
+
+        function editField($index) {
+            vm.editing = vm.fields[$index];
+            vm.editingIndex = $index;
+        }
+
+        function onFinishEdit(updatedField) {
+            var id = vm.editing['_id'];
+
+            FieldService
+                .updateField(formId, id, updatedField)
+                .then(function(updated) {
+                    vm.fields[vm.editingIndex] = updated;
+
+                    resetEditing();
+                }, resetEditing);
+        }
+
+        function resetEditing() {
+            vm.editing = undefined;
+            vm.editingIndex = undefined;
         }
 
         function _populateFieldTypes() {

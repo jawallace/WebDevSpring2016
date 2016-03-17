@@ -1,0 +1,36 @@
+<div class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                {{ vm.config('displayName') }} Field
+            </div>
+            
+            <div class="modal-body">
+                <form>
+                    <!-- Label -->
+                    <div class="form-group">
+                        <label for="field-label">Label</label>
+                        <input type="text" class="form-control" id="field-label" ng-model="vm.field.label">
+                    </div>
+                    
+                    <!-- Placeholder -->
+                    <div class="form-group" ng-if="vm.config('placeholder')">
+                        <label for="field-placeholder">Placeholder</label>
+                        <input type="text" class="form-control" id="field-placeholder" ng-model="vm.field.placeholder">
+                    </div>
+
+                    <!-- Options -->
+                    <div class="form-group" ng-if="vm.config('options')">
+                        <label for="field-options">Options</label>
+                        <textarea class="form-control" id="field-options" ng-model="vm.field.optionsString"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" ng-click="vm.onCancel()">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="vm.onComplete()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
