@@ -1,0 +1,40 @@
+<header>
+    <h1 class="page-header">Register</h1>
+</header>
+
+<div class="col-lg-8 col-lg-offset-2">
+    <form>
+        <div class="form-group ng-class:{'has-error': vm.validation.fname}">
+            <label for="fname">First Name</label>
+            <input type="text" class="form-control" id="fname" ng-model="vm.user.fname" placeholder="First Name">
+            <span class="text-danger help-block" ng-show="vm.validation.fname">{{ vm.validation.fname }}</span>
+        </div>
+        
+        <div class="form-group ng-class:{'has-error': vm.validation.lname}">
+            <label for="lname">Last Name</label>
+            <input type="text" class="form-control" id="lname" ng-model="vm.user.lname" placeholder="Last Name">
+            <span class="text-danger help-block" ng-show="vm.validation.lname">{{ vm.validation.lname }}</span>
+        </div>
+        
+        <div class="form-group ng-class:{'has-error': vm.validation.username}">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" ng-model="vm.user.username" placeholder="Username">
+            <span class="text-danger help-block" ng-show="vm.validation.username">{{ vm.validation.username }}</span>
+        </div>
+        
+        <div class="form-group ng-class:{'has-error': vm.validation.password}">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" ng-model="vm.user.password" placeholder="Password">
+        </div>
+        
+        <div class="form-group ng-class:{'has-error': vm.validation.password}">
+            <label for="vpassword">Verify Password</label>
+            <input type="password" class="form-control" id="vpassword" ng-model="vm.verifyPassword" placeholder="Verify Password">
+            <span class="text-danger help-block" ng-show="vm.validation.password">{{ vm.validation.password }}</span>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-block btn-primary" ng-click="vm.register()">Register</button>
+        </div>
+    </form>
+</div>

@@ -89,6 +89,12 @@
                 controller: 'LoginController',
                 controllerAs: 'vm'
             })
+            .state('register', {
+                url: '/register',
+                templateUrl: 'views/users/register.view.html',
+                controller: 'RegisterController',
+                controllerAs: 'vm'
+            })
         ;
             
     }
