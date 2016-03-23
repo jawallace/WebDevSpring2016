@@ -83,6 +83,12 @@
                 controller: 'GroupDetailsController',
                 controllerAs: 'vm'
             })
+            .state('login', {
+                url: '/login',
+                templateUrl: 'views/users/login.view.html',
+                controller: 'LoginController',
+                controllerAs: 'vm'
+            })
         ;
             
     }
