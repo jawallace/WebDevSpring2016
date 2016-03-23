@@ -5,7 +5,8 @@
         .module('TheBookClub')
         .controller('LoginController', LoginController);
 
-    function LoginController() {
+    LoginController.$inject = [ 'UserService', '$rootScope', '$state' ];
+    function LoginController(UserService, $rootScope, $state) {
         var vm = this;
 
         vm.username; // ng-model
@@ -15,8 +16,22 @@
         vm.login = login;
 
         function login() {
-            console.log('Login!', vm.username, vm.password);
-            vm.message = "Hello, World";
+            if (! vm.password || ! vm.username) {
+                vm.message = 'Please fill in all fields.';
+                return;
+            }
+
+            UserService
+                .findByUsernameAndPassword(vm.username, vm.password)
+                .then(function(user) {
+                    console.log('Logged in ', user);
+                    $rootScope.user = user;
+                    vm.message = '';
+                    $state.go('home');
+                }, function(err) {
+                    vm.message = 'Username / Password pair not found.';
+                    vm.password = '';
+                });
         }
     }
 

@@ -1,8 +1,8 @@
 module.exports = function(app, BookModel) {
 
-    app.get('/book/:id', getBookById);
+    app.get('/api/project/book/:id', getBookById);
 
-    app.get('/book', getBooksByQuery);
+    app.get('/api/project/book', getBooksByQuery);
 
     function getBookById(req, res) {
         BookModel.getBookById(req.params.id, onApiError(res), onApiSuccess(res));
