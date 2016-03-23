@@ -11,7 +11,7 @@
             getBookById: getBookById
         };
 
-        var baseUrl = '/books'
+        var baseUrl = '/book'
         return service;
 
         function getBookByQuery(query, page) {
