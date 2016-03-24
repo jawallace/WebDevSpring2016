@@ -14,6 +14,7 @@
             findByUsername: findByUsername,
             findByUsernameAndPassword: findByUsernameAndPassword,
             findAllUsers: findAllUsers,
+            findUserById: findUserById,
             createUser: createUser,
             updateUser: updateUser,
             deleteUserById: deleteUserById
@@ -55,6 +56,14 @@
         function findAllUsers() {
             return $http
                 .get(baseUrl)
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+
+        function findUserById(id) {
+            return $http
+                .get(baseUrl + '/' + id)
                 .then(function(res) {
                     return res.data;
                 });

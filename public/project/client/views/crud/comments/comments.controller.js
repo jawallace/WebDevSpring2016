@@ -24,13 +24,17 @@
         return;
 
         function activate() {
-            UserService.findAllUsers(function(users) {
-                vm.users = users;
-            });
+            UserService
+                .findAllUsers()
+                .then(function(users) {
+                    vm.users = users;
+                });
             
-            CommentService.getAllComments(function(comments) {
-                normalizeComments(comments);
-            });
+            CommentService
+                .getAllComments()
+                .then(function(comments) {
+                    normalizeComments(comments);
+                });
         }
 
         function addComment() {
@@ -57,20 +61,21 @@
                 parentComment: vm.selected.parentComment
             };
 
-            console.log(updated);
+            CommentService
+                .updateComment(selectedComment.id, updated)
+                .then(function(updatedComment) {
+                    updatedComment.userDetails = vm.selected.userDetails;
+                    vm.comments[selectedIndex] = updatedComment;
 
-            CommentService.updateComment(selectedComment.id, updated, function(updatedComment) {
-                updatedComment.userDetails = vm.selected.userDetails;
-                vm.comments[selectedIndex] = updatedComment;
-
-                resetSelection();
-            });
+                    resetSelection();
+                });
         }
 
         function deleteComment(comment) {
-            CommentService.deleteComment(comment.id, function(comments) {
-                normalizeComments(comments);
-            });
+            CommentService
+                .deleteComment(comment.id, function(comments) {
+                    normalizeComments(comments);
+                });
         }
 
         function selectComment(index) {
@@ -91,11 +96,14 @@
             for (var i = 0; i < length; i++) {
                 var theComment = comments[i];
 
-                UserService.findUserById(theComment.user, function(user) {
-                    theComment.userDetails = user;
-                });
-
-                normalized.push(theComment);
+                (function(c) {
+                    UserService
+                        .findUserById(c.user)
+                        .then(function(user) {
+                            c.userDetails = user;
+                            normalized.push(c);
+                        });
+                }(theComment));
             }
 
             vm.comments = normalized;

@@ -38,7 +38,6 @@ module.exports = function(app, UserModel) {
 
     function getUserById(req, res) {
         var id = parseInt(req.params.id);
-        console.log(id);
         utils.sendOr404(UserModel.findById(id), res, errorMsg);
     }
 
