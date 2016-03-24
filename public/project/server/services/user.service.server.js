@@ -15,8 +15,12 @@ module.exports = function(app, UserModel) {
 
     function createUser(req, res) {
         var user = UserModel.create(req.body);
-
-        res.send(user);
+        
+        if (user) {
+            res.send(user);
+        } else {
+            res.status(400).send('User with username ' + req.body.username + ' already exists');
+        }
     }
 
     function getUser(req, res) {

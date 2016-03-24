@@ -37,7 +37,7 @@
                     $rootScope.user = user;
                     $state.go('home');
                 }, function(err) {
-                    console.log(err);  
+                    vm.validation.username = err.data;
                 });
         }
 

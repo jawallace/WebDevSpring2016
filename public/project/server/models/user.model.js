@@ -30,10 +30,18 @@ module.exports = function() {
     }
 
     function createUser(user) {
-        user['_id'] = new Date().getTime();
-        if (user.roles === undefined) {
-            user.roles = [];
+        user.username = user.username.toLowerCase();
+
+        function sameUsername(u) {
+            return u.username === user.username;
         }
+
+        if (users.filter(sameUsername).length) {
+            // do not create user with a username that already exists
+            return;
+        }
+
+        user['_id'] = new Date().getTime();
         users.push(user);
 
         return user;
