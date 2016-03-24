@@ -76,8 +76,10 @@ module.exports = function() {
             for (var i in rawData.items) {
                 result.push(normalizeBook(rawData.items[i])); 
             }
-        } else {
+        } else if (rawData.id !== undefined) {
             result = normalizeBook(rawData);
+        } else {
+            result = [];
         }
 
         next(result);
@@ -100,6 +102,10 @@ module.exports = function() {
         book.id = rawBook.id;
 
         var volumeInfo = rawBook.volumeInfo;
+        if (! volumeInfo) {
+            return;
+        }
+
         book.title = volumeInfo.title;
         book.subtitle = volumeInfo.subtitle || "";
         book.authors = volumeInfo.authors;
@@ -108,6 +114,7 @@ module.exports = function() {
         book.description = volumeInfo.description;
         book.pages = volumeInfo.pageCount;
         book.rating = volumeInfo.averageRating;
+        book.numRatings = volumeInfo.ratingsCount;
         book.cover = {
             thumb: getThumbnailCoverLink(book.id),
             small: getSmallCoverLink(book.id)

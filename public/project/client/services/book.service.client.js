@@ -26,7 +26,6 @@
             return $http
                 .get(baseUrl, { params: params })
                 .then(function (res) {
-                    console.log('getBookByQuery: ', res.data);
                     return res;
                 });
         }
@@ -35,7 +34,6 @@
             return $http
                 .get(baseUrl + '/' + id)
                 .then(function (res) {
-                    console.log('getBookById: ', res.data);
                     return res;
                 });
         }

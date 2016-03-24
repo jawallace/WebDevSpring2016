@@ -14,7 +14,7 @@ module.exports = function(app, BookModel) {
 
     function onApiError(res) {
         return function(err) {
-            res.json({ error: err });
+            res.status(400).json({ error: err });
         }
     };
     

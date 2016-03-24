@@ -18,11 +18,25 @@
                 templateUrl: 'views/home/home.view.html'
             })
             .state('search', {
-                url: '/search',
+                url: '/search?q&page',
                 templateUrl: 'views/search/search.view.html',
                 controller: 'SearchController',
                 controllerAs: 'vm'
             })
+            .state('login', {
+                url: '/login',
+                templateUrl: 'views/users/login.view.html',
+                controller: 'LoginController',
+                controllerAs: 'vm'
+            })
+            .state('register', {
+                url: '/register',
+                templateUrl: 'views/users/register.view.html',
+                controller: 'RegisterController',
+                controllerAs: 'vm'
+            })
+            
+            /* CRUD States (for Project POC) */
             .state('crud', {
                 url: '/crud',
                 templateUrl: 'views/crud/crud.view.html',
@@ -81,18 +95,6 @@
                 url: '/details/:id',
                 templateUrl: 'views/crud/groups/groups.details.view.html',
                 controller: 'GroupDetailsController',
-                controllerAs: 'vm'
-            })
-            .state('login', {
-                url: '/login',
-                templateUrl: 'views/users/login.view.html',
-                controller: 'LoginController',
-                controllerAs: 'vm'
-            })
-            .state('register', {
-                url: '/register',
-                templateUrl: 'views/users/register.view.html',
-                controller: 'RegisterController',
                 controllerAs: 'vm'
             })
         ;

@@ -13,6 +13,23 @@
     color: #595959;
 }
 
+.book-metadata {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.book-controls {
+    margin-top: 10px;
+    text-align: right;
+}
+
+@media (min-width: 768px) {
+    .book-metadata {
+        margin-top: 0;
+        text-align: left;
+    }
+}
+
 .book-title {
     color: black;
     font-size: 1.5em; 
@@ -102,3 +119,12 @@ a {
     padding: 5px 10px;
 }
 
+.rating {
+    padding: 0;
+    margin: 0;
+}
+
+.rating li {
+    display: inline;
+    list-style-type: none;
+}
