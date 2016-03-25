@@ -21,22 +21,15 @@
         activate();
 
         function activate() {
-            ReadingService.getAllReadings(function(readings) {
-                setReadings(readings);
-            });
+            ReadingService
+                .getAllReadings()
+                .then(function(readings) {
+                    setReadings(readings);
+                });
         }
 
         function addReading() {
-            var reading = {
-                endDate: vm.selected.endDate,
-                startDate: vm.selected.startDate,
-                book: vm.selected.book
-            };
-
-            ReadingService.createReading(reading, function(newReading) {
-                vm.readings.push(newReading);
-                resetSelection();
-            });
+            console.log('TODO');
         }
 
         function updateReading() {
@@ -49,22 +42,16 @@
                 discussions: vm.selected.discussions
             };
 
-            ReadingService.updateReading(selectedReading.id, reading, function(updatedReading) {
-                vm.readings[selectedIndex] = updatedReading;
-                resetSelection();
-            });
+            ReadingService
+                .updateReading(selectedReading.id, reading)
+                .then(function(updatedReading) {
+                    vm.readings[selectedIndex] = updatedReading;
+                    resetSelection();
+                });
         }
         
         function deleteReading(reading) {
-            var discussions = reading.discussions;
-
-            for (var i = 0; i < discussions.length; i++) {
-                DiscussionService.deleteDiscussion(discussions[i], function() {});
-            }
-
-            ReadingService.deleteReading(reading.id, function(readings) {
-                setReadings(readings);
-            });
+            console.log('TODO');
         }
 
         function selectReading(index) {
@@ -93,13 +80,12 @@
         }
 
         function setReadings(readings) {
-            var theReadings = [];
+            vm.readings = readings.map(function(r) {
+                r.startDate = new Date(r.startDate);
+                r.endDate= new Date(r.endDate);
 
-            for (var i = 0; i < readings.length; i++) {
-                theReadings.push(readings[i]);
-            }
-
-            vm.readings = theReadings;
+                return r;
+            });
         }
     }
 

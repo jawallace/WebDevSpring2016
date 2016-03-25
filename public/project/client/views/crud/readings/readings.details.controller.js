@@ -22,15 +22,19 @@
         function activate() {
             var id = parseInt($stateParams.id);
 
-            ReadingService.getReadingById(id, function(reading) {
-                setReading(reading);
-            });
+            ReadingService
+                .getReadingById(id)
+                .then(function(reading) {
+                    setReading(reading);
+                });
         }
 
         function removeDiscussion(discussion) {
-            ReadingService.removeDiscussionFromReading(theReading.id, discussion.id, function(reading) {
-                setReading(reading);
-            });
+            ReadingService
+                .removeDiscussionFromReading(theReading.id, discussion.id)
+                .then(function(reading) {
+                    setReading(reading);
+                });
         }
 
         function setReading(reading) {
@@ -46,13 +50,11 @@
                 })
             ;
 
-            var discussions = [];
-            for (var i = 0; i < reading.discussions.length; i++) {
-                DiscussionService.getDiscussionById(reading.discussions[i], function(discussion) {
-                    discussions.push(discussion);
+            ReadingService
+                .getDiscussionsForReading(reading.id)
+                .then(function(discussions) {
+                    vm.discussions = discussions;
                 });
-            }
-            vm.discussions = discussions;
         }
 
         function emptyBook() {

@@ -1,0 +1,26 @@
+[
+    {
+        "id": "0",
+        "book": "3_bJKlAOecEC",
+        "startDate": 1454302800000,
+        "endDate": 1454907600000,
+        "discussions": [ "0", "1" ]
+    },
+    
+    {
+        "id": "1",
+        "book": "GsCT8lPbYFMC",
+        "startDate": 1456894800000,
+        "endDate": 1457499600000,
+        "discussions": [ "2" ]
+    },
+    
+    {
+        "id": "2",
+        "book": "mE1d--zBLMYC",
+        "startDate": 1458878400000,
+        "endDate": 1459569600000,
+        "discussions": []
+    }
+
+]

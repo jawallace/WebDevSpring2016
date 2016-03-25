@@ -6,10 +6,10 @@ module.exports = function() {
     };
 
     function sendOr404(result, res, errorMsg) {
-        if (result !== undefined && result !== null) {
-            res.json(result);
-        } else {
+        if (result === undefined || result === null) {
             res.status(404).json({ error: errorMsg });
+        } else {
+            res.json(result);
         }
     }
 }
