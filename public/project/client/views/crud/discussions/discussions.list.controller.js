@@ -23,25 +23,21 @@
         activate();
 
         function activate() {
-            UserService.findAllUsers(function(users) {
-                vm.users = users;
-            });
+            UserService
+                .findAllUsers()
+                .then(function(users) {
+                    vm.users = users;
+                });
             
-            DiscussionService.getAllDiscussions(function(discussions) {
-                normalize(discussions);     
-            });
+            DiscussionService
+                .getAllDiscussions()
+                .then(function(discussions) {
+                    normalize(discussions);     
+                });
         }
 
         function addDiscussion() {
-            var user = vm.selected.userDetails.id;
-            var topic = vm.selected.topic;
-
-            DiscussionService.createDiscussion(user, topic, function(newDiscussion) {
-                newDiscussion.userDetails = vm.selected.userDetails;
-                vm.discussions.push(newDiscussion);
-
-                resetSelection();
-            });
+            //deprecated
         }
 
         function updateDiscussion() {
@@ -53,18 +49,18 @@
                 comments: vm.selected.comments,
             };
 
-            DiscussionService.updateDiscussion(selectedDiscussion.id, updated, function(updatedDiscussion) {
-                updatedDiscussion.userDetails = vm.selected.userDetails;
-                vm.discussions[selectedIndex] = updatedDiscussion;
+            DiscussionService
+                .updateDiscussion(selectedDiscussion.id, updated)
+                .then(function(updatedDiscussion) {
+                    updatedDiscussion.userDetails = vm.selected.userDetails;
+                    vm.discussions[selectedIndex] = updatedDiscussion;
 
-                resetSelection();
-            });
+                    resetSelection();
+                });
         }
 
         function deleteDiscussion(discussion) {
-            DiscussionService.deleteDiscussion(discussion.id, function(discussions) {
-                normalize(discussions);
-            });
+            //deprecated
         }
 
         function selectDiscussion(index) {
@@ -96,9 +92,13 @@
             for (var i = 0; i < length; i++) {
                 var discussion = discussions[i];
 
-                UserService.findUserById(discussion.user, function(user) {
-                    discussion.userDetails = user;
-                });
+                (function(d) {
+                    UserService
+                        .findUserById(d.user)
+                        .then(function(user) {
+                            d.userDetails = user;
+                        });
+                }(discussion));
 
                 normalized.push(discussion);
             }

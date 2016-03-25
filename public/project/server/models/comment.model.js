@@ -68,9 +68,9 @@ module.exports = function() {
 
         if (comment) {
             this.comments.splice(comment.index, 1);
+            return comment.value;
         }
         
-        return comment.value;
     }
 
     function updateComment(commentId, newComment, callback) {

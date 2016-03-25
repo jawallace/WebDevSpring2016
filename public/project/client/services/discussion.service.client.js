@@ -5,16 +5,18 @@
         .module('TheBookClub')
         .factory('DiscussionService', DiscussionService);
 
-    function DiscussionService() {
-        var discussions = [];
+    DiscussionService.$inject = [ '$http' ];
+    function DiscussionService($http) {
+    
+        var baseUrl = '/api/project/discussion';
 
         var service = {
-            discussions: discussions,
             getDiscussionById: getDiscussionById,
             getAllDiscussions: getAllDiscussions,
             createDiscussion: createDiscussion,
             updateDiscussion: updateDiscussion,
             deleteDiscussion: deleteDiscussion,
+            getCommentsForDiscussion: getCommentsForDiscussion,
             addCommentToDiscussion: addCommentToDiscussion,
             removeCommentFromDiscussion: removeCommentFromDiscussion
         };
@@ -23,121 +25,75 @@
 
         return service;
 
+        /////////////////////////////////////////////////////
+        
         function activate() {
-            discussions.push({
-                id: 0,
-                user: 123,
-                topic: 'First Discussion',
-                comments: [0, 1, 2]
-            });
-
-            discussions.push({
-                id: 1,
-                user: 234,
-                topic: 'Second Discussion',
-                comments: [3]
-            });
-
-            discussions.push({
-                id: 2,
-                user: 345,
-                topic: 'Third Discussion',
-                comments: [4]
-            });
         }
 
-        function createDiscussion(userId, topic, callback) {
+        function createDiscussion(userId, topic) {
             var discussion = {
-                id: new Date().getTime(),
                 user: userId,
                 topic: topic,
                 comments: []
             };
 
-            discussions.push(discussion);
-
-            callback(discussion);
+            //TODO
+            console.log('TODO');
         }
 
-        function getDiscussionById(id, callback) {
-            var discussion = findDiscussion(id);
-
-            if (discussion) {
-                callback(discussion.discussion);
-            } else {
-                callback(null);
-            }
+        function getDiscussionById(id) {
+            return $http
+                .get(baseUrl + '/' + id)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function getAllDiscussions(callback) {
-            callback(this.discussions);
+        function getAllDiscussions() {
+            return $http
+                .get(baseUrl)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function updateDiscussion(id, updatedDiscussion, callback) {
-            var discussion = findDiscussion(id);
-
-            if (discussion) {
-                discussion.discussion.user = updatedDiscussion.user;
-                discussion.discussion.topic = updatedDiscussion.topic;
-                discussion.discussion.comments = updatedDiscussion.comments;
-                callback(discussion.discussion);
-            } else {
-                callback(null);
-            }
+        function updateDiscussion(id, updatedDiscussion) {
+            return $http
+                .put(baseUrl + '/' + id, updateDiscussion)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
         function deleteDiscussion(id, callback) {
-            var discussion = findDiscussion(id);
-
-            if (discussion) {
-                this.discussions.splice(discussion.index, 1);
-            }
-
-            callback(this.discussions);
+            //TODO
+            console.log('TODO');
+        }
+        
+        function getCommentsForDiscussion(id) {
+            return $http
+                .get(baseUrl + '/' + id + '/comment')
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function addCommentToDiscussion(id, commentId, callback) {
-            var discussion = findDiscussion(id);
-            
-            if (discussion) {
-                discussion.discussion.comments.push(commentId);
-                callback(discussion.discussion);
-            } else {
-                callback(null);
-            }
+        function addCommentToDiscussion(id, comment) {
+            return $http
+                .post(baseUrl + '/' + id + '/comment', comment)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function removeCommentFromDiscussion(id, commentId, callback) {
-            var discussion = findDiscussion(id);
-
-            if (discussion) {
-                var comments = discussion.discussion.comments;
-                var index = comments.indexOf(commentId);
-                if (index >= 0) {
-                    comments.splice(index, 1);
-                }
-
-                callback(discussion.discussion);
-            } else {
-                callback(null);
-            }
+        function removeCommentFromDiscussion(id, commentId) {
+            return $http
+                .delete(baseUrl + '/' + id + '/comment/' + commentId)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function findDiscussion(id) {
-            var length = discussions.length;
-            for (var i = 0; i < length; i++) {
-                var discussion = discussions[i];
-
-                if (discussion.id === id) {
-                    return {
-                        index: i,
-                        discussion: discussion
-                    };
-                }
-            }
-           
-            return null;
-        }
     }
 
 }());

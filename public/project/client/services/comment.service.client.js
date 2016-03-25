@@ -11,11 +11,9 @@
         var baseUrl = '/api/project/comment';
 
         var service = {
-            createComment: createComment,
             getAllComments: getAllComments,
             getCommentById: getCommentById,
             getCommentsForUser: getCommentsForUser,
-            deleteComment: deleteComment,
             updateComment: updateComment
         };
 
@@ -26,10 +24,6 @@
         //////////////////// IMPLEMENTATION ////////////////////
 
         function activate() {
-        }
-
-        function createComment(comment) {
-            console.log('TODO');
         }
 
         function getAllComments() {
@@ -56,10 +50,6 @@
                 });
         }
         
-        function deleteComment(commentId) {
-            console.log('TODO');
-        }
-
         function updateComment(commentId, newComment) {
             return $http
                 .put(baseUrl + '/' + commentId, newComment)

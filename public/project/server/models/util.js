@@ -1,7 +1,7 @@
 module.exports = function() {
     'use strict';
    
-    var guid = require('guid');
+    var guidLib = require('guid');
 
     return {
         extend: extend,
@@ -20,7 +20,7 @@ module.exports = function() {
     }
 
     function guid() {
-        return guid.raw();
+        return guidLib.raw();
     }
 
     function find(arr, pred) {

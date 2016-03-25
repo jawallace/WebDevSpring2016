@@ -38,18 +38,7 @@
         }
 
         function addComment() {
-            var newComment = {
-                user: vm.selected.userDetails.id,
-                text: vm.selected.text,
-                parentComment: vm.selected.parentComment
-            };
-
-            CommentService.createComment(newComment, function(comment) {
-                comment.userDetails = vm.selected.userDetails;
-                vm.comments.push(comment);
-
-                resetSelection();
-            });
+            // deprecated
         }
 
         function updateComment() {
@@ -72,10 +61,7 @@
         }
 
         function deleteComment(comment) {
-            CommentService
-                .deleteComment(comment.id, function(comments) {
-                    normalizeComments(comments);
-                });
+            //deprecated 
         }
 
         function selectComment(index) {
