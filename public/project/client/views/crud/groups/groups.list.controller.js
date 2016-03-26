@@ -21,9 +21,11 @@
         activate();
 
         function activate() {
-            GroupService.getAllGroups(function (groups) {
-                setGroups(groups);
-            });
+            GroupService
+                .getAllGroups()
+                .then(function (groups) {
+                    setGroups(groups);
+                });
         }
 
         function addGroup() {
@@ -35,12 +37,14 @@
                 readings: []
             };
 
-            GroupService.createGroup(group, function(group) {
-                normalizeGroup(group);
-                vm.groups.push(group);
+            GroupService
+                .createGroup(group)
+                .then(function(group) {
+                    normalizeGroup(group);
+                    vm.groups.push(group);
 
-                resetSelection();
-            });
+                    resetSelection();
+                });
         }
         
         function updateGroup() {
@@ -52,19 +56,22 @@
                 readings: vm.selected.readings
             };
 
-            GroupService.updateGroup(vm.selected.id, group, function(updated) {
-                normalizeGroup(updated);
-                vm.groups[selectedIndex] = updated;
-                
-                resetSelection();
-            });
-
+            GroupService
+                .updateGroup(vm.selected.id, group)
+                .then(function(updated) {
+                    normalizeGroup(updated);
+                    vm.groups[selectedIndex] = updated;
+                    
+                    resetSelection();
+                });
         }
 
         function deleteGroup(group) {
-            GroupService.deleteGroup(group.id, function(groups) {
-                setGroups(groups);
-            });
+            GroupService
+                .deleteGroup(group.id)
+                .then(function(groups) {
+                    setGroups(groups);
+                });
         }
 
         function selectGroup(index) {

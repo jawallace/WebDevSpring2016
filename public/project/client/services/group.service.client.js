@@ -5,17 +5,19 @@
         .module('TheBookClub')
         .factory('GroupService', GroupService);
 
-    function GroupService() {
-        var theGroups = [];
-
+    GroupService.$inject = [ '$http' ];
+    function GroupService($http) {
+        var BASE_URL = '/api/project/group';
+        
         var service = {
-            groups: theGroups,
-
             createGroup: createGroup,
             getGroupById: getGroupById,
             getAllGroups: getAllGroups,
             updateGroup: updateGroup,
             deleteGroup: deleteGroup,
+            getReadingsForGroup: getReadingsForGroup,
+            getMembersForGroup: getMembersForGroup,
+            getAdminsForGroup: getAdminsForGroup,
             addReadingToGroup: addReadingToGroup,
             addMemberToGroup: addMemberToGroup,
             addAdminToGroup: addAdminToGroup,
@@ -28,136 +30,121 @@
 
         return service;
 
+        //////////////////////////////////// 
+
         function activate() {
-            theGroups.push({
-                id: 0,
-                name: 'Culture Group',
-                admins: [ 123 ],
-                members: [ 234, 345 ],
-                readings: [ 0, 1 ],
-                visibility: 'PUBLIC'
-            });
-            
-            theGroups.push({
-                id: 1,
-                name: 'Jeff\'s Secret Culture Group',
-                admins: [ 456 ],
-                members: [ 234 ],
-                readings: [ 2 ],
-                visibility: 'PRIVATE'
-            });
         }
 
-        function createGroup(group, callback) {
-            group.id = new Date().getTime();
-
-            this.groups.push(group);
-
-            callback(group);
+        function createGroup(group) {
+            return $http
+                .post(BASE_URL, group)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function getGroupById(id, callback) {
-            var g = findGroup(id);
-
-            if (g) {
-                callback(g.group);
-            } else {
-                callback(undefined);
-            }
+        function getGroupById(id) {
+            return $http
+                .get(BASE_URL + '/' + id)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function getAllGroups(callback) {
-            callback(this.groups);
+        function getAllGroups() {
+            return $http
+                .get(BASE_URL)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function updateGroup(id, updated, callback) {
-            var g = findGroup(id);
-
-            if (g) {
-                var group = g.group;
-                group.name = updated.name;
-                group.admins = updated.admins;
-                group.members = updated.members;
-                group.readings = updated.readings;
-                group.visibility = updated.visibility;
-                callback(group);
-            } else {
-                callback(undefined);
-            }
+        function updateGroup(id, updated) {
+            return $http
+                .put(BASE_URL + '/' + id, updated)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function deleteGroup(id, callback) {
-            var g = findGroup(id);
-
-            if (g) {
-                this.groups.splice(g.index, 1);
-            } 
-            
-            callback(this.groups);
+        function deleteGroup(id) {
+            return $http
+                .delete(BASE_URL + '/' + id)
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+        
+        function getReadingsForGroup(id) {
+            return $http
+                .get(BASE_URL + '/' + id + '/reading')
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function addReadingToGroup(id, reading, callback) {
-            addToGroupField(id, 'readings', reading, callback);
+        function getMembersForGroup(id) {
+            return $http
+                .get(BASE_URL + '/' + id + '/member')
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function addMemberToGroup(id, member, callback) {
-            addToGroupField(id, 'members', member, callback);
+        function getAdminsForGroup(id) {
+            return $http
+                .get(BASE_URL + '/' + id + '/admin')
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function addAdminToGroup(id, admin, callback) {
-            addToGroupField(id, 'admins', admin, callback);
+        function addReadingToGroup(id, reading) {
+            return $http
+                .post(BASE_URL + '/' + id + '/reading', reading)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function removeReadingFromGroup(id, reading, callback) {
-            removeFromGroupField(id, 'readings', reading, callback);
+        function addMemberToGroup(id, member) {
+            return $http
+                .post(BASE_URL + '/' + id + '/member', member)
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+
+        function addAdminToGroup(id, admin) {
+            return $http
+                .post(BASE_URL + '/' + id + '/admin', admin)
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+
+        function removeReadingFromGroup(id, reading) {
+            return $http
+                .delete(BASE_URL + '/' + id + '/reading/' + reading.id)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
         function removeMemberFromGroup(id, member, callback) {
-            removeFromGroupField(id, 'members', member, callback);
+            return $http
+                .delete(BASE_URL + '/' + id + '/member/' + member.id)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
         function removeAdminFromGroup(id, admin, callback) {
-            removeFromGroupField(id, 'admins', admin, callback);
-        }
-
-        function addToGroupField(id, field, value, callback) {
-            var g = findGroup(id);
-
-            if (g) {
-                g.group[field].push(value);
-                callback(g.group);
-            } else {
-                callback(undefined);
-            }
-        }
-        
-        function removeFromGroupField(id, field, value, callback) {
-            var g = findGroup(id);
-
-            if (g) {
-                var index = g.group[field].indexOf(value);
-                if (index >= 0) {
-                    g.group[field].splice(index, 1);
-                }
-                callback(g.group);
-            } else {
-                callback(undefined);
-            }
-        }
-
-        function findGroup(id) {
-            var length = theGroups.length;
-
-            for (var i = 0; i < length; i++) {
-                var group = theGroups[i];
-
-                if (group.id === id) {
-                    return {
-                        index: i,
-                        group: group 
-                    };
-                }
-            }
+            return $http
+                .delete(BASE_URL + '/' + id + '/admin/' + admin.id)
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
     }

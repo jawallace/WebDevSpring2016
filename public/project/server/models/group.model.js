@@ -68,7 +68,7 @@ module.exports = function() {
 
         if (g) {
             this.groups.splice(g.index, 1);
-            return g.value; 
+            return this.groups;
         } 
     }
 
