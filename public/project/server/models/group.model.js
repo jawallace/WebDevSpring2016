@@ -115,6 +115,7 @@ module.exports = function() {
             }
 
             return g.value;
+        }
     }
 
 }
