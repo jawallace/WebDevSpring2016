@@ -10,6 +10,7 @@
         var vm = this;
 
         var theReading;
+        var id = stateParams.id;
         vm.book = emptyBook();
         vm.startDate = undefined;
         vm.endDate = undefined;
@@ -20,7 +21,6 @@
         activate();
 
         function activate() {
-            var id = parseInt($stateParams.id);
 
             ReadingService
                 .getReadingById(id)

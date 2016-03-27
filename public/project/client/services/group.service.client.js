@@ -101,7 +101,7 @@
 
         function addReadingToGroup(id, reading) {
             return $http
-                .post(BASE_URL + '/' + id + '/reading', reading)
+                .post(BASE_URL + '/' + id + '/reading', { id: reading })
                 .then(function(res) {
                     return res.data;
                 });
@@ -109,7 +109,7 @@
 
         function addMemberToGroup(id, member) {
             return $http
-                .post(BASE_URL + '/' + id + '/member', member)
+                .post(BASE_URL + '/' + id + '/member', { id: member })
                 .then(function(res) {
                     return res.data;
                 });
@@ -117,7 +117,7 @@
 
         function addAdminToGroup(id, admin) {
             return $http
-                .post(BASE_URL + '/' + id + '/admin', admin)
+                .post(BASE_URL + '/' + id + '/admin', { id: admin })
                 .then(function(res) {
                     return res.data;
                 });

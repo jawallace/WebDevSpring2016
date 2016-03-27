@@ -37,17 +37,17 @@ module.exports = function(app, UserModel) {
     }
 
     function getUserById(req, res) {
-        var id = parseInt(req.params.id);
+        var id = req.params.id;
         utils.sendOr404(UserModel.findById(id), res, errorMsg);
     }
 
     function updateUser(req, res) {
-        var id = parseInt(req.params.id);
+        var id = req.params.id;
         utils.sendOr404(UserModel.update(id, req.body), res, errorMsg);
     }
 
     function deleteUser(req, res) {
-        var id = parseInt(req.params.id);
+        var id = req.params.id;
         utils.sendOr404(UserModel.delete(id), res, errorMsg);
     }
 

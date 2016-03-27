@@ -13,7 +13,6 @@
         vm.selected = emptySelection();
         vm.readings = [];
 
-        vm.addReading = addReading;
         vm.updateReading = updateReading;
         vm.deleteReading = deleteReading;
         vm.selectReading = selectReading;
@@ -26,10 +25,6 @@
                 .then(function(readings) {
                     setReadings(readings);
                 });
-        }
-
-        function addReading() {
-            console.log('TODO');
         }
 
         function updateReading() {

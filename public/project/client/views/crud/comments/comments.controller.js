@@ -14,7 +14,6 @@
         vm.comments = []; // the comments to render
         vm.users = []; // the available users
 
-        vm.addComment = addComment;
         vm.updateComment = updateComment;
         vm.deleteComment = deleteComment;
         vm.selectComment = selectComment;
@@ -35,10 +34,6 @@
                 .then(function(comments) {
                     normalizeComments(comments);
                 });
-        }
-
-        function addComment() {
-            // deprecated
         }
 
         function updateComment() {

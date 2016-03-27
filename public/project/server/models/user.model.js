@@ -41,7 +41,7 @@ module.exports = function() {
             return;
         }
 
-        user['_id'] = new Date().getTime();
+        user.id = utils.guid();
         users.push(user);
 
         return user;
@@ -95,7 +95,7 @@ module.exports = function() {
 
     function findUser(id) {
         for (var i = 0; i < users.length; i++) {
-            if (users[i]['_id'] === id) {
+            if (users[i].id === id) {
                 return {
                     index: i,
                     user: users[i]

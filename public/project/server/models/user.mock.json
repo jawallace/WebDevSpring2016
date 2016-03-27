@@ -1,49 +1,56 @@
 [
     {
-        "_id":123, 
+        "id": "123", 
         "firstName":"Alice", 
         "lastName":"Wonderland", 
         "username":"alice",  
-        "password":"alice"
+        "password":"alice",
+        "groups": [ "0" ]
     },
       
     { 
-        "_id":234, 
+        "id": "234", 
         "firstName":"Bob", 
         "lastName":"Hope", 
         "username":"bob", 
-        "password":"bob"
+        "password":"bob",
+        "groups": [ "0", "1" ]
     },
       
     {
-        "_id":345, 
+        "id": "345", 
         "firstName":"Charlie",
         "lastName":"Brown",
         "username":"charlie",
-        "password":"charlie"
+        "password":"charlie",
+        "groups": [ "0" ]
     },
   
     {
-        "_id":456, 
+        "id": "456", 
         "firstName":"Dan",
         "lastName":"Craig",
         "username":"dan",
-        "password":"dan"
+        "password":"dan",
+        "groups": [ "1" ]
     },
   
     {
-        "_id":567, 
+        "id": "567", 
         "firstName":"Edward",
         "lastName":"Norton",
         "username":"ed",
-        "password":"ed"
+        "password":"ed",
+        "groups": [ ]
+
     },
 
     {
-        "_id": 0,
+        "id": "0",
         "firstName": "Jeff",
         "lastName": "Wallace",
         "username": "jeff",
-        "password": "jeff"
+        "password": "jeff",
+        "groups": [ ]
     }
 ]

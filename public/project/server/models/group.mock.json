@@ -2,17 +2,17 @@
     { 
         "id": "0",
         "name": "Culture Group",
-        "admins": [ 123 ],
-        "members": [ 234, 345 ],
+        "admins": [ "123" ],
+        "members": [ "234", "345" ],
         "readings": [ "0", "1" ],
         "visibility": "PUBLIC"
     },
     
     { 
-        "id": 1,
-        "name": "Jeff\"s Secret Culture Group",
-        "admins": [ 456 ],
-        "members": [ 234 ],
+        "id": "1",
+        "name": "Jeff's Secret Culture Group",
+        "admins": [ "456" ],
+        "members": [ "234" ],
         "readings": [ "2" ],
         "visibility": "PRIVATE"
     }

@@ -15,7 +15,6 @@
         vm.discussions = [];
         vm.users = [];
 
-        vm.addDiscussion = addDiscussion;
         vm.updateDiscussion = updateDiscussion;
         vm.deleteDiscussion = deleteDiscussion;
         vm.selectDiscussion = selectDiscussion;
@@ -34,10 +33,6 @@
                 .then(function(discussions) {
                     normalize(discussions);     
                 });
-        }
-
-        function addDiscussion() {
-            //deprecated
         }
 
         function updateDiscussion() {

@@ -78,9 +78,9 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
    
     var READING_ERR_MSG = 'Reading not found.';
     function addReading(req, res) {
-        var reading = ReadingModel.create(req.body);
-
-        utils.sendOr404(GroupModel.addReading(reading.id), res, 'Failed to create reading');
+        var reading = ReadingModel.create(req.body.id);
+  
+        utils.sendOr404(GroupModel.addReading(req.group.id, reading.id), res, 'Failed to create reading');
     }
 
     function getReadingById(req, res) {
@@ -111,12 +111,13 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     }
     
     function addAdmin(req, res) {
-        var admin = UserModel.findById(req.body);
-        
+        var admin = UserModel.findById(req.body.id);
+        admin.groups.push(req.group.id);
+
         if (! admin) {
             res.status(404).send(USER_ERR_MSG);    
         } else {
-            utils.sendOr404(GroupModel.addAdmin(admin.id), res, USER_ERR_MSG);
+            utils.sendOr404(GroupModel.addAdmin(req.group.id, admin.id), res, USER_ERR_MSG);
         }
     }
     
@@ -125,7 +126,7 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     }
     
     function removeAdmin(req, res) {
-        utils.sendOr404(GroupModel.removeAdmin(req.params.adminId), res, USER_ERR_MSG);
+        utils.sendOr404(GroupModel.removeAdmin(req.group.id, req.params.adminId), res, USER_ERR_MSG);
     }
     
     function getMembers(req, res) {
@@ -141,12 +142,13 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     }
     
     function addMember(req, res) {
-        var member = UserModel.findById(req.body);
+        var member = UserModel.findById(req.body.id);
+        member.groups.push(req.group.id);
         
         if (! member) {
             res.status(404).send(USER_ERR_MSG);    
         } else {
-            utils.sendOr404(GroupModel.addMember(member.id), res, USER_ERR_MSG);
+            utils.sendOr404(GroupModel.addMember(req.group.id, member.id), res, USER_ERR_MSG);
         }
     }
     
