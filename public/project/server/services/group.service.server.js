@@ -94,7 +94,7 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     function deleteReading(req, res) {
         var reading = ReadingModel.delete(req.params.readingId);
 
-        utils.sendOr404(GroupModel.removeReading(req.params.readingId), res, READING_ERR_MSG);
+        utils.sendOr404(GroupModel.removeReading(req.group.id, req.params.readingId), res, READING_ERR_MSG);
     }
    
     var USER_ERR_MSG = 'User not found.';
@@ -157,7 +157,7 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     }
     
     function removeMember(req, res) {
-        utils.sendOr404(GroupModel.removeAdmin(req.params.memberId), res, USER_ERR_MSG);
+        utils.sendOr404(GroupModel.removeMember(req.group.id, req.params.memberId), res, USER_ERR_MSG);
     }
 
     function groupMiddleware(req, res, next) {

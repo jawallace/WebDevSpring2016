@@ -131,7 +131,7 @@
                 });
         }
 
-        function removeMemberFromGroup(id, member, callback) {
+        function removeMemberFromGroup(id, member) {
             return $http
                 .delete(BASE_URL + '/' + id + '/member/' + member.id)
                 .then(function(res) {
@@ -139,7 +139,7 @@
                 });
         }
 
-        function removeAdminFromGroup(id, admin, callback) {
+        function removeAdminFromGroup(id, admin) {
             return $http
                 .delete(BASE_URL + '/' + id + '/admin/' + admin.id)
                 .then(function(res) {

@@ -24,6 +24,10 @@
         vm.addReading = addReading;
         vm.addUser = addUser;
 
+        vm.removeReading = removeReading;
+        vm.removeAdmin = removeAdmin;
+        vm.removeMember = removeMember;
+
         var id = $stateParams.id;
 
         activate();
@@ -96,6 +100,32 @@
                         vm.newUserAdmin = false;
                     });
             }
+        }
+
+        function removeReading(reading) {
+            GroupService
+                .removeReadingFromGroup(id, { id: reading })
+                .then(function() {
+                    activate();
+                });
+        }
+
+        function removeAdmin(admin) {
+            GroupService
+                .removeAdminFromGroup(id, admin)
+                .then(function() {
+                    activate();
+                });
+        }
+
+        function removeMember(member) {
+            GroupService
+                .removeMemberFromGroup(id, member)
+                .then(function() {
+                    activate();
+                }, function(err) {
+                    console.log(err);        
+                });
         }
     }
 
