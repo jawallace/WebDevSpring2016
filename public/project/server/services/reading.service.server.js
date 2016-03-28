@@ -52,9 +52,9 @@ module.exports = function(app, ReadingModel, DiscussionModel) {
     }
 
     function createDiscussion(req, res) {
-        var discussion = DiscussionModel.create(req.body);
+        var discussion = DiscussionModel.create(req.body.user, req.body.topic);
     
-        utils.sendOr404(ReadingModel.addDiscussion(discussion.id), res, DISCUSSION_ERR);
+        utils.sendOr404(ReadingModel.addDiscussion(req.reading.id, discussion.id), res, DISCUSSION_ERR);
     }
 
     function getDiscussionById(req, res) {

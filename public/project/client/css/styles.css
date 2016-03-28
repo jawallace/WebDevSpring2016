@@ -58,7 +58,6 @@ td.table-controls {
 
 /** Discussion Styles **/
 .discussion-topic {
-    width: 100%;
     border-bottom: 2px solid black;
     padding: 5px 15px;
     font-size: 1.5em;
@@ -66,9 +65,8 @@ td.table-controls {
 }
 
 .discussion-comment {
-    width: 100%;
     border: 1px dashed black;
-    margin-top: 20px;
+    margin: 20px 0;
     position: relative;
     background: lightgray;
 }
@@ -94,7 +92,6 @@ td.table-controls {
 }
 
 .discussion-new-comment {
-    width: 50%;
     margin-top: 30px;
 }
 

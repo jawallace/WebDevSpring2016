@@ -35,5 +35,26 @@
             ({{ discussion.comments.length }} Comments)
         </div>
     </div>
+
+    <hr />
+
+    <div class="col-md-8 col-md-offset-2">
+        <form>
+            <div class="form-group">
+                <label for="topic">Discussion Topic</label>
+                <input type="text" class="form-control" id="topic" placeholder="Discussion Topic" ng-model="vm.topic">
+            </div>
+
+            <div class="form-group">
+                <label for="user">Owner</label>
+                <select class="form-control" ng-model="vm.user" id="user" ng-options="user.firstName for user in vm.users">
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" ng-click="vm.addDiscussion()">Add Discussion</button>
+            </div>
+        </form>
+    </div>
 </section>
 

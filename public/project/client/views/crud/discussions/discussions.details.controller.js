@@ -26,7 +26,7 @@
                     vm.users = users;
                 });
 
-            var id = stateParams.id;
+            var id = $stateParams.id;
             DiscussionService
                 .getDiscussionById(id)
                 .then(function(discussion) {
@@ -53,6 +53,7 @@
                 .addCommentToDiscussion(vm.discussion.id, newComment)
                 .then(function(discussion) {
                     resolveDiscussion(discussion);
+                    vm.newComment = { text: '', userDetails: { firstName: '' } };
                 }, function(err) {
                     console.log(err.data);    
                 });

@@ -1,21 +1,21 @@
 [
     {
         "id": "0",
-        "user": 123,
+        "user": "123",
         "topic": "First Discussion",
         "comments": [ "0", "1", "2" ]
     },
 
     {
         "id": "1",
-        "user": 234,
+        "user": "234",
         "topic": "Second Discussion",
         "comments": [ "3" ]
     },
 
     {
         "id": "2",
-        "user": 345,
+        "user": "345",
         "topic": "Third Discussion",
         "comments": [ "4" ]
     }

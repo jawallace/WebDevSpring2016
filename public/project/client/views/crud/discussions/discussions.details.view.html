@@ -2,32 +2,40 @@
     {{ vm.discussion.topic }}
 </div>
 
-<div class="discussion-comment" ng-repeat="comment in vm.comments">
-    <div class="discussion-comment-delete">
-        <a ng-click="vm.deleteComment(comment)"><span class="glyphicon glyphicon-remove"></span></a>
-    </div>
+<div class="row" ng-repeat="comment in vm.comments">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="discussion-comment">
+            <div class="discussion-comment-delete">
+                <a ng-click="vm.deleteComment(comment)"><span class="glyphicon glyphicon-remove"></span></a>
+            </div>
 
-    <div class="discussion-comment-text">
-         {{ comment.text }}
-    </div>
+            <div class="discussion-comment-text">
+                 {{ comment.text }}
+            </div>
 
-    <div class="discussion-comment-details">
-        {{ comment.userDetails.firstName }}
+            <div class="discussion-comment-details">
+                {{ comment.userDetails.firstName }}
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="discussion-new-comment center-block">
-    <form>
-        <div class="form-group">
-            <label for="comment-text">Add Comment</label>
-            <textarea name="comment-text" class="form-control" ng-model="vm.newComment.text" noresize></textarea>
-        </div>
-        <div class="form-group">
-            <select class="form-control" ng-model="vm.newComment.userDetails" ng-options="user.firstName for user in vm.users">
-            </select>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary btn-block" ng-click="vm.addComment()">Submit</button>
-        </div>
-    </form>
+<hr />
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <form>
+            <div class="form-group">
+                <label for="comment-text">Add Comment</label>
+                <textarea name="comment-text" class="form-control" ng-model="vm.newComment.text" noresize></textarea>
+            </div>
+            <div class="form-group">
+                <select class="form-control" ng-model="vm.newComment.userDetails" ng-options="user.firstName for user in vm.users">
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block" ng-click="vm.addComment()">Submit</button>
+            </div>
+        </form>
+    </div>
 </div>
