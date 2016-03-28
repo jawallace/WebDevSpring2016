@@ -5,8 +5,8 @@
         .module('TheBookClub')
         .controller('HeaderController', HeaderController);
 
-    HeaderController.$inject = [ '$rootScope', '$state' ];
-    function HeaderController($rootScope, $state) {
+    HeaderController.$inject = [ '$rootScope', '$state', 'UserService' ];
+    function HeaderController($rootScope, $state, UserService) {
         var vm = this;
       
         vm.searchQuery = ''; // ng-model
@@ -15,8 +15,12 @@
         vm.search = search;
 
         function logout() {
-            $rootScope.user = undefined; 
-            $state.go('home');
+            UserService
+                .logout()
+                .then(function() {
+                    $rootScope.user = undefined; 
+                    $state.go('home');
+                });
         }
 
         function search() {

@@ -1,7 +1,11 @@
+'use strict';
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var multer = require('multer');
+
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 
 var app = express();
 
@@ -11,6 +15,9 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(multer());
+
+app.use(session({ secret: process.env.SESSION_SECRET }));
+app.use(cookieParser());
 
 var IP_ADDRESS = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000;

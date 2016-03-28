@@ -5,6 +5,7 @@ module.exports = function() {
 
     return {
         extend: extend,
+        copy: copy,
         guid: guid,
         find: find,
         findById: findById,
@@ -17,6 +18,17 @@ module.exports = function() {
                 current[key] = updated[key];
             }
         }
+    }
+
+    function copy(obj) {
+        var newObj = {};
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                newObj[key] = obj[key];
+            }
+        }
+
+        return newObj;
     }
 
     function guid() {

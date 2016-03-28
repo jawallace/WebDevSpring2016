@@ -9,15 +9,20 @@
     function UserService($http) {
         
         var baseUrl = '/api/project/user';
+        var LOGIN_URL = '/api/project/login';
+        var LOGGED_IN_URL = '/api/project/loggedIn';
+        var LOGOUT_URL = '/api/project/logout';
 
         var service = {
             findByUsername: findByUsername,
-            findByUsernameAndPassword: findByUsernameAndPassword,
             findAllUsers: findAllUsers,
             findUserById: findUserById,
             createUser: createUser,
             updateUser: updateUser,
-            deleteUserById: deleteUserById
+            deleteUserById: deleteUserById,
+            login: login,
+            isLoggedIn: isLoggedIn,
+            logout: logout
         };
 
         return service;
@@ -38,21 +43,6 @@
                 });
         }
 
-        function findByUsernameAndPassword(username, password) {
-            var config = {
-                params: {
-                    username: username,
-                    password: password
-                }
-            };
-
-            return $http
-                .get(baseUrl, config)
-                .then(function (res) {
-                    return res.data;
-                });
-        }
-            
         function findAllUsers() {
             return $http
                 .get(baseUrl)
@@ -92,6 +82,26 @@
                 .then(function(res) {
                     return res.data;
                 });
+        }
+
+        function login(credentials) {
+            return $http
+                .post(LOGIN_URL, credentials)
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+
+        function isLoggedIn() {
+            return $http
+                .get(LOGGED_IN_URL)
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+
+        function logout() {
+            return $http.post(LOGOUT_URL);
         }
     }
         

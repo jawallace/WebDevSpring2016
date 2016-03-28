@@ -22,7 +22,7 @@
             }
 
             UserService
-                .findByUsernameAndPassword(vm.username, vm.password)
+                .login({ username: vm.username, password: vm.password })
                 .then(function(user) {
                     console.log('Logged in ', user);
                     $rootScope.user = user;

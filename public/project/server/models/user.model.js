@@ -44,25 +44,25 @@ module.exports = function() {
         user.id = utils.guid();
         users.push(user);
 
-        return user;
+        return protectDetails(user);
     }
 
     function findAllUsers() {
-        return users;
+        return users.map(function (u) { return protectDetails(u); });
     }
 
     function findUserById(id) {
         var u = findUser(id);
 
         if (u) {
-            return u.user;
+            return protectDetails(u.user);
         }
     }
 
     function findByUsername(username) {
         for (var i = 0; i < users.length; i++) {
             if (users[i].username === username) {
-                return users[i];
+                return protectDetails(users[i]);
             }
         }
     }
@@ -70,7 +70,7 @@ module.exports = function() {
     function findByCredentials(credentials) {
         for (var i = 0; i < users.length; i++) {
             if (users[i].username === credentials.username && users[i].password === credentials.password) {
-                return users[i];
+                return protectDetails(users[i]);
             }
         }
     }
@@ -80,7 +80,7 @@ module.exports = function() {
 
         if (u) {
             utils.extend(u.user, user);
-            return u.user;
+            return protectDetails(u.user);
         }
     }
 
@@ -89,7 +89,7 @@ module.exports = function() {
 
         if (u) {
             users.splice(u.index, 1);
-            return users;
+            return users.map(function(u) { return protectDetails(u); });
         }
     }
 
@@ -102,5 +102,12 @@ module.exports = function() {
                 };
             }
         }
+    }
+
+    function protectDetails(u) {
+        var copy = utils.copy(u);
+        copy.password = undefined;
+
+        return copy;
     }
 }
