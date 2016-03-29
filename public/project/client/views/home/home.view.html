@@ -1,2 +1,17 @@
-<h1>Project Proof of Concept</h1>
-<p>The links in the header will take you to CRUD pages</p>
+<header>
+    <h1 class="page-header">Project Prototype</h1>
+</header>
+
+<section>
+    <a ui-sref="crud">CRUD Pages</a>
+</section>
+
+<hr />
+
+<section ng-if="! user" class="text-center">
+    <a ui-sref="login">Login</a> or <a ui-sref="register">Register</a> to get started with The Book Club.
+</section>
+
+<section ng-if="user" class="text-center">
+    TODO
+</section>
