@@ -26,7 +26,7 @@
             return $http
                 .get(baseUrl, { params: params })
                 .then(function (res) {
-                    return res;
+                    return res.data;
                 });
         }
 
@@ -34,7 +34,7 @@
             return $http
                 .get(baseUrl + '/' + id)
                 .then(function (res) {
-                    return res;
+                    return res.data;
                 });
         }
     }

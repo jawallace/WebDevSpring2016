@@ -5,6 +5,7 @@
         .module('TheBookClub')
         .config(Configuration);
 
+    Configuration.$inject = [ '$stateProvider', '$urlRouterProvider'];
     function Configuration($stateProvider, $urlRouterProvider) {
        
         $urlRouterProvider.otherwise('/');
@@ -15,7 +16,14 @@
         $stateProvider
             .state('home', {
                 url: '/',
-                templateUrl: 'views/home/home.view.html'
+                templateUrl: 'views/home/home.view.html',
+                controller: 'HomeController',
+                controllerAs: 'vm',
+                resolve: {
+                    user: function(UserService) {
+                        return UserService.isLoggedIn();
+                    }
+                }
             })
             .state('search', {
                 url: '/search?q&page',
@@ -104,7 +112,10 @@
                 controllerAs: 'vm'
             })
         ;
-            
+
+        function isLoggedIn() {
+
+        }
     }
 
 })();
