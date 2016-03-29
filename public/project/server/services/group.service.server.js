@@ -11,6 +11,7 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     var ADMIN_ID_URL = ADMIN_URL + '/:adminId';
     var MEMBER_URL = GROUP_ID_URL + '/member';
     var MEMBER_ID_URL = MEMBER_URL + '/:memberId';
+    var USER_URL = '/api/project/user/:userId/group';
 
     var retrieveGroupMiddleware = groupMiddleware;
 
@@ -39,6 +40,8 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     
     app.get(MEMBER_ID_URL, retrieveGroupMiddleware, getMember);
     app.delete(MEMBER_ID_URL, retrieveGroupMiddleware, removeMember);
+
+    app.get(USER_URL, getGroupsForUser);
 
     ///////////////////////////////////////
    
@@ -158,6 +161,25 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     
     function removeMember(req, res) {
         utils.sendOr404(GroupModel.removeMember(req.group.id, req.params.memberId), res, USER_ERR_MSG);
+    }
+
+    function getGroupsForUser(req, res) {
+        var user = UserModel.findById(req.params.userId);
+
+        if (!user) {
+            res.status(404).send('User not found');
+        } else {
+            var groups = user.groups.map(function(gid) {
+                return GroupModel.findById(gid);
+            });
+
+            if (groups.some(function(g) { return !g; })) {
+                res.status(404).send('GROUP NOT FOUND FOR USER. INVALID SERVER STATE.');
+            } else {
+                res.json(groups);
+            }
+        }
+
     }
 
     function groupMiddleware(req, res, next) {

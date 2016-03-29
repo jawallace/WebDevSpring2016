@@ -14,6 +14,18 @@
         vm.logout = logout;
         vm.search = search;
 
+        activate();
+
+        //////////////////////////////////////
+        
+        function activate() {
+            UserService
+                .isLoggedIn()
+                .then(function(user) {
+                    $rootScope.user = user;
+                });
+        }
+
         function logout() {
             UserService
                 .logout()

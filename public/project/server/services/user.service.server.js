@@ -55,7 +55,7 @@ module.exports = function(app, UserModel) {
     function updateUser(req, res) {
         var id = req.params.id;
 
-        if (req.session.currentUser) {
+        if (! req.session.currentUser) {
             res.status(401).send('Not authorized');
         } else if (req.session.currentUser.id !== id) {
             res.status(403).send('You cannot update another user.');
@@ -67,7 +67,7 @@ module.exports = function(app, UserModel) {
     function deleteUser(req, res) {
         var id = req.params.id;
         
-        if (req.session.currentUser) {
+        if (! req.session.currentUser) {
             res.status(401).send('Not authorized');
         } else if (req.session.currentUser.id !== id) {
             res.status(403).send('You cannot update another user.');

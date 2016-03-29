@@ -35,6 +35,12 @@
                 controller: 'RegisterController',
                 controllerAs: 'vm'
             })
+            .state('profile', {
+                url: '/profile/:userId',
+                templateUrl: 'views/users/profile.view.html',
+                controller: 'ProfileController',
+                controllerAs: 'vm'
+            })
             
             /* CRUD States (for Project POC) */
             .state('crud', {

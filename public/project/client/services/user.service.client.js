@@ -17,6 +17,7 @@
             findByUsername: findByUsername,
             findAllUsers: findAllUsers,
             findUserById: findUserById,
+            getGroupsForUser: getGroupsForUser,
             createUser: createUser,
             updateUser: updateUser,
             deleteUserById: deleteUserById,
@@ -54,6 +55,14 @@
         function findUserById(id) {
             return $http
                 .get(baseUrl + '/' + id)
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+
+        function getGroupsForUser(id) {
+            return $http
+                .get(baseUrl + '/' + id + '/group')
                 .then(function(res) {
                     return res.data;
                 });

@@ -1,0 +1,65 @@
+<header>
+    <h1 class="page-header">Profile</h1>
+</header>
+
+<div class="col-md-8 col-md-offset-2" ng-if="vm.user">
+    <section>
+        <header>
+            <h3>User Information</h3>
+        </header>
+        <form>
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" ng-disabled="! vm.isLoggedInUser" ng-model="vm.user.firstName" id="firstName">
+            </div>
+            
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" ng-disabled="! vm.isLoggedInUser" ng-model="vm.user.lastName" id="lastName">
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" ng-disabled="! vm.isLoggedInUser" ng-model="vm.user.username" id="username">
+            </div>
+           
+            <div ng-if="vm.isLoggedInUser">
+                <div class="form-group">
+                    <label for="password">Update Password</label>
+                    <input type="password" class="form-control" ng-model="vm.password" id="password">
+                </div>
+                
+                <div class="form-group">
+                    <label for="verifyPassword">Verify Password</label>
+                    <input type="password" class="form-control" ng-model="vm.verifyPassword" id="verifyPassword">
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-primary btn-block" ng-click="vm.updateUser()">Update Profile</button>
+                </div>
+            </div>
+        </form>
+    </section>
+        
+    <hr />
+
+    <section>
+        <header>
+            <h3>Group Membership</h3>
+        </header>
+
+        <ul ng-if="vm.user.groupInfo.length">
+            <li ng-repeat="group in vm.user.groupInfo">
+                <a ui-sref="crud.groups.details({ id: group.id })">{{ group.name }}</a>
+            </li>
+        </ul>
+
+        <div class="text-center" ng-if="!vm.user.groups.length">
+            No groups    
+        </div>
+    </section>
+</div>
+
+<section ng-if="! vm.user" class="col-md-8 col-md-offset-2 text-center">
+    User not found    
+</section>
