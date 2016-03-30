@@ -1,96 +1,82 @@
-module.exports = function() {
+module.exports = function(mongoose) {
     'use strict';
 
     var utils = require('./util.js')();
+    var UserSchema = require('./user.schema.server.js')(mongoose);
     
-    var users = [];
+    var User = mongoose.model('User', UserSchema);
 
     var service = {
-        create: createUser,
-        findAll: findAllUsers,
-        findById: findUserById,
-        findByUsername: findByUsername,
-        findByCredentials: findByCredentials,
-        update: updateUser,
-        delete: deleteUser
+        create: utils.defer(createUser),
+        findAll: utils.defer(findAllUsers),
+        findById: utils.defer(findUserById),
+        findByUsername: utils.defer(findByUsername),
+        findByCredentials: utils.defer(findByCredentials),
+        update: utils.defer(updateUser),
+        delete: utils.defer(deleteUser)
     };
 
     activate();
 
     return service;
 
-    function activate() {
-        var mockData = require('./user.mock.json');
-        
-        for (var i = 0; i < mockData.length; i++) {
-            users.push(mockData[i]);
-        }
+    ////////////////////////////////////////
+
+    function activate() { }
+
+    function createUser(resolve, reject, user) {
+        User.create(user, function(err, doc) {
+            return err ? reject(err) : resolve(doc);
+        });
     }
 
-    function createUser(user) {
-        user['_id'] = new Date().getTime();
-        if (user.roles === undefined) {
-            user.roles = [];
-        }
-        users.push(user);
-
-        return user;
+    function findAllUsers(resolve, reject) {
+        User.find(function(err, docs) {
+            return err ? reject(err) : resolve(doc);
+        });
     }
 
-    function findAllUsers() {
-        return users;
+    function findUserById(resolve, reject, id) {
+        User.findById(id, function(err, doc) {
+            return err ? reject(err) : resolve(doc);
+        });
     }
 
-    function findUserById(id) {
-        var u = findUser(id);
-
-        if (u) {
-            return u.user;
-        }
-    }
-
-    function findByUsername(username) {
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].username === username) {
-                return users[i];
-            }
-        }
+    function findByUsername(resolve, reject, username) {
+        User.findOne({ username: username }, function(err, doc) {
+            return err ? reject(err) : resolve(doc);
+        });
     }
 
     function findByCredentials(credentials) {
-        for (var i = 0; i < users.length; i++) {
-            if (users[i].username === credentials.username && users[i].password === credentials.password) {
-                return users[i];
+        User.findOne(credentials, function(err, doc) {
+            return err ? reject(err) : resolve(doc);
+        });
+    }
+
+    function updateUser(reject, resolve, id, user) {
+        User.findById(id, function(err, doc) {
+            if (err) {
+                reject(err);
+            } else {
+                utils.extend(doc, user);
+
+                doc.save(function(err, doc) {
+                    return err ? reject(err) : resolve(doc);
+                });
             }
-        }
+        });
     }
 
-    function updateUser(id, user) {
-        var u = findUser(id);
-
-        if (u) {
-            utils.extend(u.user, user);
-            return u.user;
-        }
-    }
-
-    function deleteUser(id) {
-        var u = findUser(id);
-
-        if (u) {
-            users.splice(u.index, 1);
-            return users;
-        }
-    }
-
-    function findUser(id) {
-        for (var i = 0; i < users.length; i++) {
-            if (users[i]['_id'] === id) {
-                return {
-                    index: i,
-                    user: users[i]
-                };
+    function deleteUser(resolve, reject, id) {
+        User.findById(id).remove(function(err) {
+            if (err) {
+                reject(err);
+            } else {
+                User.find(function(err, docs) {
+                    return err ? reject(err) : resolve(docs);    
+                });
             }
-        }
+        });
     }
 }
