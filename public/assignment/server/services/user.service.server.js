@@ -14,9 +14,15 @@ module.exports = function(app, UserModel) {
     app.delete(idParam, deleteUser);
 
     function createUser(req, res) {
-        var user = UserModel.create(req.body);
-
-        res.send(user);
+        var user = UserModel
+            .create(req.body)
+            .then(function(user) {
+                res.json(user);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
+        
     }
 
     function getUser(req, res) {
@@ -33,33 +39,69 @@ module.exports = function(app, UserModel) {
     }
 
     function getUserById(req, res) {
-        var id = parseInt(req.params.id);
-        console.log(id);
-        utils.sendOr404(UserModel.findById(id), res, errorMsg);
+        UserModel
+            .findById(req.params.id)
+            .then(function(user) {
+                res.json(user);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function updateUser(req, res) {
-        var id = parseInt(req.params.id);
-        utils.sendOr404(UserModel.update(id, req.body), res, errorMsg);
+        UserModel
+            .update(req.params.id, req.body)
+            .then(function(user) {
+                res.json(user);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function deleteUser(req, res) {
-        var id = parseInt(req.params.id);
-        utils.sendOr404(UserModel.delete(id), res, errorMsg);
+        UserModel
+            .delete(req.params.id)
+            .then(function(users) {
+                res.json(users); 
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function getUserByCredentials(credentials, res) {
-        utils.sendOr404(UserModel.findByCredentials(credentials), res, errorMsg);
+        UserModel
+            .findByCredentials(credentials)
+            .then(function(user) {
+                res.json(user);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function getUserByUsername(username, res) {
-        utils.sendOr404(UserModel.findByUsername(username), res, errorMsg);
+        UserModel
+            .findByUsername(username)
+            .then(function(user) {
+                res.json(user);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function getAllUsers(res) {
-        var users = UserModel.findAll();
-
-        res.json(users);
+        UserModel
+            .findAllUsers()
+            .then(function() {
+                res.json(user);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
 }

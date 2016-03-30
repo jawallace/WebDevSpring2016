@@ -2,60 +2,84 @@ module.exports = function(app, FormModel) {
     'use strict';
 
     var utils = require('./util.js')();
-    var guid = require('guid');
 
     var baseFieldUrl = '/api/assignment/form/:formId/field';
     var specificFieldUrl = baseFieldUrl + '/:fieldId';
 
-    app.get(baseFieldUrl, ensureFormExists, getFieldsForForm);
-    app.post(baseFieldUrl, ensureFormExists, createFieldForForm);
-    app.put(baseFieldUrl, ensureFormExists, setFieldsForForm);
+    app.get(baseFieldUrl, getFieldsForForm);
+    app.post(baseFieldUrl, createFieldForForm);
+    app.put(baseFieldUrl, setFieldsForForm);
 
-    app.get(specificFieldUrl, ensureFormExists, getField);
-    app.delete(specificFieldUrl, ensureFormExists, deleteField);
-    app.put(specificFieldUrl, ensureFormExists, updateField);
+    app.get(specificFieldUrl, getField);
+    app.delete(specificFieldUrl, deleteField);
+    app.put(specificFieldUrl, updateField);
 
-    function ensureFormExists(req, res, next) {
-        var formId = req.params.formId;
-
-        var form = FormModel.findById(formId);
-        if (! form) {
-            res.status(404).json({ error: 'Form with id (' + formId + ') not found' });
-        } else {
-            req.form = form;
-            next();
-        }
-    }
-
+    ////////////////////////////////
+    
     function getFieldsForForm(req, res) {
-        utils.sendOr404(FormModel.fields.findAll(req.form), res, 'Fields not found');
+        FormModel.fields
+            .findAll(req.params.formId)
+            .then(function(fields) {
+                res.json(fields);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function createFieldForForm(req, res) {
-        var field = req.body;
-        field['_id'] = guid.raw();
-        utils.sendOr404(FormModel.fields.create(req.form, field), res, 'Could not create field');
+        FormModel.fields
+            .create(req.params.formId, req.body)
+            .then(function(form) {
+                res.json(form);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function setFieldsForForm(req, res) {
-        var fields = req.body;
-        utils.sendOr404(FormModel.fields.set(req.form, fields), res, 'Could not set fields');
+        FormModel.fields
+            .set(req.params.formId, req.body)
+            .then(function(form) {
+                res.json(form);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function getField(req, res) {
-        var fieldId = req.params.fieldId;
-
-        utils.sendOr404(FormModel.fields.findById(req.form, fieldId), res, 'Field not found');
+        FormModel.fields
+            .findById(req.params.formId, req.params.fieldId)
+            .then(function(field) {
+                res.json(field);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function deleteField(req, res) {
-        var fieldId = req.params.fieldId;
-        utils.sendOr404(FormModel.fields.delete(req.form, fieldId), res, 'Could not delete form');
+        FormModel.fields
+            .delete(req.params.formId, req.params.fieldId)
+            .then(function(form) {
+                res.json(form);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function updateField(req, res) {
-        var fieldId = req.params.fieldId;
-        utils.sendOr404(FormModel.fields.update(req.form, fieldId, req.body), res, 'Could not delete form');
+        FormModel.fields
+            .update(req.params.formId, req.params.fieldId, req.body)
+            .then(function(field) {
+                res.json(field);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
 }

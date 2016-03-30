@@ -2,7 +2,6 @@ module.exports = function(app, FormModel) {
     'use strict';
 
     var utils = require('./util.js')();
-    var guid = require('guid');
 
     var formUrl = '/api/assignment/form/:formId';
     var userUrl = '/api/assignment/user/:userId/form';
@@ -16,37 +15,67 @@ module.exports = function(app, FormModel) {
     app.get(userUrl, getFormsForUser);
     app.post(userUrl, createForm);
 
+    ////////////////////////////////////////
+    
     function getForm(req, res) {
-        var id = req.params.formId;
-        utils.sendOr404(FormModel.findById(id), res, errorMsg);
+        FormModel
+            .findById(req.params.formId)
+            .then(function(form) {
+                res.json(form);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function deleteForm(req, res) {
-        var id = req.params.formId;
-        utils.sendOr404(FormModel.delete(id), res, errorMsg);
+        FormModel
+            .delete(req.params.formId)
+            .then(function(forms) {
+                res.json(forms);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function updateForm(req, res) {
-        var id = req.params.formId;
-        utils.sendOr404(FormModel.update(id, req.body), res, errorMsg);
+        FormModel
+            .update(req.params.formId, req.body)
+            .then(function(form) {
+                res.json(form);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function getFormsForUser(req, res) {
-        var userId = parseInt(req.params.userId);
-        utils.sendOr404(FormModel.findFormsForUser(userId), res, errorMsg);
+        FormModel
+            .findFormsForUser(req.params.userId)
+            .then(function(forms) {
+                res.json(forms);
+            })
+            .catch(function(err) {
+                res.status(404).json(err);
+            });
     }
 
     function createForm(req, res) {
-        var userId = parseInt(req.params.userId);
         var form = req.body;
-
-        form.userId = userId;
-        form['_id'] = guid.raw();
+        form.userId = req.params.userId;
         if (! form.fields) {
             form.fields = [];
         }
 
-        utils.sendOr404(FormModel.create(form), res, errorMsg);
+        FormModel
+            .create(form)
+            .then(function(form) {
+                res.json(form);
+            })
+            .catch(function(err) {
+                res.status(400).json(err);
+            });
     }
 
 }
