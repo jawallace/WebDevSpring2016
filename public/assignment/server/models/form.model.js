@@ -1,26 +1,27 @@
-module.exports = function() {
+module.exports = function(mongoose) {
     'use strict';
 
     var utils = require('./util.js')();
 
-    var forms = [];
+    var FormSchema = require('./form.schema.server.js')();
+    var Form = mongoose.model('Form', FormSchema);
 
     var service = {
-        create: createForm,
-        findAll: findAllForms,
-        findById: findFormById,
-        findFormByTitle: findFormByTitle,
-        findFormsForUser: findFormsForUser,
-        update: updateForm,
-        delete: deleteForm,
+        create: utils.defer(createForm),
+        findAll: utils.defer(findAllForms),
+        findById: utils.defer(findFormById),
+        findFormByTitle: utils.defer(findFormByTitle),
+        findFormsForUser: utils.defer(findFormsForUser),
+        update: utils.defer(updateForm),
+        delete: utils.defer(deleteForm),
 
         fields: {
-            create: createField,
-            findAll: findAllFields,
-            findById: findFieldById,
-            update: updateField,
-            set: setFields,
-            delete: deleteField
+            create: utils.defer(createField),
+            findAll: utils.defer(findAllFields),
+            findById: utils.defer(findFieldById),
+            update: utils.defer(updateField),
+            set: utils.defer(setFields),
+            delete: utils.defer(deleteField)
         }
     };
 
@@ -31,124 +32,133 @@ module.exports = function() {
     //////////////////////////
     
     function activate() {
-        var mockData = require('./form.mock.json');
-        for (var i = 0; i < mockData.length; i++) {
-            forms.push(mockData[i]);
-        }
     }
 
-    function createForm(form) {
-        forms.push(form);
-
-        return form;
-    }
-
-    function findAllForms() {
-        return forms;
-    }
-
-    function findFormById(id) {
-        var f = findForm(id);
-
-        if (f) {
-            return f.form;
-        }
-    }
-
-    function findFormByTitle(title) {
-        for (var i = 0; i < forms.length; i++) {
-            if (forms[i].title === title) {
-                return forms[i];
-            }
-        }
-    }
-
-    function findFormsForUser(userId) {
-        return forms.filter(function(form) {
-            return form.userId === userId;
+    function createForm(resolve, reject, form) {
+        Form.create(form, function(err, doc) {
+            return err ? reject(err) : resolve(doc);
         });
     }
 
-    function updateForm(id, form) {
-        var f = findForm(id);
-
-        if (f) {
-            utils.extend(f.form, form);
-            return f.form;
-        }
+    function findAllForms(resolve, reject) {
+        Form.find(function(err, doc) {
+            return err ? reject(err) : resolve(doc);
+        });
     }
 
-    function deleteForm(id) {
-        var f = findForm(id);
-
-        if (f) {
-            forms.splice(f.index, 1);
-            return f.form;
-        }
+    function findFormById(resolve, reject, id) {
+        Form.findById(id, function(err, doc) {
+            return err ? reject(err) : resolve(doc);
+        });
     }
 
-    function findForm(id) {
-        for (var i = 0; i < forms.length; i++) {
-            if (forms[i]['_id'] === id) {
-                return {
-                    index: i,
-                    form: forms[i]
-                };
+    function findFormByTitle(resolve, reject, title) {
+        Form.findOne({ title: title }, function(err, doc) {
+            return err ? reject(err) : resolve(doc); 
+        });
+    }
+
+    function findFormsForUser(resolve, reject, userId) {
+        Form.find({ userId: userId }, function(err, doc) {
+            return err ? reject(err) : resolve(doc); 
+        });
+    }
+
+    function updateForm(resolve, reject, id, form) {
+        Form.findById(id, function(err, doc) {
+            if (err) {
+                reject(err);
+            } else {
+                utils.extend(doc, form);
+
+                doc.save(function(err, doc) {
+                    return err ? reject(err) : resolve(doc);
+                });
             }
-        }
+        });
     }
 
-    function createField(form, field) {
-        form.fields.push(field);
-
-        return field;
+    function deleteForm(resolve, reject, id) {
+        Form.findById(id).remove(function(err, doc) {
+            if (err) {
+                reject(err);
+            } else {
+                Form.find(function(err, doc) {
+                    return err ? reject(err) : resolve(doc);
+                });
+            }
+        });
     }
 
-    function findAllFields(form) {
-        return form.fields;
+    function createField(resolve, reject, formId, field) {
+        Form.findById(formId, function(err, doc) {
+            if (err) {
+                reject(err);
+            } else {
+                doc.fields.push(field);
+
+                doc.save(function(err, doc) {
+                    return err ? reject(err) : resolve(doc);
+                });
+            }
+        });
     }
 
-    function findFieldById(form, id) {
-        var f = findField(form, id);
-
-        if (f) {
-            return f.field;
-        }
+    function findAllFields(resolve, reject, formId) {
+        Form.findById(formId, 'fields', function(err, doc) {
+            return err ? reject(err) : resolve(doc);
+        });
     }
 
-    function updateField(form, id, field) {
-        var f = findField(form, id);
+    function findFieldById(resolve, reject, formId, id) {
+        Form.findOne({ _id: formId, 'fields._id': id }, { 'fields.$': 1 }, function(err, doc) {
+            if (err) {
+               reject(err);
+            } else {
+                resolve(doc.fields[0]);
+            }
+        });
+    }
 
-        if (f) {
-            utils.extend(f.field, field);
-            return f.field;
-        }
+    function updateField(resolve, reject, formId, id, field) {
+        Form.findOne({ _id: formId, 'fields._id': id }, function(err, doc) {
+            if (err) {
+                reject(err);
+            } else {
+                var fieldDoc = doc.fields.id(id);
+                utils.extend(fieldDoc, field);
+
+                doc.save(function(err, doc) {
+                    return err ? reject(err) : resolve(fieldDoc);
+                });
+            }
+        });
     }
     
-    function setFields(form, fields) {
-        form.fields = fields;
-
-        return fields;
-    }
-
-    function deleteField(form, id) {
-        var f = findField(form, id);
-
-        if (f) {
-            form.fields.splice(f.index, 1);
-            return f.field;
-        }
-    }
-
-    function findField(form, fieldId) {
-        var fields = form.fields;
-        for (var i = 0; i < fields.length; i++) {
-            if (fields[i]['_id'] === fieldId) {
-                return {
-                    field: fields[i],
-                    index: i
-                };
+    function setFields(resolve, reject, formId, fields) {
+        Form.findById(formId, function(err, doc) {
+            if (err) {
+                reject(err);
+            } else {
+                doc.fields = fields;
+                doc.save(function(err, doc) {
+                    return err ? reject(err) : resolve(doc);
+                });
             }
-        }
+        });
+    }
+
+    function deleteField(resolve, reject, formId, id) {
+        Form.findOne({ _id: formId, 'fields._id': id }, function(err, doc) {
+            if (err) {
+                reject(err);
+            } else {
+                doc.fields.id(id).remove();
+
+                doc.save(function(err, doc) {
+                    return err ? reject(err) : resolve(doc);
+                });
+            }
+        });
     }
 }
