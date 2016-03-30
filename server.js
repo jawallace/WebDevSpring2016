@@ -7,6 +7,9 @@ var multer = require('multer');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/cs4559');
+
 var app = express();
 
 // Express Configuration
