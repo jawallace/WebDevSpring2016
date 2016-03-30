@@ -3,7 +3,7 @@ module.exports = function(mongoose) {
 
     var utils = require('./util.js')();
 
-    var FormSchema = require('./form.schema.server.js')();
+    var FormSchema = require('./form.schema.server.js')(mongoose);
     var Form = mongoose.model('Form', FormSchema);
 
     var service = {
