@@ -28,7 +28,7 @@ module.exports = function() {
         }
 
         return function(args) {
-            fn.apply([resolve, reject].concat(arguments)); 
+            fn.apply(null, [resolve, reject].concat([].slice.call(arguments))); 
             return deferred.promise;
         }
     }

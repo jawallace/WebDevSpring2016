@@ -17,12 +17,11 @@ module.exports = function(app, UserModel) {
         var user = UserModel
             .create(req.body)
             .then(function(user) {
-                res.json(user);
+                utils.sendOr404(user, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
-        
     }
 
     function getUser(req, res) {
@@ -42,10 +41,10 @@ module.exports = function(app, UserModel) {
         UserModel
             .findById(req.params.id)
             .then(function(user) {
-                res.json(user);
+                utils.sendOr404(user, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -53,10 +52,10 @@ module.exports = function(app, UserModel) {
         UserModel
             .update(req.params.id, req.body)
             .then(function(user) {
-                res.json(user);
+                utils.sendOr404(user, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -64,10 +63,10 @@ module.exports = function(app, UserModel) {
         UserModel
             .delete(req.params.id)
             .then(function(users) {
-                res.json(users); 
+                utils.sendOr404(users, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -75,10 +74,10 @@ module.exports = function(app, UserModel) {
         UserModel
             .findByCredentials(credentials)
             .then(function(user) {
-                res.json(user);
+                utils.sendOr404(user, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -86,21 +85,21 @@ module.exports = function(app, UserModel) {
         UserModel
             .findByUsername(username)
             .then(function(user) {
-                res.json(user);
+                utils.sendOr404(user, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
     function getAllUsers(res) {
         UserModel
             .findAllUsers()
-            .then(function() {
-                res.json(user);
+            .then(function(users) {
+                utils.sendOr404(users, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 

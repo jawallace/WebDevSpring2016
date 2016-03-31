@@ -48,7 +48,7 @@ module.exports = function(mongoose) {
         });
     }
 
-    function findByCredentials(credentials) {
+    function findByCredentials(resolve, reject, credentials) {
         User.findOne(credentials, function(err, doc) {
             return err ? reject(err) : resolve(doc);
         });
