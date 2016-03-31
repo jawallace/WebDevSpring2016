@@ -8,7 +8,18 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/cs4550');
+
+var connectionString = 'mongodb://localhost/cs4550';
+if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
+    connectionString = 
+        process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+        process.env.OPENSHIFT_APP_NAME;
+}
+
+mongoose.connect(connectionString);
 
 var app = express();
 
