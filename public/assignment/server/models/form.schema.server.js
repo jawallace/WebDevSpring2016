@@ -18,7 +18,7 @@ module.exports = function(mongoose) {
             type: Date,
             default: Date.now
         }
-    });
+    }, { collection: 'assignment.form' });
 
     return FormSchema;
 

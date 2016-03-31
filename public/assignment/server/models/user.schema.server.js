@@ -12,7 +12,7 @@ module.exports = function(mongoose) {
             type: String,
             enum: [ "user", "admin" ]
         }]
-    }, { collection: 'user' });
+    }, { collection: 'assignment.user' });
 
     return UserSchema;
 

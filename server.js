@@ -8,7 +8,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/cs4559');
+mongoose.connect('mongodb://localhost/cs4550');
 
 var app = express();
 

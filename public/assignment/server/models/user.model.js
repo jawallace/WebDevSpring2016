@@ -54,7 +54,7 @@ module.exports = function(mongoose) {
         });
     }
 
-    function updateUser(reject, resolve, id, user) {
+    function updateUser(resolve, reject, id, user) {
         User.findById(id, function(err, doc) {
             if (err) {
                 reject(err);

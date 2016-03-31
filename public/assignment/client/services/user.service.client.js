@@ -82,6 +82,8 @@
                 .put(baseUrl + '/' + id, user)
                 .then(function(res) {
                     return res.data;
+                }, function(err) {
+                    console.log(err);   
                 });
         }
     }

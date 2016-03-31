@@ -17,17 +17,17 @@ module.exports = function() {
     }
 
     function defer(fn) {
-        var deferred = q.defer();
-  
-        function resolve(obj) {
-            deferred.resolve(obj);
-        }
-
-        function reject(obj) {
-            deferred.reject(obj);
-        }
-
         return function(args) {
+            var deferred = q.defer();
+      
+            function resolve(obj) {
+                deferred.resolve(obj);
+            }
+
+            function reject(obj) {
+                deferred.reject(obj);
+            }
+
             fn.apply(null, [resolve, reject].concat([].slice.call(arguments))); 
             return deferred.promise;
         }
