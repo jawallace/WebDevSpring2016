@@ -61,12 +61,15 @@
         }
 
         function createUser(user) {
+            if (user.email && ! user.emails) {
+                user.emails = [user.email];
+            }
+
             return $http
                 .post(baseUrl, user)
                 .then(function(res) {
                     return res.data;
                 });
-
         }
 
         function deleteUserById(id) {

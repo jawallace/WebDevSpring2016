@@ -39,7 +39,15 @@
     <div class="form-group">
         <label for="email" class="col-sm-2 control-label">Email</label>
         <div class="col-sm-10">
-            <input type="email" class="form-control" ng-model="vm.user.email" placeholder="Email">
+            <textarea class="form-control" ng-model="vm.user.emails" placeholder="Emails (one per line)"></textarea>
+        </div>
+    </div>
+    
+    <!-- Email input -->
+    <div class="form-group">
+        <label for="email" class="col-sm-2 control-label">Phone</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" ng-model="vm.user.phones" placeholder="Phone Numbers (one per line)"></textarea>
         </div>
     </div>
 
