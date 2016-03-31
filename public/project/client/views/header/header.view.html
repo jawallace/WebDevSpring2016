@@ -1,5 +1,5 @@
 <!-- Page header and top level navigation -->
-<nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="HeaderController as vm">
+<nav class="navbar navbar-default navbar-fixed-top" ng-controller="HeaderController as vm">
     <div class="container-fluid">
         <header class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -11,7 +11,7 @@
             <a ui-sref="home" class="navbar-brand">The Book Club</a>
         </header>
     
-        <section id="navbar" class="navbar-collapse collapse">
+        <section id="navbar" class="navbar-collapse collapse navbar-responsive-collapse">
             <ul class="nav navbar-nav navbar-right">
                 <!-- only if not logged in -->
                 <li ui-sref-active="active" ng-hide="user">
@@ -33,13 +33,9 @@
 
             <!-- img src="https://books.google.com/googlebooks/images/poweredby.png" -->
             <form class="navbar-form navbar-right" ng-submit="vm.search()">
-                <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control" ng-model="vm.searchQuery" placeholder="Search...">
-                        <div class="input-group-addon">
-                            <span class="glyphicon glyphicon-search"></span>
-                        </div>
-                    </div>
+                <div class="form-group is-empty">
+                    <input type="text" class="form-control" ng-model="vm.searchQuery" placeholder="Search...">
+                    <span class="material-input">
                 </div>
             </form>
         </section>
