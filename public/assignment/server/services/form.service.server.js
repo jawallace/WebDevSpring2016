@@ -21,10 +21,10 @@ module.exports = function(app, FormModel) {
         FormModel
             .findById(req.params.formId)
             .then(function(form) {
-                res.json(form);
+                utils.sendOr404(form, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -32,10 +32,10 @@ module.exports = function(app, FormModel) {
         FormModel
             .delete(req.params.formId)
             .then(function(forms) {
-                res.json(forms);
+                utils.sendOr404(forms, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -43,10 +43,10 @@ module.exports = function(app, FormModel) {
         FormModel
             .update(req.params.formId, req.body)
             .then(function(form) {
-                res.json(form);
+                utils.sendOr404(form, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -54,10 +54,10 @@ module.exports = function(app, FormModel) {
         FormModel
             .findFormsForUser(req.params.userId)
             .then(function(forms) {
-                res.json(forms);
+                utils.sendOr404(forms, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -71,10 +71,10 @@ module.exports = function(app, FormModel) {
         FormModel
             .create(form)
             .then(function(form) {
-                res.json(form);
+                utils.sendOr404(form, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(400).json(err);
+                utils.serverError(res, err);
             });
     }
 

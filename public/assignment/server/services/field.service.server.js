@@ -6,6 +6,8 @@ module.exports = function(app, FormModel) {
     var baseFieldUrl = '/api/assignment/form/:formId/field';
     var specificFieldUrl = baseFieldUrl + '/:fieldId';
 
+    var errorMsg = 'Field not found';
+
     app.get(baseFieldUrl, getFieldsForForm);
     app.post(baseFieldUrl, createFieldForForm);
     app.put(baseFieldUrl, setFieldsForForm);
@@ -20,10 +22,10 @@ module.exports = function(app, FormModel) {
         FormModel.fields
             .findAll(req.params.formId)
             .then(function(fields) {
-                res.json(fields);
+                utils.sendOr404(fields, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -31,10 +33,10 @@ module.exports = function(app, FormModel) {
         FormModel.fields
             .create(req.params.formId, req.body)
             .then(function(form) {
-                res.json(form);
+                utils.sendOr404(form, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -42,10 +44,10 @@ module.exports = function(app, FormModel) {
         FormModel.fields
             .set(req.params.formId, req.body)
             .then(function(form) {
-                res.json(form);
+                utils.sendOr404(form, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -53,10 +55,10 @@ module.exports = function(app, FormModel) {
         FormModel.fields
             .findById(req.params.formId, req.params.fieldId)
             .then(function(field) {
-                res.json(field);
+                utils.sendOr404(field, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -64,10 +66,10 @@ module.exports = function(app, FormModel) {
         FormModel.fields
             .delete(req.params.formId, req.params.fieldId)
             .then(function(form) {
-                res.json(form);
+                utils.sendOr404(form, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 
@@ -75,10 +77,10 @@ module.exports = function(app, FormModel) {
         FormModel.fields
             .update(req.params.formId, req.params.fieldId, req.body)
             .then(function(field) {
-                res.json(field);
+                utils.sendOr404(field, res, errorMsg);
             })
             .catch(function(err) {
-                res.status(404).json(err);
+                utils.serverError(res, err);
             });
     }
 

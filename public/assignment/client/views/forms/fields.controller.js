@@ -30,16 +30,16 @@
         function activate(formId) {
             FieldService
                 .getFieldsForForm(formId)
-                .then(function(fields) {
-                    vm.fields = fields;
+                .then(function(form) {
+                    vm.fields = form.fields;
                 });
         }
 
         function addField(field) {
             FieldService
                 .createFieldForForm(formId, field)
-                .then(function(field) {
-                    vm.fields.push(field);
+                .then(function(form) {
+                    vm.fields = form.fields;
                 });
         }
 
@@ -55,8 +55,8 @@
             vm.fields.splice(newIndex, 0, vm.fields.splice(oldIndex, 1)[0]);
             FieldService 
                 .setFieldsForForm(formId, vm.fields)
-                .then(function(fields) {
-                    vm.fields = fields;
+                .then(function(form) {
+                    vm.fields = form.fields;
                 });
         }
 
