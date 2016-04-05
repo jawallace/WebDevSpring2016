@@ -3,11 +3,10 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var multer = require('multer');
-
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-
 var mongoose = require('mongoose');
+var passport = require('passport');
 
 var connectionString = 'mongodb://localhost/cs4550';
 if (process.env.OPENSHIFT_MONGODB_DB_PASSWORD) {
@@ -30,8 +29,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(multer());
 
-app.use(session({ secret: process.env.SESSION_SECRET }));
+app.use(session({ 
+    secret: process.env.SESSION_SECRET,
+    resave: true,
+    saveUnititialized: true
+}));
+
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 
 var IP_ADDRESS = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var PORT = process.env.OPENSHIFT_NODEJS_PORT || 3000;
