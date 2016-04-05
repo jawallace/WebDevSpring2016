@@ -21,3 +21,17 @@ td.table-controls {
 .fba-sortable-placeholder {
     opacity: 0.3;
 }
+
+.js-table-sort-control a:link, .js-table-sort-control a:visited {
+    text-decoration: inherit;
+    cursor: pointer;
+}
+
+.js-table-sort-control.sorted::before {
+    content: '\25b2'; 
+}
+
+.js-table-sort-control.sorted.reversed::before {
+    content: '\25bc'; 
+}
+

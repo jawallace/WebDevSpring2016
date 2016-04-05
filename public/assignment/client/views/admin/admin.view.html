@@ -1,4 +1,4 @@
-<header>
+<userheader>
     <h1 class="page-header">Admin</h1>
 </header>
 
@@ -11,18 +11,32 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th><span class="caret"></span> Username</th>
-                    <th><span class="caret"></span> Password</th>
-                    <th><span class="caret"></span> Role</th>
-                    <th><span class="caret"></span> Action</th>
+                    <th class="js-table-sort-control" ng-class="{ sorted: vm.predicate === 'username', reversed: vm.reversed }">
+                        <a href="javascript:void(0)" ng-click="vm.sort('username')">Username</a>
+                    </th>
+                    <th>Password</th>
+                    <th class="js-table-sort-control" ng-class="{ sorted: vm.predicate === 'firstName', reversed: vm.reversed }">
+                        <a href="javascript:void(0)" ng-click="vm.sort('firstName')">First Name</a>
+                    </th>
+                    <th class="js-table-sort-control" ng-class="{ sorted: vm.predicate === 'lastName', reversed: vm.reversed }">
+                        <a href="javascript:void(0)" ng-click="vm.sort('lastName')">Last Name</a>
+                    </th>
+                    <th>Roles</th>
+                    <th>Actions</th>
                 </tr>
                 
                 <tr>
                     <td>
-                        <input type="text" class="form-control" id="username" placeholder="Username">
+                        <input type="text" class="form-control" placeholder="Username">
                     </td>
                     <td>
-                        <input type="password" class="form-control" id="password" placeholder="Password">
+                        <input type="password" class="form-control" placeholder="Password">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="First Name">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Last Name">
                     </td>
                     <td>
                         <input type="text" class="form-control" id="role" placeholder="Role 1, Role 2">
@@ -35,30 +49,12 @@
             </thead>
 
             <tbody>
-                <tr>
-                    <td>alice</td>
+                <tr ng-repeat="user in vm.users | orderBy:vm.predicate:vm.reversed">
+                    <td>{{ user.username }}</td>
                     <td></td>
-                    <td>student</td>
-                    <td class="text-center table-controls">
-                        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td>bob</td>
-                    <td></td>
-                    <td>faculty | admin</td>
-                    <td class="text-center table-controls">
-                        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
-                    </td>
-                </tr>
-               
-                <tr>
-                    <td>charlie</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{ user.firstName}}</td>
+                    <td>{{ user.lastName }}</td>
+                    <td>{{ user.roles.join(',') }}</td>
                     <td class="text-center table-controls">
                         <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
                         <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>

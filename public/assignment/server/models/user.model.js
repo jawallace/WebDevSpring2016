@@ -32,7 +32,7 @@ module.exports = function(mongoose) {
 
     function findAllUsers(resolve, reject) {
         User.find(function(err, docs) {
-            return err ? reject(err) : resolve(doc);
+            return err ? reject(err) : resolve(docs);
         });
     }
 

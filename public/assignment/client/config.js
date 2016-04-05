@@ -35,7 +35,9 @@
             })
             .state('admin', {
                 url: '/admin',
-                templateUrl: 'views/admin/admin.view.html'
+                templateUrl: 'views/admin/admin.view.html',
+                controller: 'AdminController',
+                controllerAs: 'vm'
             })
             .state('forms', {
                 url: '/form',
