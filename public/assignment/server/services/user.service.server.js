@@ -2,22 +2,49 @@ module.exports = function(app, UserModel) {
     'use strict';
 
     var utils = require('./util.js')();
+    var passportConfig = require('../config/passport-config.js')(UserModel);
+    var requireAuthentication = passportConfig.requireAuthentication;
+    var authenticate = passportConfig.authenticate;
 
-    var baseUrl = '/api/assignment/user';
-    var idParam = baseUrl + '/:id';
-    var errorMsg = 'User not found';
+    var LOGIN_URL = '/api/assignment/login';
+    var LOGOUT_URL = '/api/assignment/logout';
+    var LOGGED_IN_URL = '/api/assignment/loggedIn';
 
-    app.post(baseUrl, createUser);
-    app.get(baseUrl, getUser);
-    app.get(idParam, getUserById);
-    app.put(idParam, updateUser);
-    app.delete(idParam, deleteUser);
+    var BASE_URL = '/api/assignment/user';
+    var ID_PARAM_URL = BASE_URL + '/:id';
+    var ERROR_MSG = 'User not found';
+
+    app.post(LOGIN_URL, passportConfig.passport.authenticate('local'), login);
+    app.post(LOGOUT_URL, logout);
+    app.get(LOGGED_IN_URL, isLoggedIn);
+
+    app.post(BASE_URL, createUser);
+    app.get(BASE_URL, getUser);
+    app.get(ID_PARAM_URL, getUserById);
+    app.put(ID_PARAM_URL, updateUser);
+    app.delete(ID_PARAM_URL, deleteUser);
+
+    ////////////////////////////////////////////////////
+    
+    function login(req, res, next) {
+        var user = req.user;
+        res.json(user); 
+    }
+
+    function logout(req, res, next) {
+        req.logOut();
+        res.status(200).send();
+    }
+
+    function isLoggedIn(req, res, next) {
+        res.send(req.isAuthenticated() ? req.user : '0');    
+    }
 
     function createUser(req, res) {
         var user = UserModel
             .create(req.body)
             .then(function(user) {
-                utils.sendOr404(user, res, errorMsg);
+                utils.sendOr404(user, res, ERROR_MSG);
             })
             .catch(function(err) {
                 utils.serverError(res, err);
@@ -41,7 +68,7 @@ module.exports = function(app, UserModel) {
         UserModel
             .findById(req.params.id)
             .then(function(user) {
-                utils.sendOr404(user, res, errorMsg);
+                utils.sendOr404(user, res, ERROR_MSG);
             })
             .catch(function(err) {
                 utils.serverError(res, err);
@@ -52,7 +79,7 @@ module.exports = function(app, UserModel) {
         UserModel
             .update(req.params.id, req.body)
             .then(function(user) {
-                utils.sendOr404(user, res, errorMsg);
+                utils.sendOr404(user, res, ERROR_MSG);
             })
             .catch(function(err) {
                 utils.serverError(res, err);
@@ -63,7 +90,7 @@ module.exports = function(app, UserModel) {
         UserModel
             .delete(req.params.id)
             .then(function(users) {
-                utils.sendOr404(users, res, errorMsg);
+                utils.sendOr404(users, res, ERROR_MSG);
             })
             .catch(function(err) {
                 utils.serverError(res, err);
@@ -74,7 +101,7 @@ module.exports = function(app, UserModel) {
         UserModel
             .findByCredentials(credentials)
             .then(function(user) {
-                utils.sendOr404(user, res, errorMsg);
+                utils.sendOr404(user, res, ERROR_MSG);
             })
             .catch(function(err) {
                 utils.serverError(res, err);
@@ -85,7 +112,7 @@ module.exports = function(app, UserModel) {
         UserModel
             .findByUsername(username)
             .then(function(user) {
-                utils.sendOr404(user, res, errorMsg);
+                utils.sendOr404(user, res, ERROR_MSG);
             })
             .catch(function(err) {
                 utils.serverError(res, err);
@@ -96,7 +123,7 @@ module.exports = function(app, UserModel) {
         UserModel
             .findAllUsers()
             .then(function(users) {
-                utils.sendOr404(users, res, errorMsg);
+                utils.sendOr404(users, res, ERROR_MSG);
             })
             .catch(function(err) {
                 utils.serverError(res, err);

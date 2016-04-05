@@ -5,9 +5,9 @@
         .module('FormBuilderApp')
         .controller('HeaderController', HeaderController);
 
-    HeaderController.$inject = [ '$rootScope', '$state' ];
+    HeaderController.$inject = [ '$rootScope', '$state', 'UserService' ];
 
-    function HeaderController($rootScope, $state) {
+    function HeaderController($rootScope, $state, UserService) {
         var vm = this;
 
         vm.logout = logout;
@@ -22,8 +22,12 @@
         }, updateLoggedInStatus);
 
         function logout() {
-            $rootScope.user = undefined;
-            $state.go('home'); 
+            UserService
+                .logout()
+                .then(function() {
+                    $rootScope.user = undefined;
+                    $state.go('home'); 
+                });
         }
 
         function updateLoggedInStatus(newValue, oldValue) {

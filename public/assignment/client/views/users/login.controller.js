@@ -24,7 +24,7 @@
             }
 
             UserService
-                .findByUsernameAndPassword(user.username, user.password)
+                .login(user.username, user.password)
                 .then(function(foundUser) {
                     if (foundUser) {
                         $rootScope.user = foundUser;

@@ -11,6 +11,9 @@
         var baseUrl = '/api/assignment/user';
 
         var service = {
+            login: login,
+            logout: logout,
+            isLoggedIn: isLoggedIn,
             findByUsername: findByUsername,
             findByUsernameAndPassword: findByUsernameAndPassword,
             findAllUsers: findAllUsers,
@@ -22,7 +25,34 @@
         return service;
 
         //////////////////////////////////
-       
+      
+        function login(username, password) {
+            return $http
+                .post('/api/assignment/login', { username: username, password: password })
+                .then(function(res) {
+                    return res.data;
+                }, function(err) {
+                    console.log(err);
+                    return err;
+                });
+        }
+
+        function logout() {
+            return $http
+                .post('/api/assignment/logout')
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+
+        function isLoggedIn() {
+            return $http
+                .get('/api/assignment/isLoggedIn')
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+
         function findByUsername(username) {
             var config = {
                 params: {

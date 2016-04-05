@@ -32,7 +32,7 @@ app.use(multer());
 app.use(session({ 
     secret: process.env.SESSION_SECRET,
     resave: true,
-    saveUnititialized: true
+    saveUninitialized: true
 }));
 
 app.use(cookieParser());
