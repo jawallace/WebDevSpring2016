@@ -39,9 +39,9 @@
                 .getBookByQuery(query, page)
                 .then(function (res) {
                     vm.msg = NO_MSG;
-                    vm.results = res.data;
+                    vm.results = res;
 
-                    if (! vm.results.length) {
+                    if (! vm.results || !vm.results.length) {
                         vm.msg = NO_RESULTS;
                     }
 

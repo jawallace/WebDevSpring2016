@@ -9,8 +9,8 @@
     function LoginController(UserService, $rootScope, $state) {
         var vm = this;
 
-        vm.username; // ng-model
-        vm.password; // ng-model
+        vm.username = ''; // ng-model
+        vm.password = ''; // ng-model
         vm.message = '';
 
         vm.login = login;

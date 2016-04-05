@@ -70,7 +70,7 @@ module.exports = function() {
 
     function normalize(rawData, next) {
         var result;
-
+        
         if (rawData.items !== undefined) {
             result = [];
             for (var i in rawData.items) {

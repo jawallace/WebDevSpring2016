@@ -3,4 +3,8 @@
 
     angular.module('TheBookClub', ['ui.router']);
 
+    $(document).ready(function() {
+        $.material.init();
+    });
+
 })();

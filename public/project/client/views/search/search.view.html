@@ -5,39 +5,9 @@
 <div class="col-sm-10 col-sm-offset-1">
     <div class="msg" ng-show="vm.msg">{{ vm.msg }}</div>
 
-    <div class="row book" ng-repeat="book in vm.results">
-        <div class="col-sm-2 book-cover">
-            <img ng-src="{{ book.cover.thumb }}">
-        </div>
-
-        <div class="col-sm-10">
-            <div class="book-metadata">
-                <div>
-                    <span class="book-title">{{ book.title }} <span ng-if="book.subtitle">({{ book.subtitle }})</span></span> 
-                </div>
-
-                <div>
-                    {{ book.authors.join(", ") }}
-                </div>
-
-                <div>
-                    <span ng-if="book.publisher">{{ book.publisher }} |<span> 
-                    <span ng-if="book.date">{{ book.date | date }} |<span>
-                    <span ng-if="book.pages">{{ book.pages }} pages</span>
-                </div>
-
-                <div bc-rating bc-value="book.rating" bc-out-of="5" bc-num-ratings="book.numRatings">
-                </div>
-            </div>
-
-            <div class="book-description">
-                {{ book.description }}
-            </div>
-
-            <div class="book-controls col-md-2 col-md-offset-10" ng-if="vm.selecting">
-                <button class="btn btn-primary btn-block" ng-click="vm.select(book)">Select</button>
-            </div>
-        </div>
+    <div ng-repeat="book in vm.results">
+        <bc-book-card bc-book="book.id" bc-allow-selection="true" bc-on-select="vm.select()">
+        </bc-book-card>
     </div>
 
     <div class="text-center" ng-show="vm.results.length || vm.page > 1">

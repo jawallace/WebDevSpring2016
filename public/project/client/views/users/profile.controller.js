@@ -37,7 +37,7 @@
             UserService
                 .isLoggedIn()
                 .then(function(user) {
-                    vm.isLoggedInUser = !!user;
+                    vm.isLoggedInUser = user.id === userId;
                 });
         }
 

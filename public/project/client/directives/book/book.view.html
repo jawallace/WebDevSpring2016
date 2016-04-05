@@ -1,0 +1,25 @@
+<div class="col-md-4 col-sm-6 col-xs-12">
+    <div class="card">
+        <div class="card-height-indicator"></div>
+
+        <div class="card-content" 
+            style="background-image: url({{ vm.book.cover.thumb }}); background-repeat: no-repeat; background-size: contain">
+            <div class="card-image">
+            </div>
+
+            <div class="card-body" style="color: white;">
+                <h3>{{ vm.book.title }}</h3>
+
+                <div>{{ vm.book.authors.join(', ') }}</div>
+
+                <div bc-rating bc-value="vm.book.rating" bc-out-of="5" bc-num-ratings="vm.book.numRatings">
+                </div>
+            </div>
+
+            <footer class="card-footer" ng-if="vm.includeFooter">
+                <button class="btn btn-flat btn-primary">Details</button>
+                <button class="btn btn-flat btn-primary" ng-click="vm.select()">Select</button>
+            </footer>
+        </div>
+    </div>
+</div>
