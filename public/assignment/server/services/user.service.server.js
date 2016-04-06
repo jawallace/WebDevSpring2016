@@ -41,6 +41,10 @@ module.exports = function(app, UserModel) {
     }
 
     function createUser(req, res) {
+        if (req.body.roles) {
+            delete req.body.roles;
+        }
+
         var user = UserModel
             .create(req.body)
             .then(function(user) {
@@ -76,6 +80,10 @@ module.exports = function(app, UserModel) {
     }
 
     function updateUser(req, res) {
+        if (req.body.roles) {
+            delete req.body.roles;
+        }
+
         UserModel
             .update(req.params.id, req.body)
             .then(function(user) {

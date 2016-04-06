@@ -56,10 +56,6 @@ module.exports = function(mongoose) {
     }
 
     function createUser(resolve, reject, user) {
-        if (user.roles) {
-            delete user.roles;
-        }
-
         User.create(user, function(err, doc) {
             doc.password = undefined;
             return err ? reject(err) : resolve(doc);
@@ -103,10 +99,6 @@ module.exports = function(mongoose) {
     }
 
     function updateUser(resolve, reject, id, user) {
-        if (user.roles) {
-            delete user.roles;
-        }
-
         User.findById(id, function(err, doc) {
             if (err) {
                 reject(err);
