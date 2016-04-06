@@ -21,6 +21,20 @@
             return $rootScope.user;
         }, updateLoggedInStatus);
 
+        activate();
+
+        /////////////////////////////////////////
+
+        function activate() {
+            UserService
+                .isLoggedIn()
+                .then(function(user) {
+                    if (user) {
+                        $rootScope.user = user;
+                    }
+                });
+        }
+
         function logout() {
             UserService
                 .logout()

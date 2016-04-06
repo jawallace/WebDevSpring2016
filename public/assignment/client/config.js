@@ -5,6 +5,7 @@
         .module('FormBuilderApp')
         .config(Configuration);
 
+    Configuration.$inject = [ '$stateProvider', '$urlRouterProvider'];
     function Configuration($stateProvider, $urlRouterProvider) {
        
         $urlRouterProvider.otherwise("/");
@@ -31,19 +32,28 @@
                 url: '/profile',
                 templateUrl: 'views/users/profile.view.html',
                 controller: 'ProfileController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve:  {
+                    user: isLoggedIn
+                }
             })
             .state('admin', {
                 url: '/admin',
                 templateUrl: 'views/admin/admin.view.html',
                 controller: 'AdminController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve:  {
+                    isAdmin: isAdmin
+                }
             })
             .state('forms', {
                 url: '/form',
                 templateUrl: 'views/forms/forms.view.html',
                 controller: 'FormsController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve:  {
+                    user: isLoggedIn
+                }
             })
             .state('forms.list', {
                 url: '/list',
@@ -57,7 +67,60 @@
                 controller: 'FieldsController',
                 controllerAs: 'vm'
             });
-            
+    }
+
+    // This is a bit funky. Adapted from http://stackoverflow.com/a/28267504
+    isLoggedIn.$inject = [ '$q', 'UserService', '$timeout', '$state' ];
+    function isLoggedIn($q, UserService, $timeout, $state) {
+        var deferred = $q.defer();
+        UserService
+            .isLoggedIn()
+            .then(function(user) {
+                if (user) {
+                    deferred.resolve(user);
+                } else {
+                    deferred.reject({});
+                    $timeout(function() {
+                        $state.go('login');
+                    });
+                }
+            }, function(err) {
+                deferred.reject({});
+                $timeout(function() {
+                    $state.go('login');
+                });
+            });
+
+        return deferred.promise;
+    }
+
+    isAdmin.$inject = [ '$q', 'UserService', '$timeout', '$state' ];
+    function isAdmin($q, UserService, $timeout, $state) {
+        var deferred = $q.defer();
+        UserService
+            .isLoggedIn()
+            .then(function(user) {
+                if (user && user.roles.indexOf('admin') > -1) {
+                    deferred.resolve(user);
+                } else if (user) {
+                    deferred.reject({});
+                    $timeout(function() {
+                        $state.go('home');
+                    });
+                } else {
+                    deferred.reject({});
+                    $timeout(function() {
+                        $state.go('login');
+                    });
+                }
+            }, function(err) {
+                deferred.reject({});
+                $timeout(function() {
+                    $state.go('login');
+                });
+            });
+
+        return deferred.promise;
     }
 
 })();

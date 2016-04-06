@@ -47,7 +47,7 @@
 
         function isLoggedIn() {
             return $http
-                .get('/api/assignment/isLoggedIn')
+                .get('/api/assignment/loggedIn')
                 .then(function(res) {
                     return res.data;
                 });
