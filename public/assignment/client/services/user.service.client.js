@@ -31,9 +31,6 @@
                 .post('/api/assignment/login', { username: username, password: password })
                 .then(function(res) {
                     return res.data;
-                }, function(err) {
-                    console.log(err);
-                    return err;
                 });
         }
 

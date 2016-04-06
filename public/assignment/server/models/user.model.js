@@ -94,7 +94,7 @@ module.exports = function(mongoose) {
                 .comparePassword(credentials.password)
                 .then(function(isMatch) {
                     user.password = undefined;
-                    return isMatch ? resolve(user) : resolve();
+                    return isMatch ? resolve(user) : resolve(false);
                 })
                 .catch(function(err) {
                     return reject(err);
