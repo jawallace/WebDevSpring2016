@@ -13,6 +13,8 @@
         var loggedInUser;
         vm.user;
         vm.update = update;
+        vm.successMsg;
+        vm.failMsg;
 
         activate($rootScope.user);
 
@@ -33,17 +35,18 @@
         function update(user) {
             user.emails = user.emails.split("\n").map(function(s) { return s.trim(); });
             user.phones = user.phones.split("\n").map(function(s) { return s.trim(); });
-
-            console.log('update!', user);
+            
+            vm.successMsg = '';
+            vm.failMsg = '';
             UserService
                 .updateUser(loggedInUser['_id'], user)
                 .then(function(updatedUser) {
                     $rootScope.user = updatedUser;
-                    
                     activate(updatedUser);
-                    console.log('updated!');
+                    vm.successMsg = 'Updated profile.';
                 }, function(err) {
                    console.log('error!', err);    
+                   vm.failMsg = 'Failed to update profile. Please try again.';
                 });
         }
 

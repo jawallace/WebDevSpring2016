@@ -3,6 +3,12 @@
 </header>
 
 <form class="form-horizontal">
+    <!-- error message -->
+    <div class="alert alert-success" ng-show="vm.failMsg">{{ vm.failMsg }}</div>
+    
+    <!-- confirmation message -->
+    <div class="alert alert-success" ng-show="vm.successMsg">{{ vm.successMsg }}</div>
+
     <!-- Username input -->
     <div class="form-group">
         <label for="username" class="col-sm-2 control-label">Username</label>
