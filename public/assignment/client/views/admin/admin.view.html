@@ -27,23 +27,23 @@
                 
                 <tr>
                     <td>
-                        <input type="text" class="form-control" placeholder="Username">
+                        <input type="text" class="form-control" ng-model="vm.selected.username" placeholder="Username">
                     </td>
                     <td>
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" ng-model="vm.selected.password" placeholder="Password">
                     </td>
                     <td>
-                        <input type="text" class="form-control" placeholder="First Name">
+                        <input type="text" class="form-control" ng-model="vm.selected.firstName" placeholder="First Name">
                     </td>
                     <td>
-                        <input type="text" class="form-control" placeholder="Last Name">
+                        <input type="text" class="form-control" ng-model="vm.selected.lastName" placeholder="Last Name">
                     </td>
                     <td>
-                        <input type="text" class="form-control" id="role" placeholder="Role 1, Role 2">
+                        <input type="text" class="form-control" ng-model="vm.selected.roleString" placeholder="Role 1, Role 2">
                     </td>
                     <td class="text-center table-controls">
-                        <a href="#"><span class="glyphicon glyphicon-plus"></span></a>
-                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="javascript:void(0)" ng-click="vm.createUser()"><span class="glyphicon glyphicon-plus"></span></a>
+                        <a href="javascript:void(0)" ng-click="vm.editUser()"><span class="glyphicon glyphicon-pencil"></span></a>
                     </td>
                 </tr>
             </thead>
@@ -56,8 +56,8 @@
                     <td>{{ user.lastName }}</td>
                     <td>{{ user.roles.join(',') }}</td>
                     <td class="text-center table-controls">
-                        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                        <a href="#"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="javascript:void(0)" ng-click="vm.deleteUser(user)"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a href="javascript:void(0)" ng-click="vm.selectUser($index, user)"><span class="glyphicon glyphicon-pencil"></span></a>
                     </td>
                 </tr>
             </tbody>

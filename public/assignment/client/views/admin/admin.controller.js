@@ -12,7 +12,13 @@
         vm.users;
         vm.predicate;
         vm.reversed = false;
+        vm.selected;
+        vm.selectedIndex;
 
+        vm.createUser = createUser;
+        vm.editUser = editUser;
+        vm.deleteUser = deleteUser;
+        vm.selectUser = selectUser;
         vm.sort = createSortFunction();
 
         activate();
@@ -25,6 +31,49 @@
                 .then(function(users) {
                     vm.users = users;
                 });
+        }
+
+        function createUser() {
+            console.log('create user');
+            vm.selected.roles = (vm.selected.rolesString || '').split(', ').map(function(s) { return s.trim(); });
+            
+            AdminService
+                .create(vm.selected)
+                .then(function(user) {
+                    activate();
+                    clearSelection();
+                });
+        }
+
+        function editUser() {
+            console.log('edit user');
+            vm.selected.roles = (vm.selected.rolesString || '').split(', ').map(function(s) { return s.trim(); });
+            
+            AdminService
+                .update(vm.selected._id, vm.selected)
+                .then(function(user) {
+                    activate();
+                    clearSelection();
+                });
+        }
+
+        function deleteUser(user) {
+            AdminService
+                .delete(user._id)
+                .then(function(users) {
+                    activate();
+                });
+        }
+
+        function selectUser(index, user) {
+            vm.selectedIndex = index;
+            vm.selected = angular.copy(user);
+            vm.selected.rolesString = vm.selected.roles.join(", ");
+        }
+
+        function clearSelection() {
+            vm.selectedIndex = undefined;
+            vm.selected = undefined;
         }
 
         function createSortFunction() {
