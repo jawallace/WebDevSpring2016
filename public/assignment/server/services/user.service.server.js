@@ -14,15 +14,15 @@ module.exports = function(app, UserModel) {
     var ID_PARAM_URL = BASE_URL + '/:id';
     var ERROR_MSG = 'User not found';
 
-    app.post(LOGIN_URL, passportConfig.passport.authenticate('local'), login);
-    app.post(LOGOUT_URL, logout);
-    app.get(LOGGED_IN_URL, isLoggedIn);
+    app.post(LOGIN_URL,      authenticate,                        login);
+    app.post(LOGOUT_URL,                                          logout);
+    app.get(LOGGED_IN_URL,                                        isLoggedIn);
 
-    app.post(BASE_URL, createUser);
-    app.get(BASE_URL, getUser);
-    app.get(ID_PARAM_URL, getUserById);
-    app.put(ID_PARAM_URL, updateUser);
-    app.delete(ID_PARAM_URL, deleteUser);
+    app.post(BASE_URL,                                            createUser);
+    app.get(BASE_URL,                                             getUser);
+    app.get(ID_PARAM_URL,                                         getUserById);
+    app.put(ID_PARAM_URL,    requireAuthentication, isAuthorized, updateUser);
+    app.delete(ID_PARAM_URL, requireAuthentication, isAuthorized, deleteUser);
 
     ////////////////////////////////////////////////////
     
@@ -121,7 +121,7 @@ module.exports = function(app, UserModel) {
 
     function getAllUsers(res) {
         UserModel
-            .findAllUsers()
+            .findAll()
             .then(function(users) {
                 utils.sendOr404(users, res, ERROR_MSG);
             })
@@ -130,4 +130,11 @@ module.exports = function(app, UserModel) {
             });
     }
 
+    function isAuthorized(req, res, next) {
+        if (req.user._id.equals(req.params.id)) {
+            next();
+        } else {
+            res.status(403).send('Not authorized!');
+        }
+    }
 }

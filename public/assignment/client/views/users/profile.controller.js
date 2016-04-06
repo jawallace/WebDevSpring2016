@@ -12,6 +12,7 @@
        
         var loggedInUser;
         vm.user;
+        vm.update = update;
 
         activate($rootScope.user);
 
@@ -29,17 +30,20 @@
             };
         }
 
-        vm.update = update;
-
         function update(user) {
             user.emails = user.emails.split("\n").map(function(s) { return s.trim(); });
             user.phones = user.phones.split("\n").map(function(s) { return s.trim(); });
+
+            console.log('update!', user);
             UserService
                 .updateUser(loggedInUser['_id'], user)
                 .then(function(updatedUser) {
                     $rootScope.user = updatedUser;
                     
                     activate(updatedUser);
+                    console.log('updated!');
+                }, function(err) {
+                   console.log('error!', err);    
                 });
         }
 

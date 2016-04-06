@@ -32,6 +32,9 @@ module.exports = function(UserModel) {
     }
 
     function serializeUser(user, next) {
+        if (user.password) {
+            user.password = undefined;
+        }
         return next(null, user);
     }
 
