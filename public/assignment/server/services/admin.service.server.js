@@ -21,6 +21,9 @@ module.exports = function(app, UserModel) {
             .create(req.body)
             .then(function(user) {
                 res.send(user);
+            })
+            .catch(function(err) {
+                res.status(400).send(err);
             });
     }
 
@@ -29,6 +32,9 @@ module.exports = function(app, UserModel) {
             .findAll()
             .then(function(users) {
                 res.send(users);
+            })
+            .catch(function(err) {
+                res.status(400).send(err);
             });
     }
 
@@ -37,6 +43,9 @@ module.exports = function(app, UserModel) {
             .findById(req.params.userId)
             .then(function(user) {
                 res.send(user);
+            })
+            .catch(function(err) {
+                res.status(400).send(err);
             });
     }
 
@@ -45,6 +54,9 @@ module.exports = function(app, UserModel) {
             .delete(req.params.userId)
             .then(function(users) {
                 res.send(users);
+            })
+            .catch(function(err) {
+                res.status(400).send(err);
             });
     }
 
@@ -53,6 +65,9 @@ module.exports = function(app, UserModel) {
             .update(req.params.userId, req.body)
             .then(function(user) {
                 res.send(user);
+            })
+            .catch(function(err) {
+                res.status(400).send(err);
             });
     }
 

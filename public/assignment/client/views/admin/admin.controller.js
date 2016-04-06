@@ -34,26 +34,40 @@
         }
 
         function createUser() {
-            console.log('create user');
-            vm.selected.roles = (vm.selected.rolesString || '').split(', ').map(function(s) { return s.trim(); });
-            
+            cleanSelectedUser();
+            delete vm.selected._id;
+
             AdminService
                 .create(vm.selected)
                 .then(function(user) {
                     activate();
                     clearSelection();
+                }, function(res) {
+                    console.log('Create Error!', res); 
                 });
         }
 
         function editUser() {
-            console.log('edit user');
-            vm.selected.roles = (vm.selected.rolesString || '').split(', ').map(function(s) { return s.trim(); });
-            
+            cleanSelectedUser();
+
             AdminService
                 .update(vm.selected._id, vm.selected)
                 .then(function(user) {
                     activate();
                     clearSelection();
+                }, function(res) {
+                    console.log('Edit Error!', res); 
+                });
+        }
+
+        function cleanSelectedUser() {
+            vm.selected.roles = (vm.selected.roleString || '')
+                .split(', ')
+                .map(function(s) { 
+                    return s.trim().toLowerCase(); 
+                })
+                .filter(function(s) {
+                    return s === 'admin' || s === 'user';
                 });
         }
 
@@ -68,7 +82,7 @@
         function selectUser(index, user) {
             vm.selectedIndex = index;
             vm.selected = angular.copy(user);
-            vm.selected.rolesString = vm.selected.roles.join(", ");
+            vm.selected.roleString = vm.selected.roles.join(", ");
         }
 
         function clearSelection() {

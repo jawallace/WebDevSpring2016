@@ -11,14 +11,20 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="js-table-sort-control" ng-class="{ sorted: vm.predicate === 'username', reversed: vm.reversed }">
+                    <th class="js-table-sort-control">
+                        <span ng-show="vm.predicate === 'username' && !vm.reversed" class="glyphicon glyphicon-triangle-top"></span> 
+                        <span ng-show="vm.predicate === 'username' && vm.reversed" class="glyphicon glyphicon-triangle-bottom"></span> 
                         <a href="javascript:void(0)" ng-click="vm.sort('username')">Username</a>
                     </th>
                     <th>Password</th>
-                    <th class="js-table-sort-control" ng-class="{ sorted: vm.predicate === 'firstName', reversed: vm.reversed }">
+                    <th class="js-table-sort-control">
+                        <span ng-show="vm.predicate === 'firstName' && !vm.reversed" class="glyphicon glyphicon-triangle-top"></span> 
+                        <span ng-show="vm.predicate === 'firstName' && vm.reversed" class="glyphicon glyphicon-triangle-bottom"></span> 
                         <a href="javascript:void(0)" ng-click="vm.sort('firstName')">First Name</a>
                     </th>
-                    <th class="js-table-sort-control" ng-class="{ sorted: vm.predicate === 'lastName', reversed: vm.reversed }">
+                    <th class="js-table-sort-control">
+                        <span ng-show="vm.predicate === 'lastName' && !vm.reversed" class="glyphicon glyphicon-triangle-top"></span> 
+                        <span ng-show="vm.predicate === 'lastName' && vm.reversed" class="glyphicon glyphicon-triangle-bottom"></span> 
                         <a href="javascript:void(0)" ng-click="vm.sort('lastName')">Last Name</a>
                     </th>
                     <th>Roles</th>
@@ -43,7 +49,7 @@
                     </td>
                     <td class="text-center table-controls">
                         <a href="javascript:void(0)" ng-click="vm.createUser()"><span class="glyphicon glyphicon-plus"></span></a>
-                        <a href="javascript:void(0)" ng-click="vm.editUser()"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="javascript:void(0)" ng-click="vm.editUser()"><span class="glyphicon glyphicon-ok"></span></a>
                     </td>
                 </tr>
             </thead>
@@ -56,8 +62,12 @@
                     <td>{{ user.lastName }}</td>
                     <td>{{ user.roles.join(',') }}</td>
                     <td class="text-center table-controls">
-                        <a href="javascript:void(0)" ng-click="vm.deleteUser(user)"><span class="glyphicon glyphicon-remove"></span></a>
-                        <a href="javascript:void(0)" ng-click="vm.selectUser($index, user)"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="javascript:void(0)" ng-click="vm.deleteUser(user)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                        <a href="javascript:void(0)" ng-click="vm.selectUser($index, user)">
+                            <span class="glyphicon glyphicon-cog"></span>
+                        </a>
                     </td>
                 </tr>
             </tbody>
