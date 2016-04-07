@@ -1,9 +1,11 @@
 <ul class="rating">
-    <li ng-repeat="star in vm.filledStars">
-        &#x2605;
-    </li>
-    <li ng-repeat="star in vm.unfilledStars">
-        &#x2606;
-    </li>
-    <li>({{ vm.bcNumRatings }})</li>
+	<li ng-repeat="star in vm.filledStars">
+		&#x2605;
+	</li>
+	<li ng-repeat="star in vm.unfilledStars">
+		&#x2606;
+	</li>
+	<li>
+		<span class="badge">{{ vm.bcNumRatings }}</span>
+	</li>
 </ul>

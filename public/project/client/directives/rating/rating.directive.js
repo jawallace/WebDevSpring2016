@@ -13,6 +13,7 @@
                 bcOutOf: '=',
                 bcNumRatings: '='
             },
+            replace: true,
             controller: 'RatingController',
             controllerAs: 'vm',
             bindToController: true,

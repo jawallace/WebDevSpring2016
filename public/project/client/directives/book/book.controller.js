@@ -12,6 +12,10 @@
         vm.book = {};
         vm.includeFooter = vm.bcAllowSelection;
         vm.select = select;
+        vm.showDetails = false;
+        vm.detailsIcon = "expand_more";
+        vm.toggleDetails = toggleDetails;
+
         activate();
 
         ////////////////////////////////
@@ -24,6 +28,11 @@
                 .then(function(book) {
                     vm.book = book;
                 });
+        }
+
+        function toggleDetails() {
+            vm.showDetails = !vm.showDetails;
+            vm.detailsIcon = vm.showDetails ? "expand_less" : "expand_more";
         }
 
         function select() {

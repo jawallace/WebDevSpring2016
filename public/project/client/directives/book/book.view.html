@@ -1,25 +1,40 @@
-<div class="col-md-4 col-sm-6 col-xs-12">
-    <div class="card">
-        <div class="card-height-indicator"></div>
+<div class="list-group-item">
+    <div class="row-action-primary">
+        <img class="circle" ng-src="{{ vm.book.cover.thumb }}" title="{{ vm.book.title }}">
+    </div>
 
-        <div class="card-content" 
-            style="background-image: url({{ vm.book.cover.thumb }}); background-repeat: no-repeat; background-size: contain">
-            <div class="card-image">
+    <div class="row-content"> 
+        <div class="action-secondary">
+            <i class="material-icons" ng-click="vm.toggleDetails()">{{ vm.detailsIcon }}</i>
+        </div>
+
+        <h3 class="list-group-item-heading">{{ vm.book.title }} <small>{{ vm.book.authors.join(', ') }}</small></h3>
+        
+        <div class="list-group-item-text">
+            <div ng-if="vm.book.rating" 
+                 bc-rating 
+                 bc-value="vm.book.rating" 
+                 bc-out-of="5" 
+                 bc-num-ratings="vm.book.numRatings">
             </div>
+        </div>
+    </div>
+</div>
 
-            <div class="card-body" style="color: white;">
-                <h3>{{ vm.book.title }}</h3>
+<div class="list-group-item" ng-show="vm.showDetails">
+    <div class="row-action-primary">
+    </div>
+    <div class="row-content" style="margin-left: 56px;">
+        <div class="list-group-item-text">
+            <p>
+                <span ng-if="vm.book.publisher">{{ vm.book.publisher }} |<span> 
+                <span ng-if="vm.book.date">{{ vm.book.date | date }} |<span>
+                <span ng-if="vm.book.pages">{{ vm.book.pages }} pages</span> 
+            </p>
 
-                <div>{{ vm.book.authors.join(', ') }}</div>
-
-                <div bc-rating bc-value="vm.book.rating" bc-out-of="5" bc-num-ratings="vm.book.numRatings">
-                </div>
-            </div>
-
-            <footer class="card-footer" ng-if="vm.includeFooter">
-                <button class="btn btn-flat btn-primary">Details</button>
-                <button class="btn btn-flat btn-primary" ng-click="vm.select()">Select</button>
-            </footer>
+            <p>
+                {{ vm.book.description }}
+            </p>
         </div>
     </div>
 </div>

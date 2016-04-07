@@ -3,9 +3,9 @@
 
     angular
         .module('TheBookClub')
-        .directive('bcBookCard', BookClubBookCard);
+        .directive('bcBookListItem', BookListItem);
 
-    function BookClubBookCard() {
+    function BookListItem() {
         return {
             restrict: 'E',
             scope: {
