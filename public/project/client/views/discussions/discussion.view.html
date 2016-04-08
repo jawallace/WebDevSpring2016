@@ -1,15 +1,10 @@
 <header>
-    <p class="lead">
-        {{ vm.discussion.topic }}
-    </p>
+    {{ vm.discussion.topic }}
 </header>
 
 <div class="list-group">
     <div ng-repeat="comment in vm.comments">
         <div class="list-group-item">
-            <div class="row-action-primary">
-                <i class="material-icons">person</i>
-            </div>
             <div class="row-content">
                 <div class="action-secondary">
                     <i class="material-icons" ng-click="vm.deleteComment(comment)">delete</i>
@@ -29,7 +24,7 @@
     
     <div class="list-group-item">
         <div class="row-content">
-            <h3 class="list-group-item-heading">Add Comment</h3>
+            <h3 class="list-item-header">Add Comment</h3>
             <div class="list-group-item-text">
                 <form>
                     <div class="form-group">

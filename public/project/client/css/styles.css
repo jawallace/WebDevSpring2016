@@ -132,3 +132,16 @@ a {
 .rating li i {
 	color: inherit;
 }
+
+.landing-page {
+    background-color: #009688;
+}
+
+.landing-page-content {
+    margin-top: 10%;
+}
+
+.landing-page-content i {
+    font-size: 12em;
+    color: #009688;
+}

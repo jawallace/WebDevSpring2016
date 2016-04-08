@@ -17,7 +17,7 @@
         <link rel="stylesheet" type="text/css" href="css/styles.css">
 	<head>
 
-	<body>
+    <body ng-class="{ 'landing-page': isLandingPage }" ng-controller="MainController">
 		<div ng-include="'views/header/header.view.html'"></div>
         <section class="container-fluid">
             <div ui-view></div>
@@ -68,5 +68,6 @@
     <script src="views/users/profile.controller.js"></script>
     <script src="views/home/home.controller.js"></script>
     <script src="directives/book/book.controller.js"></script>
+    <script src="views/main/main.controller.js"></script>
 
 </html>

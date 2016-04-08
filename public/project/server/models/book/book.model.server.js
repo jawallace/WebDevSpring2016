@@ -24,7 +24,6 @@ module.exports = function() {
     var cache = require('lru-cache')(1000);
 
     return api;
-   
     
     ///////////////////// IMPLEMENTATION /////////////////////
     

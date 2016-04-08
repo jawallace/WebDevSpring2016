@@ -1,15 +1,16 @@
 module.exports = function() {
     'use strict';
    
-    var guidLib = require('guid');
+    var q = require('q');
 
     return {
         extend: extend,
         copy: copy,
-        guid: guid,
         find: find,
         findById: findById,
-        matchId: matchId
+        matchId: matchId,
+        sendOr404: sendOr404,
+        deferService: deferService
     };
 
     function extend(current, updated) {
@@ -54,5 +55,41 @@ module.exports = function() {
 
     function findById(arr, id) {
         return find(arr, matchId(id));
+    }
+    
+    function sendOr404(result, res, errorMsg) {
+        if (result === undefined || result === null) {
+            res.status(404).json({ error: errorMsg });
+        } else {
+            res.json(result);
+        }
+    }
+
+    function deferService(service) {
+        var deferredService = {};
+        for(var key in service) {
+            if(service.hasOwnProperty(key)) {
+                deferredService[key] = defer(service[key]); 
+            }
+        }
+
+        return deferService;
+    }
+
+    function defer(fn) {
+        return function(args) {
+            var deferred = q.defer();
+      
+            function resolve(obj) {
+                deferred.resolve(obj);
+            }
+
+            function reject(obj) {
+                deferred.reject(obj);
+            }
+
+            fn.apply(null, [resolve, reject].concat([].slice.call(arguments))); 
+            return deferred.promise;
+        }
     }
 }

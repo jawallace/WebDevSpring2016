@@ -1,17 +1,13 @@
-<header>
-    <h1 class="page-header">Project Prototype</h1>
-</header>
-
-<section>
-    <a ui-sref="crud">CRUD Pages</a>
-</section>
-
-<hr />
-
-<section ng-if="!user" class="text-center">
-    <p class="lead">
-        <a ui-sref="login">Login</a> or <a ui-sref="register">Register</a> to get started with The Book Club.
-    </p>
+<section ng-if="!user" class="text-center landing-page-content">
+    <div class="col-md-4 col-md-offset-4 well well-lg">
+        <i class="material-icons">book</i>
+        
+        <h1>The Book Club</h1>
+        
+        <p class="lead">
+            <a ui-sref="login">Login</a> or <a ui-sref="register">Register</a> to get started.
+        </p>
+    </div>
 </section>
 
 <section ng-if="user">
