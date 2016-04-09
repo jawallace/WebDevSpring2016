@@ -1,34 +1,77 @@
 module.exports = function(app, CommentModel) {
     'use strict';
 
-    var utils = require('./util.js')();
+    var utils = require('../utils/util.js')();
 
     var errorMsg = 'Comment not found.';
 
-    var baseUrl = '/api/project/comment';
-    var baseUserUrl = '/api/project/user/:userId/comment';
-    var commentId = '/:commentId';
+    var BASE_URL = '/api/project/comment';
+    var COMMENT_ID_URL = '/:slug';
+    
+    var USER_URL = '/api/project/user/:userId/comment';
 
-    app.get(baseUrl, getAllComments);
-    app.get(baseUrl + commentId, getCommentById);
-    app.put(baseUrl + commentId, updateComment);
+    var DISCUSSION_URL = '/api/project/discussion/:discussionId/comment'
 
-    app.get(baseUserUrl, getCommentsForUser);
+    app.get(BASE_URL, getAllComments);
+    app.get(BASE_URL + COMMENT_ID_URL, getCommentById);
+    app.put(BASE_URL + COMMENT_ID_URL, updateComment);
+
+    app.get(USER_URL, getCommentsForUser);
+    app.get(DISCUSSION_URL, getCommentsForDiscussion);
 
     function getAllComments(req, res) {
-        res.json(CommentModel.findAll());
+        CommentModel
+            .findAll()
+            .then(function(comments) {
+                utils.sendOr404(comments, res, errorMsg); 
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function getCommentById(req, res) {
-        utils.sendOr404(CommentModel.findById(req.params.commentId), res, errorMsg);
+        CommentModel
+            .findById(req.params.commentId)
+            .then(function(comment) {
+                utils.sendOr404(comment, res, errorMsg); 
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function updateComment(req, res) {
-        utils.sendOr404(CommentModel.update(req.params.commentId, req.body), res, errorMsg);
+        CommentModel
+            .update(req.params.commentId, req.body)
+            .then(function(comment) {
+                utils.sendOr404(comment, res, errorMsg); 
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function getCommentsForUser(req, res) {
-        utils.sendOr404(CommentModel.findByUser(req.params.userId), res, errorMsg);
+        CommentModel
+            .findByUser(req.params.userId)
+            .then(function(comment) {
+                utils.sendOr404(comment, res, errorMsg); 
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
+    }
+
+    function getCommentsForDiscussion(req, res) {
+        CommentModel
+            .findByDiscussion(req.params.discussionId)
+            .then(function(comments) {
+                utils.sendOr404(comments, res, errorMsg); 
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
 };

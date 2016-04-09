@@ -5,13 +5,13 @@ module.exports = function(mongoose) {
      * https://docs.mongodb.org/ecosystem/use-cases/storing-comments/
      */
     var CommentSchema = mongoose.Schema({
-        user: { type: Schema.ObjectId, required: true },
-        discussion: { type: Schema.ObjectId, required: true },
+        user: { type: mongoose.Schema.ObjectId, required: true },
+        discussion: { type: mongoose.Schema.ObjectId, required: true },
         slug: { type: String, required: true },
         posted: { type: Date, default: Date.now },
         text: { type: String, required: true }
     }, { collection: 'project.comment' });
 
 
-    return mongoose.Model('Comment', CommentSchema);
+    return mongoose.model('Comment', CommentSchema);
 }

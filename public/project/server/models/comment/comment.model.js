@@ -1,84 +1,93 @@
-/**
- * Comment: {
- *      id: id, id of the comment
- *      user: integer, id of the user
- *      text: string, comment text
- *      parentComment: integer, id of parent comment (optional)
- * }
- *
- */
-module.exports = function() {
+var randString = require('randomstring');
+
+module.exports = function(mongoose) {
     'use strict';
 
-    var utils = require('./util.js')();
+    var utils = require('../../utils/util.js')();
+    var model = require('./comment.schema.js')(mongoose);
 
-    var comments = [];
-
-    var service = {
-        comments: comments,
+    var service = utils.deferService({
         create: createComment,
         findAll: getAllComments,
         findById: getCommentById,
         findByUser: getCommentsForUser,
+        findBySlug: findCommentBySlug,
+        findByDiscussion: findCommentsForDiscussion,
         delete: deleteComment,
         update: updateComment
-    };
-
-    activate();
+    });
 
     return service;
 
     //////////////////// IMPLEMENTATION ////////////////////
 
-    function activate() {
-        var mockData = require('./comment.mock.json');
-
-        for (var i = 0; i < mockData.length; i++) {
-            comments.push(mockData[i]);
+    function createComment(resolve, reject, comment) {
+        if (! comment.slug) {
+            comment.slug = randString.generate(16);
         }
-    }
 
-    function createComment(comment) {
-        comment.id = utils.guid();
-        comments.push(comment);
-
-        return comment;
-    }
-
-    function getAllComments() {
-        return comments;
-    }
-   
-    function getCommentById(id) {
-        var comment = utils.findById(comments, id);
-
-        if (comment) {
-            return comment.value;
-        }
-    }
-
-    function getCommentsForUser(userId) {
-        return comments.filter(function(comment) {
-            comment.userId === userId;
+        model.create(comment, function(err, comment) {
+            return err ? reject(err) : resolve(comment);     
         });
     }
-    
-    function deleteComment(commentId) {
-        var comment = utils.findById(comments, commentId);
 
-        if (comment) {
-            this.comments.splice(comment.index, 1);
-            return comment.value;
-        }
-        
+    function getAllComments(resolve, reject) {
+        model.find(function(err, comments) {
+            return err ? reject(err) : resolve(comments);
+        });
+    }
+   
+    function getCommentById(resolve, reject, id) {
+        model.findById(id, function(err, comment) {
+            return err ? reject(err) : resolve(comment);
+        });
     }
 
-    function updateComment(commentId, newComment, callback) {
-        var comment = utils.findById(comments, commentId);
+    function getCommentsForUser(resolve, reject, userId) {
+        model.find({ user: userId }, function(err, comments) {
+            return err ? reject(err) : resolve(comments);
+        });
+    }
+   
+    function deleteComment(resolve, reject, commentId) {
+        model.findById(commentId).remove(function(err) {
+            if (err) {
+                return reject(err);
+            }
 
-        if (comment) {
-            utils.extend(comment.value, newComment);
-            return comment.value;
+            model.find(function(err, comments) {
+                return err ? reject(err) : resolve(comments);
+            });
+        });
+    }
+
+    function updateComment(resolve, reject, commentId, newComment) {
+        if (newComment.slug) {
+            delete newComment.slug;
         }
+
+        model.findById(commentId, function(err, comment) {
+            if (err) {
+                return reject(err);
+            }
+
+            utils.extend(comment, newComment);
+
+            comment.save(function(err) {
+                return err ? reject(err) : resolve(comment);
+            });
+        });
+    }
+
+    function findCommentBySlug(resolve, reject, slug) {
+        model.find({ slug: slug }, function(err, comment) {
+            return err ? reject(err) : resolve(comment);
+        });
+    }
+
+    function findCommentsForDiscussion(resolve, reject, discussionId) {
+        model.find({ discussion: discussionId }, null, { sort: 'posted' }, function(err, comments) {
+            return err ? reject(err) : resolve(comments);
+        });
     }
 };

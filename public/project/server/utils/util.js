@@ -73,7 +73,7 @@ module.exports = function() {
             }
         }
 
-        return deferService;
+        return deferredService;
     }
 
     function defer(fn) {

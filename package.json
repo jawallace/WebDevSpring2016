@@ -31,6 +31,7 @@
     "express-session": "^1.13.0",
     "guid": "0.0.12",
     "gulp": "^3.9.1",
+    "gulp-mocha": "^2.2.0",
     "lru-cache": "^4.0.0",
     "mocha": "^2.4.5",
     "mockgoose": "^6.0.0",
@@ -39,6 +40,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "q": "^1.4.1",
+    "randomstring": "^1.1.4",
     "request": "^2.69.0"
   },
   "devDependencies": {},
