@@ -1,6 +1,5 @@
-module.exports = function(app, UserModel) {
+module.exports = function(app, UserModel, passportConfig) {
     
-    var passportConfig = require('../config/passport-config.js')(UserModel);
     var requireAuthentication = passportConfig.requireAuthentication;
     var isAdmin = isAdmin;
 

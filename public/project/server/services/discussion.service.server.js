@@ -1,89 +1,127 @@
 module.exports = function(app, DiscussionModel, CommentModel) {
     'use strict';
 
-    var utils = require('./util.js')();
+    var utils = require('../utils/util.js')();
 
-    var baseUrl = '/api/project/discussion';
-    var discussionId = baseUrl + '/:discussionId';
-    var commentUrl =  discussionId + '/comment';
-    var commentId = commentUrl + '/:commentId';
+    var BASE_URL = '/api/project/discussion';
+    var DISCUSSION_ID_URL = BASE_URL + '/:discussionId';
+    var COMMENT_URL =  DISCUSSION_ID_URL + '/comment';
+    var COMMENT_ID_URL = COMMENT_URL + '/:commentId';
 
     var DISCUSSION_ERR = 'Discussion not found.';
     var COMMENT_ERR = 'Comment not found.';
 
-    app.get(baseUrl, getAllDiscussions);
+    var discussionMiddleware = discussionMiddleware;
 
-    app.get(discussionId, getDiscussionById);
-    app.put(discussionId, updateDiscussion);
+    app.get(BASE_URL, getAllDiscussions);
 
-    app.get(commentId, getComment);
-    app.put(commentId, updateComment);
-    app.delete(commentId, deleteComment);
+    app.get(DISCUSSION_ID_URL, discussionMiddleware, getDiscussionById);
+    app.put(DISCUSSION_ID_URL, discussionMiddleware, updateDiscussion);
+
+    app.get(COMMENT_ID_URL, discussionMiddleware, getComment);
+    app.put(COMMENT_ID_URL, discussionMiddleware, updateComment);
+    app.delete(COMMENT_ID_URL, discussionMiddleware, deleteComment);
     
-    app.post(commentUrl, createComment);
-    app.get(commentUrl, getCommentsForDiscussion);
+    app.post(COMMENT_URL, discussionMiddleware, createComment);
+    app.get(COMMENT_URL, discussionMiddleware, getCommentsForDiscussion);
 
     function getAllDiscussions(req, res) {
-        res.json(DiscussionModel.findAll());
+        DiscussionModel
+            .findAll()
+            .then(function(discussions) {
+                utils.sendOr404(discussions, res, DISCUSSION_ERR);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function getDiscussionById(req, res) {
-        utils.sendOr404(DiscussionModel.findById(req.params.discussionId), res, DISCUSSION_ERR);
+        res.json(req.discussion);
     }
 
     function updateDiscussion(req, res) {
-        utils.sendOr404(DiscussionModel.update(req.params.discussionId, req.body), res, DISCUSSION_ERR);
+        DiscussionModel
+            .update(req.discussion._id, req.body)
+            .then(function(discussion) {
+                res.json(discussion);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function getComment(req, res) {
-        var discussion = DiscussionModel.findById(req.params.discussionId);
-        if (!discussion) {
-            res.status(404).json(DISCUSSION_ERR);
-        } else {
-            utils.sendOr404(CommentModel.findById(req.params.discussionId), res, COMMENT_ERR);
-        }
+        CommentModel
+            .findById(req.params.commentId)
+            .then(function(comment) {
+                utils.sendOr404(comment, res, COMMENT_ERR); 
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function updateComment(req, res) {
-        var discussion = DiscussionModel.findById(req.params.discussionId);
-        if (!discussion) {
-            res.status(404).json(DISCUSSION_ERR);
-        } else {
-            utils.sendOr404(CommentModel.update(req.params.discussionId, req.body), res, COMMENT_ERR);
-        }
+        CommentModel
+            .update(req.params.commentId, req.body)
+            .then(function(comment) {
+                utils.sendOr404(comment, res, COMMENT_ERR); 
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function createComment(req, res) {
-        var discussion = DiscussionModel.findById(req.params.discussionId);
-        if (! discussion) {
-            res.status(404).json(DISCUSSION_ERR);
-        } else {
-            var comment = CommentModel.create(req.body);
-            utils.sendOr404(DiscussionModel.addComment(req.params.discussionId, comment.id), res, COMMENT_ERR);
-        }
+        var comment = req.body;
+        comment.discussion = req.discussion.id;
+
+        CommentModel
+            .create(comment)
+            .then(function(comment) {
+                utils.sendOr404(comment, res, COMMENT_ERR);
+            })
+            .catch(function(err) {
+                res.status(500).send(err);
+            });
     }
 
     function deleteComment(req, res) {
-        var discussion = DiscussionModel.findById(req.params.discussionId);
-        if (! discussion) {
-            res.status(404).json(DISCUSSION_ERR);
-        } else {
-            var comment = CommentModel.delete(req.params.commentId);
-            utils.sendOr404(DiscussionModel.removeComment(req.params.discussionId, comment.id), res, COMMENT_ERR);
-        }
+        CommentModel
+            .delete(req.params.commentId)
+            .then(function(comments) {
+                utils.sendOr404(comments, res, COMMENT_ERR);
+            })
+            .catch(function(err) {
+                res.status(500).send(err);
+            });
     }
 
     function getCommentsForDiscussion(req, res) {
-        var discussion = DiscussionModel.findById(req.params.discussionId);
-        if (! discussion) {
-            res.status(404).json(DISCUSSION_ERR);
-        } else {
-            var comments = discussion.comments.map(CommentModel.findById);
-            if (comments.length && comments.some(function(c) { return !c }).length) {
-                res.status(404).json('INVALID SERVER STATE!: Comments for discussion not found');
-            } else {
-                res.json(comments);
-            }
-        }
+        CommentModel
+            .findByDiscussion(req.discussion._id)
+            .then(function(comments) {
+                utils.sendOr404(comments, res, COMMENT_ERR);
+            })
+            .catch(function(err) {
+                res.status(500).send(err);
+            });
+    }
+
+    function discussionMiddleware(req, res, next) {
+        DiscussionModel
+            .findById(req.params.discussionId)
+            .then(function(discussion) {
+                if (discussion) {
+                    req.discussion = discussion;
+                    next();
+                } else {
+                    res.status(404).send(DISCUSSION_ERR);
+                }
+            })
+            .catch(function(err) {
+                res.status(500).json(err);   
+            });
     }
 }

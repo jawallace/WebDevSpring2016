@@ -3,11 +3,11 @@ module.exports = function(passport, UserModel) {
 
     var LocalStrategy = require('passport-local').Strategy;
 
-    passport.use('assignment', new LocalStrategy(passportStrategy));
+    passport.use('project', new LocalStrategy(passportStrategy));
 
     return {
         requireAuthentication: requireAuthentication,
-        authenticate: passport.authenticate('assignment')
+        authenticate: passport.authenticate('project')
     };
 
     //////////////////////////////////////////

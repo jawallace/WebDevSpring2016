@@ -1,8 +1,8 @@
 module.exports = function(app, ReadingModel, DiscussionModel) {
     'use strict';
 
-    var utils = require('./util.js')();
-
+    var utils = require('../utils/util.js')();
+    
     var BASE_URL = '/api/project/reading';
     var READING_ID_URL = BASE_URL + '/:readingId';
     var DISCUSSIONS_URL = READING_ID_URL + '/discussion';
@@ -12,8 +12,8 @@ module.exports = function(app, ReadingModel, DiscussionModel) {
 
     app.get(BASE_URL, getAllReadings);
     
-    app.get(READING_ID_URL, getReadingById);
-    app.put(READING_ID_URL, updateReading);
+    app.get(READING_ID_URL, retrieveReadingMiddleware, getReadingById);
+    app.put(READING_ID_URL, retrieveReadingMiddleware, updateReading);
 
     app.get(DISCUSSIONS_URL, retrieveReadingMiddleware, getDiscussionsForReading);
     app.post(DISCUSSIONS_URL, retrieveReadingMiddleware, createDiscussion);
@@ -28,55 +28,102 @@ module.exports = function(app, ReadingModel, DiscussionModel) {
     var DISCUSSION_ERR = 'Discussion not found.';
     
     function getAllReadings(req, res) {
-        res.json(ReadingModel.findAll());
+        ReadingModel
+            .findAll()
+            .then(function(readings) {
+                utils.sendOr404(readings, res, READING_ERR);
+            })
+            .catch(function(err) {
+                res.status(500).send(err);   
+            });
     }
 
     function getReadingById(req, res) {
-        utils.sendOr404(ReadingModel.findById(req.params.readingId), res, READING_ERR);
+        res.json(req.reading);
     }
 
     function updateReading(req, res) {
-        utils.sendOr404(ReadingModel.update(req.params.readingId, req.body), res, READING_ERR);
+        ReadingModel
+            .update(req.reading._id, req.body)
+            .then(function(reading) {
+                res.json(reading); 
+            })
+            .catch(function(err) {
+                res.status(500).send(err);   
+            });
     }
 
     function getDiscussionsForReading(req, res) {
-        var discussions = req.reading.discussions.map(function(id) {
-            return DiscussionModel.findById(id);
-        });
-
-        if (discussions.some(function(d) { return !d; })) {
-            res.status(404).send('DISCUSSION IN READING NOT FOUND. INVALID SERVER STATE!');    
-        } else {
-            res.json(discussions);
-        }
+        DiscussionModel
+            .findForReading(req.reading._id)
+            .then(function(discussions) {
+                utils.sendOr404(discussions, res, DISCUSSION_ERR);
+            })
+            .catch(function(err) {
+               res.status(500).send(err);
+            });
     }
 
     function createDiscussion(req, res) {
-        var discussion = DiscussionModel.create(req.body.user, req.body.topic);
-    
-        utils.sendOr404(ReadingModel.addDiscussion(req.reading.id, discussion.id), res, DISCUSSION_ERR);
+        var discussion = req.body;
+        discussion.reading = req.reading._id;
+
+        DiscussionModel
+            .create(discussion)
+            .then(function(discussion) {
+                utils.sendOr404(discussion, res, DISCUSSION_ERR);
+            })
+            .catch(function(err) {
+                res.status(500).send(err);
+            });
     }
 
     function getDiscussionById(req, res) {
-        utils.sendOr404(DiscussionModel.findById(req.params.discussionId), res, DISCUSSION_ERR);
+        DiscussionModel
+            .findById(req.params.discussionId)
+            .then(function(discussion) {
+                utils.sendOr404(discussion, res, DISCUSSION_ERR);
+            })
+            .catch(function(err) {
+                res.status(500).send(err);
+            });
     }
 
     function deleteDiscussion(req, res) {
-        var discussion = DiscussionModel.delete(req.params.discussionId);
-
-        utils.sendOr404(ReadingModel.removeDiscussion(req.reading.id, discussion.id), res, DISCUSSION_ERR);
+        DiscussionModel
+            .delete(req.params.discussionId)
+            .then(function(discussions) {
+                res.json(discussions);
+            })
+            .catch(function(err) {
+                res.status(500).send(err);
+            });
     }
 
     function updateDiscussion(req, res) {
-        utils.sendOr404(DiscussionModel.update(req.params.discussionId, req.body), res, DISCUSSION_ERR);
+        DiscussionModel
+            .update(req.params.discussionId, req.body)
+            .then(function(discussion) {
+                utils.sendOr404(discussion, res, DISCUSSION_ERR);
+            })
+            .catch(function(err) {
+                res.json(500).send(err);
+            });
     }
 
     function getReading(req, res, next) {
-        req.reading = ReadingModel.findById(req.params.readingId);
-        if (! req.reading) {
-            res.status(404).send(READING_ERR); 
-        } else {
-            next();
-        }
+        ReadingModel
+            .findById(req.params.readingId)
+            .then(function(reading) {
+                if (reading) {
+                    req.reading = reading;
+                    next();
+                } else {
+                    res.status(404).send(READING_ERR); 
+                }
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 }

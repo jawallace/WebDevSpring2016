@@ -6,5 +6,5 @@ gulp.task('default', [ 'test' ]);
 gulp.task('test', function() {
     return gulp
         .src('tests/**/*.js', { read: false })
-        .pipe(mocha({ reporter: 'dot' }));
+        .pipe(mocha({ reporter: 'progress' }));
 });

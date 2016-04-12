@@ -1,121 +1,157 @@
-module.exports = function() {
+module.exports = function(mongoose) {
     'use strict';
 
-    var utils = require('./util.js')();
+    var utils = require('../../utils/util.js')();
+    var GroupModel = require('./group.schema.js')(mongoose);
 
-    var theGroups = [];
-
-    var service = {
-        groups: theGroups,
+    var service = utils.deferService({
         create: createGroup,
         findById: getGroupById,
         findAll: getAllGroups,
         update: updateGroup,
         delete: deleteGroup,
-        addReading: addReadingToGroup,
         addMember: addMemberToGroup,
         addAdmin: addAdminToGroup,
-        removeReading: removeReadingFromGroup,
         removeMember: removeMemberFromGroup,
-        removeAdmin: removeAdminFromGroup
-    };
-
-    activate();
+        removeAdmin: removeAdminFromGroup,
+        findByUser: findGroupsForUser
+    });
 
     return service;
 
     /////////////////////////////////////////
 
-    function activate() {
-        var mock = require('./group.mock.json');
-
-        for (var i = 0; i < mock.length; i++) {
-            theGroups.push(mock[i]);    
-        }
+    function createGroup(resolve, reject, group) {
+        GroupModel.create(group, function(err, group) {
+            return err ? reject(err) : resolve(group); 
+        });
     }
 
-    function createGroup(group) {
-        group.id = utils.guid();
-
-        this.groups.push(group);
-
-        return group;
+    function getGroupById(resolve, reject, id) {
+        GroupModel.findById(id, function(err, group) {
+            return err ? reject(err) : resolve(group); 
+        });
     }
 
-    function getGroupById(id) {
-        var g = utils.findById(this.groups, id);
-
-        if (g) {
-            return g.value;
-        }
+    function getAllGroups(resolve, reject) {
+        GroupModel.find(function(err, group) {
+            return err ? reject(err) : resolve(group); 
+        });
     }
 
-    function getAllGroups() {
-        return this.groups;
-    }
-
-    function updateGroup(id, updated) {
-        var g = utils.findById(this.groups, id);
-
-        if (g) {
-            utils.extend(g.value, updated);
-            return g.value;
-        }
-    }
-
-    function deleteGroup(id) {
-        var g = utils.findById(this.groups, id);
-
-        if (g) {
-            this.groups.splice(g.index, 1);
-            return this.groups;
-        } 
-    }
-
-    function addReadingToGroup(id, reading) {
-        return addToGroupField(id, 'readings', reading);
-    }
-
-    function addMemberToGroup(id, member) {
-        return addToGroupField(id, 'members', member);
-    }
-
-    function addAdminToGroup(id, admin) {
-        return addToGroupField(id, 'admins', admin);
-    }
-
-    function removeReadingFromGroup(id, reading) {
-        return removeFromGroupField(id, 'readings', reading);
-    }
-
-    function removeMemberFromGroup(id, member) {
-        return removeFromGroupField(id, 'members', member);
-    }
-
-    function removeAdminFromGroup(id, admin) {
-        return removeFromGroupField(id, 'admins', admin);
-    }
-
-    function addToGroupField(id, field, value) {
-        var g = utils.findById(theGroups, id);
-
-        if (g) {
-            g.value[field].push(value);
-            return g.value;
-        }
-    }
-    
-    function removeFromGroupField(id, field, value) {
-        var g = utils.findById(theGroups, id);
-
-        if (g) {
-            var index = g.value[field].indexOf(value);
-            if (index >= 0) {
-                g.value[field].splice(index, 1);
+    function updateGroup(resolve, reject, id, updated) {
+        GroupModel.findById(id, function(err, group) {
+            if (err) {
+                return reject(err);
             }
 
-            return g.value;
-        }
+            utils.extend(group, updated);
+
+            group.save(function(err, updatedGroup) {
+                return err ? reject(err) : resolve(group); 
+            });
+        });
+    }
+
+    function deleteGroup(resolve, reject, id) {
+        GroupModel.findById(id).remove(function(err) {
+            if (err) {
+                return reject(err);
+            }
+
+            GroupModel.find(function(err, groups) {
+                return err ? reject(err) : resolve(groups); 
+            });
+        });
+    }
+
+    function addMemberToGroup(resolve, reject, id, member) {
+        GroupModel.findById(id, function(err, group) {
+            if (err) {
+                return err;
+            }
+
+            group.members.push(member);
+
+            group.save(function(err, updatedGroup) {
+                return err ? reject(err) : resolve(group);  
+            });
+        });
+    }
+
+    function addAdminToGroup(resolve, reject, id, admin) {
+        GroupModel.findById(id, function(err, group) {
+            if (err) {
+                return err;
+            }
+
+            group.admins.push(admin);
+
+            group.save(function(err, updatedGroup) {
+                return err ? reject(err) : resolve(group);  
+            });
+        });
+    }
+
+    function removeMemberFromGroup(resolve, reject, id, member) {
+        GroupModel.findById(id, function(err, group) {
+            if (err) {
+                return err;
+            }
+            
+            var i = group.members.indexOf(member);
+            if (i < 0) {
+                return resolve(group);
+            }
+
+            group.members.splice(i, 1);
+
+            group.save(function(err, updatedGroup) {
+                return err ? reject(err) : resolve(group);  
+            });
+        });
+    }
+
+    function removeAdminFromGroup(resolve, reject, id, admin) {
+        GroupModel.findById(id, function(err, group) {
+            if (err) {
+                return err;
+            }
+            
+            var i = group.admins.indexOf(admin);
+            if (i < 0) {
+                return resolve(group);
+            }
+
+            group.admins.splice(i, 1);
+
+            group.save(function(err, updatedGroup) {
+                return err ? reject(err) : resolve(group);  
+            });
+        });
+    }
+
+    function findGroupsForUser(resolve, reject, userId) {
+        var response = {
+            member: [],
+            admin: []
+        };
+
+        GroupModel.find({ members: userId }, function(err, memberGroups) {
+            if (err) {
+                return reject(err);
+            }
+
+            response.member = memberGroups;
+            GroupModel.find({ admins: userId }, function(err, adminGroups) {
+                if (err) {
+                    return reject(err);
+                }
+
+                response.admin = adminGroups;
+                return resolve(response);
+            });
+        });
     }
 
 }

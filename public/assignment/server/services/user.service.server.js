@@ -1,8 +1,7 @@
-module.exports = function(app, UserModel) {
+module.exports = function(app, UserModel, passportConfig) {
     'use strict';
 
     var utils = require('./util.js')();
-    var passportConfig = require('../config/passport-config.js')(UserModel);
     var requireAuthentication = passportConfig.requireAuthentication;
     var authenticate = passportConfig.authenticate;
 

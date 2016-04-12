@@ -1,7 +1,8 @@
 module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     'use strict';
 
-    var utils = require('./util.js')();
+    var utils = require('../utils/util.js')();
+    var q = require('q');
 
     var BASE_URL = '/api/project/group';
     var GROUP_ID_URL = BASE_URL + '/:groupId';
@@ -48,138 +49,246 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     var GROUP_ERR_MSG = 'Group not found.';
 
     function getAllGroups(req, res) {
-        res.json(GroupModel.findAll());
+        GroupModel
+            .findAll()
+            .then(function(groups) {
+                res.json(groups);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function createGroup(req, res) {
-        utils.sendOr404(GroupModel.create(req.body), res, 'Failed to create group');
+        GroupModel
+            .create(req.body)
+            .then(function(group) {
+                res.json(group);
+            })
+            .catch(function(err) {
+                res.status(400).json(err);
+            });
     }
     
     function getGroupById(req, res) {
-        utils.sendOr404(GroupModel.findById(req.params.groupId), res, GROUP_ERR_MSG);    
+        res.json(req.group);
     }
     
     function updateGroup(req, res) {
-        utils.sendOr404(GroupModel.update(req.params.groupId, req.body), res, GROUP_ERR_MSG);
+        GroupModel
+            .update(req.group._id, req.body)
+            .then(function(group) {
+                res.json(group);
+            })
+            .catch(function(err) {
+                res.status(400).json(err);
+            });
     }
     
     function deleteGroup(req, res) {
-        utils.sendOr404(GroupModel.delete(req.params.groupId), res, GROUP_ERR_MSG);
+        GroupModel
+            .delete(req.group._id)
+            .then(function(groups) {
+                res.json(groups);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function getReadings(req, res) {
-        var readings = req.group.readings.map(function(r) {
-            return ReadingModel.findById(r);
-        });
-
-        if (readings.some(function(r) { return !r; })) {
-            res.status(404).send('READING FOR GROUP NOT FOUND! INCONSISTENT SERVER STATE!');
-        } else {
-            res.json(readings);
-        }
+        ReadingModel
+            .findByGroup(req.group._id)
+            .then(function(readings) {
+                res.json(readings);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
    
     var READING_ERR_MSG = 'Reading not found.';
     function addReading(req, res) {
-        var reading = ReadingModel.create(req.body.id);
-  
-        utils.sendOr404(GroupModel.addReading(req.group.id, reading.id), res, 'Failed to create reading');
+        var reading = req.body;
+        reading.group = req.group._id;
+
+        ReadingModel
+            .create(reading)
+            .then(function(reading) {
+                res.json(reading);
+            })
+            .catch(function(err) {
+                res.status(400).json(err);
+            });
     }
 
     function getReadingById(req, res) {
-        utils.sendOr404(ReadingModel.findById(req.params.readingId), res, READING_ERR_MSG);
+        ReadingModel
+            .findById(req.params.readingId)
+            .then(function(reading) {
+                utils.sendOr404(reading, res, READING_ERR);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function updateReading(req, res) {
-        utils.sendOr404(ReadingModel.update(req.params.readingId, req.body), res, READING_ERR_MSG);
+        ReadingModel
+            .update(req.params.readingId, req.body)
+            .then(function(reading) {
+                utils.sendOr404(reading, res, READING_ERR);
+            })
+            .catch(function(err) {
+                res.status(400).json(err);
+            });
     }
     
     function deleteReading(req, res) {
-        var reading = ReadingModel.delete(req.params.readingId);
-
-        utils.sendOr404(GroupModel.removeReading(req.group.id, req.params.readingId), res, READING_ERR_MSG);
+        ReadingModel
+            .delete(req.params.readingId)
+            .then(function(readings) {
+                res.json(readings);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
    
     var USER_ERR_MSG = 'User not found.';
     function getAdmins(req, res) {
-        var admins = req.group.admins.map(function(u) {
-            return UserModel.findById(u);
+        var admins = req.group.admins.map(function(admin) {
+            return UserModel.findById(admin);
         });
-
-        if (admins.some(function(u) { return !u; })) {
-            res.status(404).send('ADMIN FOR GROUP NOT FOUND! INCONSISTENT SERVER STATE!');
-        } else {
-            res.json(admins);
-        }
+        
+        q.all(admins)
+            .then(function(admins) {
+                if (admins.some(function(a) { return !a; })) {
+                    res.status(500).send('INCONSISTENT SERVER STATE');
+                } else {
+                    res.json(admins);
+                }
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function addAdmin(req, res) {
-        var admin = UserModel.findById(req.body.id);
-        admin.groups.push(req.group.id);
-
-        if (! admin) {
-            res.status(404).send(USER_ERR_MSG);    
-        } else {
-            utils.sendOr404(GroupModel.addAdmin(req.group.id, admin.id), res, USER_ERR_MSG);
-        }
+        UserModel
+            .addGroup(req.body.id, req.group._id)
+            .then(function(user) {
+                return GroupModel.addAdmin(req.group._id, req.body.id);
+            })
+            .then(function(group) {
+                res.json(group);            
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function getAdmin(req, res) {
-        utils.sendOr404(UserModel.findById(parseInt(req.params.adminId)), res, USER_ERR_MSG);
+        if (req.group.admins.indexOf(req.params.adminId) < 0) {
+            res.status(404).json();
+            return;
+        }
+
+        UserModel
+            .findById(req.params.adminId)
+            .then(function(user) {
+                utils.sendOr404(user, res, USER_ERR_MSG);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function removeAdmin(req, res) {
-        utils.sendOr404(GroupModel.removeAdmin(req.group.id, req.params.adminId), res, USER_ERR_MSG);
+        UserModel
+            .removeGroup(req.params.adminId, req.group._id)
+            .then(function(user) {
+                return GroupModel.removeAdmin(req.group._id, req.params.id);
+            })
+            .then(function(group) {
+                res.json(group);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function getMembers(req, res) {
-        var members = req.group.members.map(function(u) {
-            return UserModel.findById(u);
+        var members = req.group.members.map(function(member) {
+            return UserModel.findById(member);
         });
-
-        if (members.some(function(u) { return !u; })) {
-            res.status(404).send('MEMBER FOR GROUP NOT FOUND! INCONSISTENT SERVER STATE!');
-        } else {
-            res.json(members);
-        }
+        
+        q.all(members)
+            .then(function(members) {
+                if (members.some(function(m) { return !m; })) {
+                    res.status(500).send('INCONSISTENT SERVER STATE');
+                } else {
+                    res.json(members);
+                }
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function addMember(req, res) {
-        var member = UserModel.findById(req.body.id);
-        member.groups.push(req.group.id);
-        
-        if (! member) {
-            res.status(404).send(USER_ERR_MSG);    
-        } else {
-            utils.sendOr404(GroupModel.addMember(req.group.id, member.id), res, USER_ERR_MSG);
-        }
+        UserModel
+            .addGroup(req.body.id, req.group._id)
+            .then(function(user) {
+                return GroupModel.addMember(req.group._id, req.body.id);
+            })
+            .then(function(group) {
+                res.json(group);            
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function getMember(req, res) {
-        utils.sendOr404(UserModel.findById(parseInt(req.params.memberId)), res, USER_ERR_MSG);
+        if (req.group.members.indexOf(req.params.memberId) < 0) {
+            res.status(404).json();
+            return;
+        }
+
+        UserModel
+            .findById(req.params.memberId)
+            .then(function(user) {
+                utils.sendOr404(user, res, USER_ERR_MSG);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
     
     function removeMember(req, res) {
-        utils.sendOr404(GroupModel.removeMember(req.group.id, req.params.memberId), res, USER_ERR_MSG);
+        UserModel
+            .removeGroup(req.params.memberId, req.group._id)
+            .then(function(user) {
+                return GroupModel.removeMember(req.group._id, req.params.id);
+            })
+            .then(function(group) {
+                res.json(group);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function getGroupsForUser(req, res) {
-        var user = UserModel.findById(req.params.userId);
-
-        if (!user) {
-            res.status(404).send('User not found');
-        } else {
-            var groups = user.groups.map(function(gid) {
-                return GroupModel.findById(gid);
-            });
-
-            if (groups.some(function(g) { return !g; })) {
-                res.status(404).send('GROUP NOT FOUND FOR USER. INVALID SERVER STATE.');
-            } else {
+        GroupModel
+            .findByUser(req.params.userId)
+            .then(function(groups) {
                 res.json(groups);
-            }
-        }
-
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function groupMiddleware(req, res, next) {

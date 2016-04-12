@@ -1,98 +1,72 @@
-module.exports = function() {
+module.exports = function(mongoose) {
     'use strict';
 
-    var utils = require('./util.js')();
+    var utils = require('../../utils/util.js')();
+    var ReadingModel = require('./reading.schema.js')(mongoose);
 
-    var readings = [];
-
-    var service = {
-        readings: readings,
+    var service = utils.deferService({
         create: createReading,
         delete: deleteReading,
         update: updateReading,
         findAll: getAllReadings,
         findById: getReadingById,
-        addDiscussion: addDiscussionToReading,
-        removeDiscussion: removeDiscussionFromReading
-    };
-
-    activate();
+        findByGroup: getReadingsForGroup,
+        findCurrentForGroup: getCurrentReading
+    });
 
     return service;
 
     /////////////////////////////////////////
     
-    function activate() {
-        var mock = require('./reading.mock.json');
-        
-        for (var i = 0; i < mock.length; i++) {
-            mock.startDate = new Date(mock.startDate);
-            mock.endDate= new Date(mock.endDate);
-            readings.push(mock[i]);
-        }
-
+    function createReading(resolve, reject, reading) {
+        ReadingModel.create(reading, function(err, reading) {
+            return err ? reject(err) : resolve(reading);
+        });
     }
 
-    function createReading(reading) {
-        reading.discussons = [];
-        reading.id = utils.guid();
-
-        this.readings.push(reading);
-        
-        return reading;
+    function deleteReading(resolve, reject, id) {
+        ReadingModel.findById(id).remove(function(err) {
+            ReadingModel.find(function(err, readings) {
+                return err ? reject(err) : resolve(readings);   
+            });
+        });
     }
 
-    function deleteReading(id) {
-        var r = utils.findById(readings, id);
-
-        if (r) {
-            this.readings.splice(r.index, 1);
-            return r.value;
-        }
-    }
-
-    function updateReading(id, updated) {
-        var r = utils.findById(readings, id);
-
-        if (r) {
-            utils.extend(r.value, updated);
-            return r.value;
-        }
-    }
-
-    function getAllReadings() {
-        return this.readings;
-    }
-
-    function getReadingById(id) {
-        var r = utils.findById(readings, id);
-
-        if (r) {
-            return r.value;
-        }
-    }
-
-    function addDiscussionToReading(id, discussion) {
-        var r = utils.findById(readings, id);
-
-        if (r) {
-            r.value.discussions.push(discussion);
-            return r.value;
-        }
-    }
-
-    function removeDiscussionFromReading(id, discussion) {
-        var r = utils.findById(readings, id);
-        
-        if (r) {
-            var index = r.value.discussions.indexOf(discussion);
-            if (index >= 0) {
-                r.value.discussions.splice(index, 1);
+    function updateReading(resolve, reject, id, updated) {
+        ReadingModel.findById(id, function(err, reading) {
+            if (err) {
+                return reject(err);
             }
 
-            return r.value;
-        }
-    
+            utils.extend(reading, updated);
+
+            reading.save(function(err, updatedReading) {
+                return err ? reject(err) : resolve(reading); 
+            });
+        });
     }
 
+    function getAllReadings(resolve, reject) {
+        ReadingModel.find({}, null, { sort: '-startDate' }, function(err, readings) {
+            return err ? reject(err) : resolve(readings); 
+        });
+    }
+
+    function getReadingById(resolve, reject, id) {
+        ReadingModel.findById(id, function(err, reading) {
+            return err ? reject(err) : resolve(reading); 
+        });
+    }
+
+    function getReadingsForGroup(resolve, reject, group) {
+        ReadingModel.find({ group: group }, null, { sort: '-startDate' }, function(err, readings) {
+            return err ? reject(err) : resolve(readings); 
+        });
+    }
+    
+    function getCurrentReading(resolve, reject, group) {
+        ReadingModel.findOne({ group: group }, null, { sort: '-startDate' }, function(err, reading) {
+            return err ? reject(err) : resolve(reading); 
+        });
+    }
 }

@@ -1,102 +1,77 @@
-module.exports = function() {
+module.exports = function(mongoose) {
     'use strict';
 
-    var utils = require('./util.js')();
+    var utils = require('../../utils/util.js')();
+    var DiscussionModel = require('./discussion.schema.js')(mongoose);
 
-    var discussions = [];
-
-    var service = {
-        discussions: discussions,
+    var service = utils.deferService({
         findById: getDiscussionById,
         findAll: getAllDiscussions,
+        findByReading: getDiscussionsForReading,
+        findByUser: getDiscussionsForUser,
         create: createDiscussion,
         update: updateDiscussion,
-        delete: deleteDiscussion,
-        addComment: addCommentToDiscussion,
-        removeComment: removeCommentFromDiscussion
-    };
-
-    activate();
+        delete: deleteDiscussion
+    });
 
     return service;
 
     //////////////////////////////////
     
-    function activate() {
-        var mock = require('./discussion.mock.json');
-
-        for (var i = 0; i < mock.length; i++) {
-            discussions.push(mock[i]);
-        }
+    function createDiscussion(resolve, reject, discussion) {
+        DiscussionModel.create(discussion, function(err, discussion) {
+            return err ? reject(err) : resolve(discussion);
+        });
     }
 
-    function createDiscussion(userId, topic) {
-        var discussion = {
-            id: utils.guid(),
-            user: userId,
-            topic: topic,
-            comments: []
-        };
-
-        discussions.push(discussion);
-        
-        return discussion;
-    }
-
-    function getDiscussionById(id) {
-        var discussion = utils.findById(discussions, id);
-
-        if (discussion) {
-            return discussion.value;
-        } 
+    function getDiscussionById(resolve, reject, id) {
+        DiscussionModel.findById(id, function(err, discussion) {
+            return err ? reject(err) : resolve(discussion);
+        });
     }
 
     function getAllDiscussions() {
-        return this.discussions;
+        DiscussionModel.find(function(err, discussions) {
+            return err ? reject(err) : resolve(discussions);
+        });
     }
 
-    function updateDiscussion(id, updatedDiscussion) {
-        var discussion = utils.findById(this.discussions, id);
-
-        if (discussion) {
-            utils.extend(discussion.value, updateDiscussion);
-
-            return discussion.value;
-        }
-    }
-
-    function deleteDiscussion(id) {
-        var discussion = utils.findById(this.discussions, id);
-
-        if (discussion) {
-            this.discussions.splice(discussion.index, 1);
-        }
-
-        return discussion.value;
-    }
-
-    function addCommentToDiscussion(id, commentId) {
-        var discussion = utils.findById(this.discussions, id);
-        
-        if (discussion) {
-            discussion.value.comments.push(commentId);
-            return discussion.value;
-        }
-    }
-
-    function removeCommentFromDiscussion(id, commentId) {
-        var discussion = utils.findById(this.discussions, id);
-
-        if (discussion) {
-            var comments = discussion.value.comments;
-            var index = comments.indexOf(commentId);
-            if (index >= 0) {
-                comments.splice(index, 1);
+    function updateDiscussion(resolve, reject, id, updatedDiscussion) {
+        DiscussionModel.findById(id, function(err, discussion) {
+            if (err) {
+                return reject(err);
             }
 
-            return discussion.value;
-        }
+            utils.extend(discussion, updatedDiscussion);
+
+            discussion.save(function(err) {
+                return err ? reject(err) : resolve(discussion);
+            });
+        });
     }
 
-};
+    function deleteDiscussion(resolve, reject, id) {
+        DiscussionModel.findById(id).remove(function(err) {
+            if (err) {
+                return reject(err);
+            }
+
+            DiscussionModel.find(function(err, discussions) {
+                return err ? reject(err) : resolve(discussions);
+            });
+        });
+    }
+
+    function getDiscussionsForReading(resolve, reject, readingId) {
+        DiscussionModel.find({ reading: readingId }, null, { sort: 'posted' }, function(err, discussions) {
+            return err ? reject(err) : resolve(discussions);
+        });
+    }
+    
+    function getDiscussionsForUser(resolve, reject, userId) {
+        DiscussionModel.find({ user: userId }, null, { sort: 'posted' }, function(err, discussions) {
+            return err ? reject(err) : resolve(discussions);
+        });
+    }
+}
 

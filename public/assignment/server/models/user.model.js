@@ -86,6 +86,10 @@ module.exports = function(mongoose) {
                 return reject(err);
             }
 
+            if (! user) {
+                return resolve(undefined);
+            }
+
             user
                 .comparePassword(credentials.password)
                 .then(function(isMatch) {

@@ -36,6 +36,7 @@
     "mocha": "^2.4.5",
     "mockgoose": "^6.0.0",
     "mongoose": "^4.4.10",
+    "mongoose-unique-validator": "^1.0.2",
     "multer": "^1.1.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",

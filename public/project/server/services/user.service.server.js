@@ -1,44 +1,58 @@
-module.exports = function(app, UserModel) {
+module.exports = function(app, UserModel, passportConfig) {
     'use strict';
 
-    var utils = require('./util.js')();
+    var utils = require('../utils/util.js')();
 
-    var BASE_URL = '/api/project/user';
+    var requireAuthentication = passportConfig.requireAuthentication;
+    var authenticate = passportConfig.authenticate;
+
+    var LOGIN_URL = '/api/assignment/login';
+    var LOGOUT_URL = '/api/assignment/logout';
+    var LOGGED_IN_URL = '/api/assignment/loggedIn';
+
+    var BASE_URL = '/api/assignment/user';
     var ID_PARAM_URL = BASE_URL + '/:id';
+    var ERROR_MSG = 'User not found';
+
+    app.post(LOGIN_URL,      authenticate,                        login);
+    app.post(LOGOUT_URL,                                          logout);
+    app.get(LOGGED_IN_URL,                                        isLoggedIn);
+
+    app.post(BASE_URL,                                            createUser);
+    app.get(BASE_URL,                                             getUser);
+    app.get(ID_PARAM_URL,                                         getUserById);
+    app.put(ID_PARAM_URL,    requireAuthentication, isAuthorized, updateUser);
+    app.delete(ID_PARAM_URL, requireAuthentication, isAuthorized, deleteUser);
+
+    ////////////////////////////////////////////////////
     
-    var LOGIN_URL = '/api/project/login';
-    var LOGGED_IN_URL = '/api/project/loggedIn';
-    var LOGOUT_URL = '/api/project/logout';
+    function login(req, res, next) {
+        var user = req.user;
+        res.json(user); 
+    }
 
-    var errorMsg = 'User not found';
+    function logout(req, res, next) {
+        req.logOut();
+        res.status(200).send();
+    }
 
-    app.post(BASE_URL, createUser);
-    app.get(BASE_URL, getUser);
-   
-    app.get(ID_PARAM_URL, getUserById);
-    app.put(ID_PARAM_URL, updateUser);
-   
-    app.delete(ID_PARAM_URL, deleteUser);
+    function isLoggedIn(req, res, next) {
+        res.send(req.isAuthenticated() ? req.user : false);    
+    }
 
-    app.post(LOGIN_URL, login);
-    app.get(LOGGED_IN_URL, loggedIn);
-    app.post(LOGOUT_URL, logout);
-
-    /////////////////////////////////////////
-    
     function createUser(req, res) {
-        var user = UserModel.create(req.body);
-        
-        if (user) {
-            res.send(user);
-        } else {
-            res.status(400).send('User with username ' + req.body.username + ' already exists');
-        }
+        var user = UserModel
+            .create(req.body)
+            .then(function(user) {
+                utils.sendOr404(user, res, ERROR_MSG);
+            })
+            .catch(function(err) {
+                res.status(400).json(err);
+            });
     }
 
     function getUser(req, res) {
         var username = req.query.username;
-        var password = req.query.password;
 
         if (username) {
             getUserByUsername(username, res);
@@ -48,67 +62,66 @@ module.exports = function(app, UserModel) {
     }
 
     function getUserById(req, res) {
-        var id = req.params.id;
-        utils.sendOr404(UserModel.findById(id), res, errorMsg);
+        UserModel
+            .findById(req.params.id)
+            .then(function(user) {
+                utils.sendOr404(user, res, ERROR_MSG);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function updateUser(req, res) {
-        var id = req.params.id;
-
-        if (! req.session.currentUser) {
-            res.status(401).send('Not authorized');
-        } else if (req.session.currentUser.id !== id) {
-            res.status(403).send('You cannot update another user.');
-        } else {
-            utils.sendOr404(UserModel.update(id, req.body), res, errorMsg);
-        }
+        UserModel
+            .update(req.params.id, req.body)
+            .then(function(user) {
+                utils.sendOr404(user, res, ERROR_MSG);
+            })
+            .catch(function(err) {
+                res.status(400).json(err);
+            });
     }
 
     function deleteUser(req, res) {
-        var id = req.params.id;
-        
-        if (! req.session.currentUser) {
-            res.status(401).send('Not authorized');
-        } else if (req.session.currentUser.id !== id) {
-            res.status(403).send('You cannot update another user.');
-        } else {
-            utils.sendOr404(UserModel.delete(id), res, errorMsg);
-        }
-    }
-
-    function login(req, res) {
-        var credentials = req.body;
-        var user = UserModel.findByCredentials(credentials);
-
-        if (user) {
-            req.session.currentUser = user;
-            res.json(user);
-        } else {
-            res.status(404).send(errorMsg);
-        }
-    }
-
-    function loggedIn(req, res) {
-        res.json(req.session.currentUser);
-    }
-
-    function logout(req, res) {
-        req.session.destroy();
-        res.send(200);
-    }
-
-    function getUserByCredentials(credentials, res) {
-        utils.sendOr404(UserModel.findByCredentials(credentials), res, errorMsg);
+        UserModel
+            .delete(req.params.id)
+            .then(function(users) {
+                utils.sendOr404(users, res, ERROR_MSG);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function getUserByUsername(username, res) {
-        utils.sendOr404(UserModel.findByUsername(username), res, errorMsg);
+        UserModel
+            .findByUsername(username)
+            .then(function(user) {
+                utils.sendOr404(user, res, ERROR_MSG);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
     }
 
     function getAllUsers(res) {
-        var users = UserModel.findAll();
+        UserModel
+            .findAll()
+            .then(function(users) {
+                utils.sendOr404(users, res, ERROR_MSG);
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
+    }
 
-        res.json(users);
+    function isAuthorized(req, res, next) {
+        if (req.user._id.equals(req.params.id)) {
+            next();
+        } else {
+            res.status(403).send('Not authorized!');
+        }
     }
 
 }
