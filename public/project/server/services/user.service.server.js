@@ -6,11 +6,11 @@ module.exports = function(app, UserModel, passportConfig) {
     var requireAuthentication = passportConfig.requireAuthentication;
     var authenticate = passportConfig.authenticate;
 
-    var LOGIN_URL = '/api/assignment/login';
-    var LOGOUT_URL = '/api/assignment/logout';
-    var LOGGED_IN_URL = '/api/assignment/loggedIn';
+    var LOGIN_URL = '/api/project/login';
+    var LOGOUT_URL = '/api/project/logout';
+    var LOGGED_IN_URL = '/api/project/loggedIn';
 
-    var BASE_URL = '/api/assignment/user';
+    var BASE_URL = '/api/project/user';
     var ID_PARAM_URL = BASE_URL + '/:id';
     var ERROR_MSG = 'User not found';
 
@@ -117,7 +117,7 @@ module.exports = function(app, UserModel, passportConfig) {
     }
 
     function isAuthorized(req, res, next) {
-        if (req.user._id.equals(req.params.id)) {
+        if (req.user._id === req.params.id) {
             next();
         } else {
             res.status(403).send('Not authorized!');

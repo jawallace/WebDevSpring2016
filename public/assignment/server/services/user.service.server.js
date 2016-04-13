@@ -138,7 +138,7 @@ module.exports = function(app, UserModel, passportConfig) {
     }
 
     function isAuthorized(req, res, next) {
-        if (req.user._id.equals(req.params.id)) {
+        if (req.user._id === req.params.id) {
             next();
         } else {
             res.status(403).send('Not authorized!');
