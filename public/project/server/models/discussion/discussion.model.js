@@ -63,13 +63,13 @@ module.exports = function(mongoose) {
     }
 
     function getDiscussionsForReading(resolve, reject, readingId) {
-        DiscussionModel.find({ reading: readingId }, null, { sort: 'posted' }, function(err, discussions) {
+        DiscussionModel.find({ reading: readingId }, null, { sort: '-posted' }, function(err, discussions) {
             return err ? reject(err) : resolve(discussions);
         });
     }
     
     function getDiscussionsForUser(resolve, reject, userId) {
-        DiscussionModel.find({ user: userId }, null, { sort: 'posted' }, function(err, discussions) {
+        DiscussionModel.find({ user: userId }, null, { sort: '-posted' }, function(err, discussions) {
             return err ? reject(err) : resolve(discussions);
         });
     }

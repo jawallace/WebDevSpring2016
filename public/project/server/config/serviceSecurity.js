@@ -72,7 +72,11 @@ module.exports = function(app) {
             return next();
         }
 
-        if (isGroupMember(req)) {
+        if (userIsMemberOfGroup(req)) {
+            return next();
+        }
+        
+        if (userIsAdminOfGroup(req)) {
             return next();
         }
 

@@ -19,7 +19,7 @@ module.exports = function(app, DiscussionModel, security) {
    
     function getDiscussionsForReading(req, res) {
         DiscussionModel
-            .findForReading(req.target.reading._id)
+            .findByReading(req.target.reading._id)
             .then(function(discussions) {
                 utils.sendOr404(discussions, res, DISCUSSION_ERR);
             })
@@ -31,6 +31,7 @@ module.exports = function(app, DiscussionModel, security) {
     function createDiscussion(req, res) {
         var discussion = req.body;
         discussion.reading = req.target.reading._id;
+        discussion.user = req.user._id;
 
         DiscussionModel
             .create(discussion)
@@ -38,7 +39,7 @@ module.exports = function(app, DiscussionModel, security) {
                 utils.sendOr404(discussion, res, DISCUSSION_ERR);
             })
             .catch(function(err) {
-                res.status(500).send(err);
+                res.status(400).send(err);
             });
     }
 
