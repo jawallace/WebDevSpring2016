@@ -1,5 +1,3 @@
-var randString = require('randomstring');
-
 module.exports = function(mongoose) {
     'use strict';
 
@@ -11,7 +9,6 @@ module.exports = function(mongoose) {
         findAll: getAllComments,
         findById: getCommentById,
         findByUser: getCommentsForUser,
-        findBySlug: findCommentBySlug,
         findByDiscussion: findCommentsForDiscussion,
         delete: deleteComment,
         update: updateComment
@@ -22,10 +19,6 @@ module.exports = function(mongoose) {
     //////////////////// IMPLEMENTATION ////////////////////
 
     function createComment(resolve, reject, comment) {
-        if (! comment.slug) {
-            comment.slug = randString.generate(16);
-        }
-
         model.create(comment, function(err, comment) {
             return err ? reject(err) : resolve(comment);     
         });
@@ -62,10 +55,6 @@ module.exports = function(mongoose) {
     }
 
     function updateComment(resolve, reject, commentId, newComment) {
-        if (newComment.slug) {
-            delete newComment.slug;
-        }
-
         model.findById(commentId, function(err, comment) {
             if (err) {
                 return reject(err);
@@ -76,12 +65,6 @@ module.exports = function(mongoose) {
             comment.save(function(err) {
                 return err ? reject(err) : resolve(comment);
             });
-        });
-    }
-
-    function findCommentBySlug(resolve, reject, slug) {
-        model.find({ slug: slug }, function(err, comment) {
-            return err ? reject(err) : resolve(comment);
         });
     }
 

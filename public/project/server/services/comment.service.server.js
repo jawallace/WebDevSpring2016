@@ -35,6 +35,7 @@ module.exports = function(app, CommentModel, security) {
     function createComment(req, res) {
         var comment = req.body;
         comment.discussion = req.target.discussion._id;
+        comment.user = req.user._id;
 
         CommentModel
             .create(comment)
