@@ -23,8 +23,6 @@ describe('CommentModel', function() {
                 .then(function(comment) {
                     expect(comment).to.exist;
                     expect(comment.text).to.equal('A new comment');
-                    expect(comment.slug).to.exist;
-                    expect(comment.slug).to.not.be.empty;
                     done();
                 })
                 .catch(done);
@@ -202,13 +200,12 @@ describe('CommentModel', function() {
                 .catch(done);
         });
 
-        it('should update the comment except for the slug field', function(done) {
+        it('should update the comment', function(done) {
             CommentModel
-                .update(id, { text: 'Some new text', slug: '12345' })
+                .update(id, { text: 'Some new text' })
                 .then(function(comment) {
                     expect(comment._id.toString()).to.equal(id.toString());
                     expect(comment.text).to.equal('Some new text');
-                    expect(comment.slug).to.not.equal('12345');
                     done();
                 })
                 .catch(done);
