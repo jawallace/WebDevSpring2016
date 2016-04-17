@@ -5,10 +5,7 @@ module.exports = function(passport, UserModel) {
 
     passport.use('project', new LocalStrategy(passportStrategy));
 
-    return {
-        requireAuthentication: requireAuthentication,
-        authenticate: passport.authenticate('project')
-    };
+    return passport.authenticate('project');
 
     //////////////////////////////////////////
     
@@ -22,11 +19,4 @@ module.exports = function(passport, UserModel) {
             });
     }
 
-    function requireAuthentication(req, res, next) {
-        if (! req.isAuthenticated()) {
-            res.send(401);
-        } else {
-            next();
-        }
-    }
 }

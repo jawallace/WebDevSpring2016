@@ -7,14 +7,17 @@ module.exports = function(app, mongoose, passport) {
     var ReadingModel = require('./models/reading/reading.model.js')(mongoose);
     var GroupModel = require('./models/group/group.model.js')(mongoose);
 
-    var passportConfig = require('./config/passportConfig.js')(passport, UserModel);
+    var authenticate = require('./config/passportConfig.js')(passport, UserModel);
+
+    require('./config/serviceParams.js')(app, UserModel, CommentModel, DiscussionModel, ReadingModel, GroupModel);
+    var security = require('./config/serviceSecurity.js')(app, UserModel, GroupModel);
 
     require('./services/book.service.server.js')(app, BookModel);
-    require('./services/user.service.server.js')(app, UserModel, passportConfig);
-    require('./services/comment.service.server.js')(app, CommentModel);
-    require('./services/discussion.service.server.js')(app, DiscussionModel, CommentModel);
-    require('./services/reading.service.server.js')(app, ReadingModel, DiscussionModel);
-    require('./services/group.service.server.js')(app, GroupModel, ReadingModel, UserModel);
+    require('./services/user.service.server.js')(app, UserModel, authenticate, security);
+    require('./services/comment.service.server.js')(app, CommentModel, security);
+    require('./services/discussion.service.server.js')(app, DiscussionModel, security);
+    require('./services/reading.service.server.js')(app, ReadingModel, security);
+    require('./services/group.service.server.js')(app, GroupModel, UserModel, security);
 
 };
 

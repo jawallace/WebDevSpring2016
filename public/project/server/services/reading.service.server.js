@@ -1,50 +1,52 @@
-module.exports = function(app, ReadingModel, DiscussionModel) {
+module.exports = function(app, ReadingModel, security) {
     'use strict';
 
     var utils = require('../utils/util.js')();
     
-    var BASE_URL = '/api/project/reading';
+    var BASE_URL = '/api/project/group/:groupId/reading';
     var READING_ID_URL = BASE_URL + '/:readingId';
-    var DISCUSSIONS_URL = READING_ID_URL + '/discussion';
-    var DISCUSSION_ID_URL = DISCUSSIONS_URL + '/:discussionId';
-
-    var retrieveReadingMiddleware = getReading;
-
-    app.get(BASE_URL, getAllReadings);
     
-    app.get(READING_ID_URL, retrieveReadingMiddleware, getReadingById);
-    app.put(READING_ID_URL, retrieveReadingMiddleware, updateReading);
+    app.get(    BASE_URL,                                           getReadingsForGroup);
+    app.post(   BASE_URL,           security.auth, security.admin,  addReading);
 
-    app.get(DISCUSSIONS_URL, retrieveReadingMiddleware, getDiscussionsForReading);
-    app.post(DISCUSSIONS_URL, retrieveReadingMiddleware, createDiscussion);
-   
-    app.get(DISCUSSION_ID_URL, retrieveReadingMiddleware, getDiscussionById);
-    app.delete(DISCUSSION_ID_URL, retrieveReadingMiddleware, deleteDiscussion);
-    app.put(DISCUSSION_ID_URL, retrieveReadingMiddleware, updateDiscussion);
+    app.get(    READING_ID_URL,                                     getReadingById);
+    app.put(    READING_ID_URL,     security.auth, security.admin,  updateReading);
+    app.delete( READING_ID_URL,     security.auth, security.admin,  deleteReading);
 
     //////////////////////////////////////////
     
-    var READING_ERR = 'Reading not found.';
-    var DISCUSSION_ERR = 'Discussion not found.';
-    
-    function getAllReadings(req, res) {
+    function getReadingsForGroup(req, res) {
         ReadingModel
-            .findAll()
+            .findByGroup(req.target.group._id)
             .then(function(readings) {
-                utils.sendOr404(readings, res, READING_ERR);
+                res.json(readings);
             })
             .catch(function(err) {
-                res.status(500).send(err);   
+                res.status(500).json(err);
             });
     }
+    
+    function addReading(req, res) {
+        var reading = req.body;
+        reading.group = req.target.group._id;
 
+        ReadingModel
+            .create(reading)
+            .then(function(reading) {
+                res.json(reading);
+            })
+            .catch(function(err) {
+                res.status(400).json(err);
+            });
+    }
+    
     function getReadingById(req, res) {
-        res.json(req.reading);
+        res.json(req.target.reading);
     }
 
     function updateReading(req, res) {
         ReadingModel
-            .update(req.reading._id, req.body)
+            .update(req.target.reading._id, req.body)
             .then(function(reading) {
                 res.json(reading); 
             })
@@ -52,78 +54,16 @@ module.exports = function(app, ReadingModel, DiscussionModel) {
                 res.status(500).send(err);   
             });
     }
-
-    function getDiscussionsForReading(req, res) {
-        DiscussionModel
-            .findForReading(req.reading._id)
-            .then(function(discussions) {
-                utils.sendOr404(discussions, res, DISCUSSION_ERR);
-            })
-            .catch(function(err) {
-               res.status(500).send(err);
-            });
-    }
-
-    function createDiscussion(req, res) {
-        var discussion = req.body;
-        discussion.reading = req.reading._id;
-
-        DiscussionModel
-            .create(discussion)
-            .then(function(discussion) {
-                utils.sendOr404(discussion, res, DISCUSSION_ERR);
-            })
-            .catch(function(err) {
-                res.status(500).send(err);
-            });
-    }
-
-    function getDiscussionById(req, res) {
-        DiscussionModel
-            .findById(req.params.discussionId)
-            .then(function(discussion) {
-                utils.sendOr404(discussion, res, DISCUSSION_ERR);
-            })
-            .catch(function(err) {
-                res.status(500).send(err);
-            });
-    }
-
-    function deleteDiscussion(req, res) {
-        DiscussionModel
-            .delete(req.params.discussionId)
-            .then(function(discussions) {
-                res.json(discussions);
-            })
-            .catch(function(err) {
-                res.status(500).send(err);
-            });
-    }
-
-    function updateDiscussion(req, res) {
-        DiscussionModel
-            .update(req.params.discussionId, req.body)
-            .then(function(discussion) {
-                utils.sendOr404(discussion, res, DISCUSSION_ERR);
-            })
-            .catch(function(err) {
-                res.json(500).send(err);
-            });
-    }
-
-    function getReading(req, res, next) {
+    
+    function deleteReading(req, res) {
         ReadingModel
-            .findById(req.params.readingId)
-            .then(function(reading) {
-                if (reading) {
-                    req.reading = reading;
-                    next();
-                } else {
-                    res.status(404).send(READING_ERR); 
-                }
+            .delete(req.target.reading._id)
+            .then(function(readings) {
+                res.json(readings);
             })
             .catch(function(err) {
                 res.status(500).json(err);
             });
     }
+
 }

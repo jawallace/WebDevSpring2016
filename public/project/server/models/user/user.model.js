@@ -145,6 +145,10 @@ module.exports = function(mongoose) {
                 return reject(err);
             }
 
+            if (! user) {
+                return reject({ error: 'Not found' });
+            }
+
             user.groups.push(groupId);
 
             user.save(function(err, updatedUser) {

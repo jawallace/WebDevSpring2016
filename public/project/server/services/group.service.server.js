@@ -1,4 +1,4 @@
-module.exports = function(app, GroupModel, ReadingModel, UserModel) {
+module.exports = function(app, GroupModel, UserModel, security) {
     'use strict';
 
     var utils = require('../utils/util.js')();
@@ -6,43 +6,33 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
 
     var BASE_URL = '/api/project/group';
     var GROUP_ID_URL = BASE_URL + '/:groupId';
-    var READING_URL = GROUP_ID_URL + '/reading';
-    var READING_ID_URL = READING_URL + '/:readingId';
+    
     var ADMIN_URL = GROUP_ID_URL + '/admin';
-    var ADMIN_ID_URL = ADMIN_URL + '/:adminId';
+    var ADMIN_ID_URL = ADMIN_URL + '/:userId';
     var MEMBER_URL = GROUP_ID_URL + '/member';
-    var MEMBER_ID_URL = MEMBER_URL + '/:memberId';
+    var MEMBER_ID_URL = MEMBER_URL + '/:userId';
     var USER_URL = '/api/project/user/:userId/group';
 
-    var retrieveGroupMiddleware = groupMiddleware;
-
-    app.get(BASE_URL, getAllGroups);
-    app.post(BASE_URL, createGroup);
+    app.get(    BASE_URL,                                       getAllGroups);
+    app.post(   BASE_URL,       security.auth,                  createGroup);
     
-    app.get(GROUP_ID_URL,retrieveGroupMiddleware, getGroupById);
-    app.put(GROUP_ID_URL, retrieveGroupMiddleware, updateGroup);
-    app.delete(GROUP_ID_URL, retrieveGroupMiddleware, deleteGroup);
+    app.get(    GROUP_ID_URL,                                   getGroupById);
+    app.put(    GROUP_ID_URL,   security.auth, security.admin,  updateGroup);
+    app.delete( GROUP_ID_URL,   security.auth, security.admin,  deleteGroup);
 
-    app.get(READING_URL, retrieveGroupMiddleware, getReadings);
-    app.post(READING_URL, retrieveGroupMiddleware, addReading);
+    app.get(    ADMIN_URL,                                      getAdmins);
+    app.post(   ADMIN_URL,      security.auth, security.admin,  addAdmin);
 
-    app.get(READING_ID_URL, retrieveGroupMiddleware, getReadingById);
-    app.put(READING_ID_URL, retrieveGroupMiddleware, updateReading);
-    app.delete(READING_ID_URL, retrieveGroupMiddleware, deleteReading);
+    app.get(    ADMIN_ID_URL,                                   getAdmin);
+    app.delete( ADMIN_ID_URL,   security.auth, security.admin,  removeAdmin);
 
-    app.get(ADMIN_URL, retrieveGroupMiddleware, getAdmins);
-    app.post(ADMIN_URL, retrieveGroupMiddleware, addAdmin);
-
-    app.get(ADMIN_ID_URL, retrieveGroupMiddleware, getAdmin);
-    app.delete(ADMIN_ID_URL, retrieveGroupMiddleware, removeAdmin);
-
-    app.get(MEMBER_URL, retrieveGroupMiddleware, getMembers);
-    app.post(MEMBER_URL, retrieveGroupMiddleware, addMember);
+    app.get(    MEMBER_URL,                                     getMembers);
+    app.post(   MEMBER_URL,                                     addMember);
     
-    app.get(MEMBER_ID_URL, retrieveGroupMiddleware, getMember);
-    app.delete(MEMBER_ID_URL, retrieveGroupMiddleware, removeMember);
+    app.get(    MEMBER_ID_URL,                                  getMember);
+    app.delete( MEMBER_ID_URL,                                  removeMember);
 
-    app.get(USER_URL, getGroupsForUser);
+    app.get(    USER_URL,                                       getGroupsForUser);
 
     ///////////////////////////////////////
    
@@ -60,8 +50,13 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     }
     
     function createGroup(req, res) {
+        var group = req.body;
+        if (! group.admins) {
+            group.admins = [ req.user._id ];
+        }
+
         GroupModel
-            .create(req.body)
+            .create(group)
             .then(function(group) {
                 res.json(group);
             })
@@ -71,12 +66,12 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     }
     
     function getGroupById(req, res) {
-        res.json(req.group);
+        res.json(req.target.group);
     }
     
     function updateGroup(req, res) {
         GroupModel
-            .update(req.group._id, req.body)
+            .update(req.target.group._id, req.body)
             .then(function(group) {
                 res.json(group);
             })
@@ -87,7 +82,7 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     
     function deleteGroup(req, res) {
         GroupModel
-            .delete(req.group._id)
+            .delete(req.target.group._id)
             .then(function(groups) {
                 res.json(groups);
             })
@@ -96,68 +91,10 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
             });
     }
     
-    function getReadings(req, res) {
-        ReadingModel
-            .findByGroup(req.group._id)
-            .then(function(readings) {
-                res.json(readings);
-            })
-            .catch(function(err) {
-                res.status(500).json(err);
-            });
-    }
-   
-    var READING_ERR_MSG = 'Reading not found.';
-    function addReading(req, res) {
-        var reading = req.body;
-        reading.group = req.group._id;
-
-        ReadingModel
-            .create(reading)
-            .then(function(reading) {
-                res.json(reading);
-            })
-            .catch(function(err) {
-                res.status(400).json(err);
-            });
-    }
-
-    function getReadingById(req, res) {
-        ReadingModel
-            .findById(req.params.readingId)
-            .then(function(reading) {
-                utils.sendOr404(reading, res, READING_ERR);
-            })
-            .catch(function(err) {
-                res.status(500).json(err);
-            });
-    }
-    
-    function updateReading(req, res) {
-        ReadingModel
-            .update(req.params.readingId, req.body)
-            .then(function(reading) {
-                utils.sendOr404(reading, res, READING_ERR);
-            })
-            .catch(function(err) {
-                res.status(400).json(err);
-            });
-    }
-    
-    function deleteReading(req, res) {
-        ReadingModel
-            .delete(req.params.readingId)
-            .then(function(readings) {
-                res.json(readings);
-            })
-            .catch(function(err) {
-                res.status(500).json(err);
-            });
-    }
    
     var USER_ERR_MSG = 'User not found.';
     function getAdmins(req, res) {
-        var admins = req.group.admins.map(function(admin) {
+        var admins = req.target.group.admins.map(function(admin) {
             return UserModel.findById(admin);
         });
         
@@ -176,9 +113,9 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     
     function addAdmin(req, res) {
         UserModel
-            .addGroup(req.body.id, req.group._id)
+            .addGroup(req.body.id, req.target.group._id)
             .then(function(user) {
-                return GroupModel.addAdmin(req.group._id, req.body.id);
+                return GroupModel.addAdmin(req.target.group._id, req.body.id);
             })
             .then(function(group) {
                 res.json(group);            
@@ -189,13 +126,13 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     }
     
     function getAdmin(req, res) {
-        if (req.group.admins.indexOf(req.params.adminId) < 0) {
+        if (req.target.group.admins.indexOf(req.target.user._id) < 0) {
             res.status(404).json();
             return;
         }
 
         UserModel
-            .findById(req.params.adminId)
+            .findById(req.target.user._id)
             .then(function(user) {
                 utils.sendOr404(user, res, USER_ERR_MSG);
             })
@@ -205,21 +142,26 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     }
     
     function removeAdmin(req, res) {
+        /*if (req.target.group.admins.length === 1) {
+            res.status(400).json({ error: 'Cannot remove last admin' });
+            return;
+        }*/
+
         UserModel
-            .removeGroup(req.params.adminId, req.group._id)
+            .removeGroup(req.target.user._id, req.target.group._id)
             .then(function(user) {
-                return GroupModel.removeAdmin(req.group._id, req.params.id);
+                return GroupModel.removeAdmin(req.target.group._id, req.target.user._id);
             })
             .then(function(group) {
                 res.json(group);
             })
             .catch(function(err) {
-                res.status(500).json(err);
+                res.status(400).json(err);
             });
     }
     
     function getMembers(req, res) {
-        var members = req.group.members.map(function(member) {
+        var members = req.target.group.members.map(function(member) {
             return UserModel.findById(member);
         });
         
@@ -238,9 +180,9 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     
     function addMember(req, res) {
         UserModel
-            .addGroup(req.body.id, req.group._id)
+            .addGroup(req.body.id, req.target.group._id)
             .then(function(user) {
-                return GroupModel.addMember(req.group._id, req.body.id);
+                return GroupModel.addMember(req.target.group._id, req.body.id);
             })
             .then(function(group) {
                 res.json(group);            
@@ -251,13 +193,13 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     }
     
     function getMember(req, res) {
-        if (req.group.members.indexOf(req.params.memberId) < 0) {
+        if (req.target.group.members.indexOf(req.target.user._id) < 0) {
             res.status(404).json();
             return;
         }
 
         UserModel
-            .findById(req.params.memberId)
+            .findById(req.target.user._id)
             .then(function(user) {
                 utils.sendOr404(user, res, USER_ERR_MSG);
             })
@@ -268,9 +210,9 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
     
     function removeMember(req, res) {
         UserModel
-            .removeGroup(req.params.memberId, req.group._id)
+            .removeGroup(req.target.user._id, req.target.group._id)
             .then(function(user) {
-                return GroupModel.removeMember(req.group._id, req.params.id);
+                return GroupModel.removeMember(req.target.group._id, req.target.user._id)
             })
             .then(function(group) {
                 res.json(group);
@@ -282,7 +224,7 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
 
     function getGroupsForUser(req, res) {
         GroupModel
-            .findByUser(req.params.userId)
+            .findByUser(req.target.user._id)
             .then(function(groups) {
                 res.json(groups);
             })
@@ -291,14 +233,4 @@ module.exports = function(app, GroupModel, ReadingModel, UserModel) {
             });
     }
 
-    function groupMiddleware(req, res, next) {
-        var group = GroupModel.findById(req.params.groupId);
-        
-        if (group) {
-            req.group = group;
-            next();
-        } else {
-            res.status(404).send(GROUP_ERR_MSG);
-        }
-    }
 }

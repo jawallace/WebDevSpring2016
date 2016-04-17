@@ -1,27 +1,29 @@
-module.exports = function(app, CommentModel) {
+module.exports = function(app, CommentModel, security) {
     'use strict';
 
     var utils = require('../utils/util.js')();
 
     var errorMsg = 'Comment not found.';
+    var COMMENT_ERR = 'Comment not found.';
 
-    var BASE_URL = '/api/project/comment';
-    var COMMENT_ID_URL = '/:slug';
-    
+    var BASE_URL = '/api/project/group/:groupId/reading/:readingId/discussion/:discussionId/comment';
+    var COMMENT_ID_URL = BASE_URL + '/:commentId';
     var USER_URL = '/api/project/user/:userId/comment';
 
-    var DISCUSSION_URL = '/api/project/discussion/:discussionId/comment'
-
-    app.get(BASE_URL, getAllComments);
-    app.get(BASE_URL + COMMENT_ID_URL, getCommentById);
-    app.put(BASE_URL + COMMENT_ID_URL, updateComment);
-
+    app.get(    BASE_URL,                                                       getCommentsForDiscussion);
+    app.post(   BASE_URL,           security.auth, security.isGroupMember,      createComment);
+    
+    app.get(    COMMENT_ID_URL,                                                 getCommentById);
+    app.put(    COMMENT_ID_URL,     security.auth, security.canManageComment,   updateComment);
+    app.delete( COMMENT_ID_URL,     security.auth, security.canManageComment,   deleteComment);
+    
     app.get(USER_URL, getCommentsForUser);
-    app.get(DISCUSSION_URL, getCommentsForDiscussion);
+  
+    //////////////////////////////////////////////////////////
 
-    function getAllComments(req, res) {
+    function getCommentsForDiscussion(req, res) {
         CommentModel
-            .findAll()
+            .findByDiscussion(req.target.discussion._id)
             .then(function(comments) {
                 utils.sendOr404(comments, res, errorMsg); 
             })
@@ -29,21 +31,28 @@ module.exports = function(app, CommentModel) {
                 res.status(500).json(err);
             });
     }
+    
+    function createComment(req, res) {
+        var comment = req.body;
+        comment.discussion = req.target.discussion._id;
 
-    function getCommentById(req, res) {
         CommentModel
-            .findById(req.params.commentId)
+            .create(comment)
             .then(function(comment) {
-                utils.sendOr404(comment, res, errorMsg); 
+                utils.sendOr404(comment, res, COMMENT_ERR);
             })
             .catch(function(err) {
-                res.status(500).json(err);
+                res.status(500).send(err);
             });
+    }
+
+    function getCommentById(req, res) {
+        res.json(req.target.comment);
     }
 
     function updateComment(req, res) {
         CommentModel
-            .update(req.params.commentId, req.body)
+            .update(req.target.comment._id, req.body)
             .then(function(comment) {
                 utils.sendOr404(comment, res, errorMsg); 
             })
@@ -54,7 +63,7 @@ module.exports = function(app, CommentModel) {
 
     function getCommentsForUser(req, res) {
         CommentModel
-            .findByUser(req.params.userId)
+            .findByUser(req.target.user._id)
             .then(function(comment) {
                 utils.sendOr404(comment, res, errorMsg); 
             })
@@ -63,14 +72,14 @@ module.exports = function(app, CommentModel) {
             });
     }
 
-    function getCommentsForDiscussion(req, res) {
+    function deleteComment(req, res) {
         CommentModel
-            .findByDiscussion(req.params.discussionId)
+            .delete(req.target.comment._id)
             .then(function(comments) {
-                utils.sendOr404(comments, res, errorMsg); 
+                utils.sendOr404(comments, res, COMMENT_ERR);
             })
             .catch(function(err) {
-                res.status(500).json(err);
+                res.status(500).send(err);
             });
     }
 

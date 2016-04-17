@@ -6,7 +6,7 @@ module.exports = function(mongoose) {
         name: { type: String, required: true },
         admins: { type: [mongoose.Schema.ObjectId], validate: ensureOneAdmin },
         members: { type: [mongoose.Schema.ObjectId], default: [] },
-        visibility: { type: String, enum: [ 'PUBLIC', 'PRIVATE' ] }
+        visibility: { type: String, enum: [ 'PUBLIC', 'PRIVATE' ], required: true }
     }, { collection: 'project.group' });
 
     return mongoose.model('Group', GroupSchema);

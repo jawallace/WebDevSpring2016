@@ -1,48 +1,54 @@
-module.exports = function(app, DiscussionModel, CommentModel) {
+module.exports = function(app, DiscussionModel, security) {
     'use strict';
 
     var utils = require('../utils/util.js')();
 
-    var BASE_URL = '/api/project/discussion';
+    var BASE_URL = '/api/project/group/:groupId/reading/:readingId/discussion';
     var DISCUSSION_ID_URL = BASE_URL + '/:discussionId';
-    var COMMENT_URL =  DISCUSSION_ID_URL + '/comment';
-    var COMMENT_ID_URL = COMMENT_URL + '/:commentId';
 
     var DISCUSSION_ERR = 'Discussion not found.';
-    var COMMENT_ERR = 'Comment not found.';
 
-    var discussionMiddleware = discussionMiddleware;
-
-    app.get(BASE_URL, getAllDiscussions);
-
-    app.get(DISCUSSION_ID_URL, discussionMiddleware, getDiscussionById);
-    app.put(DISCUSSION_ID_URL, discussionMiddleware, updateDiscussion);
-
-    app.get(COMMENT_ID_URL, discussionMiddleware, getComment);
-    app.put(COMMENT_ID_URL, discussionMiddleware, updateComment);
-    app.delete(COMMENT_ID_URL, discussionMiddleware, deleteComment);
+    app.get(    BASE_URL,                                                           getDiscussionsForReading);
+    app.post(   BASE_URL,           security.auth, security.isGroupMember,          createDiscussion);
     
-    app.post(COMMENT_URL, discussionMiddleware, createComment);
-    app.get(COMMENT_URL, discussionMiddleware, getCommentsForDiscussion);
+    app.get(    DISCUSSION_ID_URL,                                                  getDiscussionById);
+    app.put(    DISCUSSION_ID_URL,  security.auth, security.canManageDiscussion,    updateDiscussion);
+    app.delete( DISCUSSION_ID_URL,  security.auth, security.canManageDiscussion,    deleteDiscussion);
 
-    function getAllDiscussions(req, res) {
+    //////////////////////////////////////////////
+   
+    function getDiscussionsForReading(req, res) {
         DiscussionModel
-            .findAll()
+            .findForReading(req.target.reading._id)
             .then(function(discussions) {
                 utils.sendOr404(discussions, res, DISCUSSION_ERR);
             })
             .catch(function(err) {
-                res.status(500).json(err);
+               res.status(500).send(err);
+            });
+    }
+
+    function createDiscussion(req, res) {
+        var discussion = req.body;
+        discussion.reading = req.target.reading._id;
+
+        DiscussionModel
+            .create(discussion)
+            .then(function(discussion) {
+                utils.sendOr404(discussion, res, DISCUSSION_ERR);
+            })
+            .catch(function(err) {
+                res.status(500).send(err);
             });
     }
 
     function getDiscussionById(req, res) {
-        res.json(req.discussion);
+        res.json(req.target.discussion);
     }
 
     function updateDiscussion(req, res) {
         DiscussionModel
-            .update(req.discussion._id, req.body)
+            .update(req.target.discussion._id, req.body)
             .then(function(discussion) {
                 res.json(discussion);
             })
@@ -50,78 +56,16 @@ module.exports = function(app, DiscussionModel, CommentModel) {
                 res.status(500).json(err);
             });
     }
-
-    function getComment(req, res) {
-        CommentModel
-            .findById(req.params.commentId)
-            .then(function(comment) {
-                utils.sendOr404(comment, res, COMMENT_ERR); 
-            })
-            .catch(function(err) {
-                res.status(500).json(err);
-            });
-    }
-
-    function updateComment(req, res) {
-        CommentModel
-            .update(req.params.commentId, req.body)
-            .then(function(comment) {
-                utils.sendOr404(comment, res, COMMENT_ERR); 
-            })
-            .catch(function(err) {
-                res.status(500).json(err);
-            });
-    }
-
-    function createComment(req, res) {
-        var comment = req.body;
-        comment.discussion = req.discussion.id;
-
-        CommentModel
-            .create(comment)
-            .then(function(comment) {
-                utils.sendOr404(comment, res, COMMENT_ERR);
-            })
-            .catch(function(err) {
-                res.status(500).send(err);
-            });
-    }
-
-    function deleteComment(req, res) {
-        CommentModel
-            .delete(req.params.commentId)
-            .then(function(comments) {
-                utils.sendOr404(comments, res, COMMENT_ERR);
-            })
-            .catch(function(err) {
-                res.status(500).send(err);
-            });
-    }
-
-    function getCommentsForDiscussion(req, res) {
-        CommentModel
-            .findByDiscussion(req.discussion._id)
-            .then(function(comments) {
-                utils.sendOr404(comments, res, COMMENT_ERR);
-            })
-            .catch(function(err) {
-                res.status(500).send(err);
-            });
-    }
-
-    function discussionMiddleware(req, res, next) {
+    
+    function deleteDiscussion(req, res) {
         DiscussionModel
-            .findById(req.params.discussionId)
-            .then(function(discussion) {
-                if (discussion) {
-                    req.discussion = discussion;
-                    next();
-                } else {
-                    res.status(404).send(DISCUSSION_ERR);
-                }
+            .delete(req.target.discussion._id)
+            .then(function(discussions) {
+                res.json(discussions);
             })
             .catch(function(err) {
-                res.status(500).json(err);   
+                res.status(500).send(err);
             });
     }
+
 }
