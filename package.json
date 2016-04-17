@@ -31,7 +31,9 @@
     "express-session": "^1.13.0",
     "guid": "0.0.12",
     "gulp": "^3.9.1",
+    "gulp-jshint": "^2.0.0",
     "gulp-mocha": "^2.2.0",
+    "jshint": "^2.9.1",
     "lru-cache": "^4.0.0",
     "mocha": "^2.4.5",
     "mockgoose": "^6.0.0",
@@ -45,6 +47,7 @@
     "request": "^2.69.0",
     "supertest": "^1.2.0"
   },
+  "jshintConfig": {},
   "devDependencies": {},
   "bundleDependencies": [],
   "private": true,

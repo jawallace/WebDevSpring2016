@@ -13,26 +13,26 @@ module.exports = function(app, GroupModel, UserModel, security) {
     var MEMBER_ID_URL = MEMBER_URL + '/:userId';
     var USER_URL = '/api/project/user/:userId/group';
 
-    app.get(    BASE_URL,                                       getAllGroups);
-    app.post(   BASE_URL,       security.auth,                  createGroup);
+    app.get(    BASE_URL,                                               getAllGroups);
+    app.post(   BASE_URL,       security.auth,                          createGroup);
     
-    app.get(    GROUP_ID_URL,                                   getGroupById);
-    app.put(    GROUP_ID_URL,   security.auth, security.admin,  updateGroup);
-    app.delete( GROUP_ID_URL,   security.auth, security.admin,  deleteGroup);
+    app.get(    GROUP_ID_URL,                                           getGroupById);
+    app.put(    GROUP_ID_URL,   security.auth, security.admin,          updateGroup);
+    app.delete( GROUP_ID_URL,   security.auth, security.admin,          deleteGroup);
 
-    app.get(    ADMIN_URL,                                      getAdmins);
-    app.post(   ADMIN_URL,      security.auth, security.admin,  addAdmin);
+    app.get(    ADMIN_URL,                                              getAdmins);
+    app.post(   ADMIN_URL,      security.auth, security.admin,          addAdmin);
 
-    app.get(    ADMIN_ID_URL,                                   getAdmin);
-    app.delete( ADMIN_ID_URL,   security.auth, security.admin,  removeAdmin);
+    app.get(    ADMIN_ID_URL,                                           getAdmin);
+    app.delete( ADMIN_ID_URL,   security.auth, security.admin,          removeAdmin);
 
-    app.get(    MEMBER_URL,                                     getMembers);
-    app.post(   MEMBER_URL,                                     addMember);
+    app.get(    MEMBER_URL,                                             getMembers);
+    app.post(   MEMBER_URL,     security.auth, security.adminOrPublic,  addMember);
     
-    app.get(    MEMBER_ID_URL,                                  getMember);
-    app.delete( MEMBER_ID_URL,                                  removeMember);
+    app.get(    MEMBER_ID_URL,                                          getMember);
+    app.delete( MEMBER_ID_URL,  security.auth, security.adminOrSelf,    removeMember);
 
-    app.get(    USER_URL,                                       getGroupsForUser);
+    app.get(    USER_URL,                                               getGroupsForUser);
 
     ///////////////////////////////////////
    

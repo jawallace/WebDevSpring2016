@@ -8,7 +8,9 @@ module.exports = function(app) {
         canManageComment: canManageComment,
         canManageDiscussion: canManageDiscussion,
         canManageUser: canManageUser,
-        isGroupMember: isGroupMember
+        isGroupMember: isGroupMember,
+        adminOrPublic: isAdminUserOrGroupIsPublic,
+        adminOrSelf: isAdminUserOrSelf
     };
 
     ////////////////////////////////////
@@ -75,6 +77,38 @@ module.exports = function(app) {
         }
 
         res.status(403).send('User (' + req.user._id + ') is not a member of group (' + req.target.group._id + ')');
+    }
+
+    function isAdminUserOrGroupIsPublic(req, res, next) {
+        if (isSuperUser(req)) {
+            return next();
+        }
+
+        if (userIsAdminOfGroup(req)) {
+            return next();
+        }
+
+        if (isPublicGroup(req)) {
+            return next();
+        }
+        
+        res.status(403).send('User (' + req.user._id.toString() + ') is not allowed to modify the private group (' + req.target.group._id.toString() + ')');
+    }
+
+    function isAdminUserOrSelf(req, res, next) {
+        if (isSuperUser(req)) {
+            return next();
+        }
+
+        if (userIsAdminOfGroup(req)) {
+            return next();
+        }
+
+        if (req.user._id.toString() === req.target.user._id.toString()) {
+            return next();
+        }
+
+        res.status(403).send('User (' + req.user._id.toString() + ') is not allowed to modify the group (' + req.target.group._id.toString() + ')');
     }
 
     function guardGroupAccess(req, res, next) {
