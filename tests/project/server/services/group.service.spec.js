@@ -340,6 +340,27 @@ describe('GroupService', function() {
                 .end(done);
         });
     });
+
+    describe('/api/project/user/:userId/group', function() {
+        
+        it('GET should return all groups for the user', function(done) {
+            request(app)
+                .get('/api/project/user/' + testData.user2._id + '/group')
+                .expect(200)
+                .expect(function(res) {
+                    expect(res.body.admin).to.have.lengthOf(2);
+                    res.body.admin.forEach(function(g) {
+                        expect(g._id).to.be.oneOf([testData.group2._id.toString(), testData.group4._id.toString()]);
+                    });
+                    expect(res.body.member).to.have.lengthOf(1);
+                    res.body.member.forEach(function(g) {
+                        expect(g._id).to.be.oneOf([testData.group1._id.toString()]);
+                    });
+                })
+                .end(done);
+        });
+
+    });
 });
 
 function initData(done) {
