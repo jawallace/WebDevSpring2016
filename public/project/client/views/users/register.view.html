@@ -2,39 +2,39 @@
     <h1 class="page-header">Register</h1>
 </header>
 
-<div class="col-lg-8 col-lg-offset-2">
-    <form>
-        <div class="form-group ng-class:{'has-error': vm.validation.fname}">
-            <label for="fname">First Name</label>
-            <input type="text" class="form-control" id="fname" ng-model="vm.user.fname" placeholder="First Name">
+<div class="col-lg-6 col-lg-offset-3 col-xs-12 col-xs-offset-0">
+    <form class="well">
+        <div class="form-group label-floating is-empty ng-class:{'has-error': vm.validation.fname}">
+            <label class="control-label" for="fname">First Name</label>
+            <input type="text" class="form-control" id="fname" ng-model="vm.user.fname">
             <span class="text-danger help-block" ng-show="vm.validation.fname">{{ vm.validation.fname }}</span>
         </div>
         
-        <div class="form-group ng-class:{'has-error': vm.validation.lname}">
-            <label for="lname">Last Name</label>
-            <input type="text" class="form-control" id="lname" ng-model="vm.user.lname" placeholder="Last Name">
+        <div class="form-group label-floating is-empty ng-class:{'has-error': vm.validation.lname}">
+            <label class="control-label" for="lname">Last Name</label>
+            <input type="text" class="form-control" id="lname" ng-model="vm.user.lname">
             <span class="text-danger help-block" ng-show="vm.validation.lname">{{ vm.validation.lname }}</span>
         </div>
         
-        <div class="form-group ng-class:{'has-error': vm.validation.username}">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" ng-model="vm.user.username" placeholder="Username">
+        <div class="form-group label-floating is-empty ng-class:{'has-error': vm.validation.username}">
+            <label class="control-label" for="username">Username</label>
+            <input type="text" class="form-control" id="username" ng-model="vm.user.username">
             <span class="text-danger help-block" ng-show="vm.validation.username">{{ vm.validation.username }}</span>
         </div>
         
-        <div class="form-group ng-class:{'has-error': vm.validation.password}">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" ng-model="vm.user.password" placeholder="Password">
+        <div class="form-group label-floating is-empty ng-class:{'has-error': vm.validation.password}">
+            <label class="control-label" for="password">Password</label>
+            <input type="password" class="form-control" id="password" ng-model="vm.user.password">
         </div>
         
-        <div class="form-group ng-class:{'has-error': vm.validation.password}">
-            <label for="vpassword">Verify Password</label>
-            <input type="password" class="form-control" id="vpassword" ng-model="vm.verifyPassword" placeholder="Verify Password">
+        <div class="form-group label-floating is-empty ng-class:{'has-error': vm.validation.password}">
+            <label class="control-label" for="vpassword">Verify Password</label>
+            <input type="password" class="form-control" id="vpassword" ng-model="vm.verifyPassword">
             <span class="text-danger help-block" ng-show="vm.validation.password">{{ vm.validation.password }}</span>
         </div>
 
-        <div class="form-group">
-            <button class="btn btn-block btn-primary" ng-click="vm.register()">Register</button>
+        <div class="form-group text-right">
+            <button class="btn btn-raised btn-primary" ng-click="vm.register()">Register</button>
         </div>
     </form>
 </div>

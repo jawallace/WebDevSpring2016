@@ -2,7 +2,7 @@
     <h1 class="page-header">Login</h1>
 </header>
 
-<div class="col-lg-8 col-lg-offset-2">
+<div class="col-lg-6 col-lg-offset-3 col-xs-12 col-xs-offset-0">
 
     <div class="well">
         <div class="alert alert-danger alert-dismissable" ng-show="vm.message">
@@ -11,16 +11,14 @@
         </div>
        
         <form>
-            <div class="form-group">
-                <label for="username">Username</label>
+            <div class="form-group label-floating is-empty">
+                <label class="control-label" for="username">Username</label>
                 <input class="form-control" type="text" ng-model="vm.username" id="username">
-                <span class="material-input"></span>
             </div>
             
-            <div class="form-group label-floating">
-                <label for="password">Password</label>
+            <div class="form-group label-floating is-empty">
+                <label class="control-label" for="password">Password</label>
                 <input class="form-control" type="password" ng-model="vm.password" id="password">
-                <span class="material-input"></span>
             </div>
 
             <div class="form-group text-right">
