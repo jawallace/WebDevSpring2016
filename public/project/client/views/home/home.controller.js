@@ -5,8 +5,8 @@
         .module('TheBookClub')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = [ 'UserService', 'GroupService', 'BookService', 'ReadingService', 'user', '$q'];
-    function HomeController(UserService, GroupService, BookService, ReadingService, user, $q) {
+    HomeController.$inject = [ 'UserService', 'DiscussionService', 'BookService', 'ReadingService', 'user', '$q'];
+    function HomeController(UserService, DiscussionService, BookService, ReadingService, user, $q) {
         var vm = this;
 
         vm.groups;
@@ -18,28 +18,23 @@
         function activate() {
             if (user) {
                 UserService
-                    .getGroupsForUser(user.id)
+                    .getGroupsForUser(user._id)
                     .then(function(groups) {
-                        vm.groups = groups.map(getLatestReading);
+                        var groupArray = [].concat(groups.admin || []).concat(groups.member || []);
+                        vm.groups = groupArray.map(getLatestReading);
                     });
             }
         }
 
         function getLatestReading(group) {
-            GroupService
-                .getReadingsForGroup(group.id)
+            ReadingService 
+                .getReadingsForGroup({ group: group._id })
                 .then(function(readings) {
                     if (! readings.length) {
                         return;
                     }
 
-                    readings.sort(function(a, b) { 
-                        return b - a;
-                    });
-
-                    resolveReading(readings[0]).then(function(r) {
-                        group.currentReading = r;
-                    });
+                    group.currentReading = resolveReading(readings[0]);
                 });
 
             return group;
@@ -55,8 +50,8 @@
                 });
 
             var discussionDeferred = $q.defer();
-            ReadingService
-                .getDiscussionsForReading(reading.id)
+            DiscussionService
+                .getDiscussionsForReading(reading._id)
                 .then(function(discussions) {
                     reading.discussions = discussions;
                     discussionDeferred.resolve();

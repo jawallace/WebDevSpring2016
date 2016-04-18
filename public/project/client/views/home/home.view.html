@@ -1,4 +1,4 @@
-<section ng-if="!user" class="text-center landing-page-content">
+<section ng-if="! user" class="text-center landing-page-content">
     <div class="col-md-4 col-md-offset-4 well well-lg">
         <i class="material-icons">book</i>
         
@@ -15,27 +15,32 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h1 class="panel-title">
-                    <a ui-sref="crud.groups.details({ id: group.id })">
+                    <a ui-sref="group.detail({ id: group._id })">
                         {{ group.name }}
                     </a>
                 </h1>
             </div>
 
             <div class="panel-body text-center">
-                <div class="col-md-6">
-                    <h4>{{ group.currentReading.book.title }}</h4>
-                    <img ng-src="{{ group.currentReading.book.cover.thumb }}" alt="{{ group.currentReading.book.title }}" />
-                </div>
+                <div ng-if="group.currentReading">
+                    <div class="col-md-6">
+                        <h4>{{ group.currentReading.book.title }}</h4>
+                        <img ng-src="{{ group.currentReading.book.cover.thumb }}" alt="{{ group.currentReading.book.title }}" />
+                    </div>
 
-                <div class="col-md-6">
-                    <h4>Discussions</h4>
-                    <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="discussion in group.currentReading.discussions">
-                            <a ui-sref="crud.discussions.details({ id: discussion.id })">
-                                {{ discussion.topic }}
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="col-md-6">
+                        <h4>Discussions</h4>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="discussion in group.currentReading.discussions">
+                                <a ui-sref="crud.discussions.details({ id: discussion.id })">
+                                    {{ discussion.topic }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div ng-if="!group.currentReading">
+                    This group has not had a reading yet.
                 </div>
             </div>
         </div>
