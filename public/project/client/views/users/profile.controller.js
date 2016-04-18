@@ -37,7 +37,7 @@
             UserService
                 .isLoggedIn()
                 .then(function(user) {
-                    vm.isLoggedInUser = user.id === userId;
+                    vm.isLoggedInUser = user._id === userId;
                 });
         }
 
@@ -47,7 +47,7 @@
             user.groupInfo = undefined;
 
             UserService
-                .updateUser(user.id, user)
+                .updateUser(user._id, user)
                 .then(function() {
                     activate();
                     vm.password = undefined;

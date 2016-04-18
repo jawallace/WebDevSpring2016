@@ -14,7 +14,7 @@
             if (toState.name !== 'home') {
                 $rootScope.isLandingPage = false;
             } else {
-                $rootScope.isLandingPage = !$scope.user;
+                $rootScope.isLandingPage = !$rootScope.user;
             }
         });
 
