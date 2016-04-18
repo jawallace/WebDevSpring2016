@@ -5,8 +5,8 @@
         .module('TheBookClub')
         .controller('GroupDetailController', GroupDetailController);
 
-    GroupDetailController.$inject = [ '$stateParams', 'GroupService', 'ReadingService', 'user' ];
-    function GroupDetailController($stateParams, GroupService, ReadingService, user) {
+    GroupDetailController.$inject = [ '$stateParams', 'GroupService', 'ReadingService', 'user', '$state' ];
+    function GroupDetailController($stateParams, GroupService, ReadingService, user, $state) {
         var vm = this;
 
         vm.group;
@@ -14,10 +14,11 @@
         vm.pastReadings;
         vm.isAdmin;
         vm.editingCurrentReading = false;
+        vm.newReading;
 
         vm.getLoc = getLocation;
-        vm.addNewReading = addNewReading;
         vm.removeCurrentReading = removeCurrentReading;
+        vm.selectBookForNewReading = selectBookForNewReading;
         vm.toggleEditing = toggleEditing;
 
         activate();
@@ -38,12 +39,41 @@
             };
         }
 
-        function addNewReading() {
-
+        function removeCurrentReading() {
+            if (! vm.currentReading) {
+                return;
+            }
         }
 
-        function removeCurrentReading() {
-        
+        function selectBookForNewReading() {
+            var loc = { group: $stateParams.groupId };
+            var reading = angular.copy(vm.newReading);
+
+            var params = {
+                selecting: true,
+                onSelect: _createOnSelect(loc, reading)
+            };
+
+            // not ideal at all, but it works.
+            $(".modal-backdrop").hide();
+
+            $state.go('search', params);
+        }
+
+        function _createOnSelect(loc, reading) {
+            return function(book) {
+                reading.book = book;
+
+                ReadingService
+                    .createReading(loc, reading)
+                    .then(function(reading) {
+                        $state.go('group.detail', { groupId: loc.group });
+                    })
+                    .catch(function(err) {
+                        // TODO
+                        console.log(err);   
+                    });
+            }
         }
 
         function toggleEditing() {

@@ -7,6 +7,8 @@
     
     var NO_RESULTS = "No results";
     var FETCHING = "Fetching results...";
+    var ENTER_SEARCH = "Search to see results.";
+    var SELECTION_MSG = "Find and select a book to use it for your reading.";
     var NO_MSG = "";
     var ERR_MSG = "Something went wrong. Please try again.";
 
@@ -17,26 +19,35 @@
         var q = $stateParams.q;
         var page = parseInt($stateParams.page || "1");
 
-        vm.browsing = true;
-        vm.selecting = true;
+        vm.query = q || '';
+        vm.allowSelection = $stateParams.selecting;
+        
+        var defaultMessage = vm.allowSelection ? SELECTION_MSG : ENTER_SEARCH;
 
-        vm.page = page;
+        vm.page = (page < 1) ? 1 : page;
         vm.results = []; // search results
-        vm.msg = FETCHING; // message for loading / no results / etc
+        vm.msg = vm.query ? FETCHING : defaultMessage; // message for loading / no results / etc
 
         vm.nextPage = nextPage;
         vm.prevPage = prevPage;
+        vm.search = search;
+        vm.onSelect = onSelect;
 
-        search(q, page);
+        search();
 
         //////////////////////////////////
         
-        function search(query, page) {
+        function search() {
+            if (! vm.query) {
+                vm.msg = defaultMessage;
+                return;
+            }
+
             vm.msg = FETCHING;
             vm.results = [];
             
             BookService
-                .getBookByQuery(query, page)
+                .getBookByQuery(vm.query, vm.page)
                 .then(function (res) {
                     vm.msg = NO_MSG;
                     vm.results = res;
@@ -52,15 +63,20 @@
 
         function nextPage() {
             if (vm.results.length) {
-                $state.go('search', { q: q, page: page + 1 });
+                vm.page = vm.page + 1;
+                search();
             }
         }
 
         function prevPage() {
-            if (page > 1) {
-                $state.go('search', { q: q, page: page - 1 });            
+            if (vm.page > 1) {
+                vm.page = vm.page - 1;
+                search();
             }
+        }
 
+        function onSelect(book) {
+            $stateParams.onSelect(book);
         }
     }
 

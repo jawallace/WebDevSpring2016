@@ -15,7 +15,7 @@
         vm.showDetails = false;
         vm.detailsIcon = "expand_more";
         vm.toggleDetails = toggleDetails;
-
+        
         activate();
 
         ////////////////////////////////
@@ -36,7 +36,7 @@
         }
 
         function select() {
-            console.log('select');
+            vm.bcOnSelection()(vm.book._id); 
         }
     }
 

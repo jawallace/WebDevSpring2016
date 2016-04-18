@@ -1,23 +1,29 @@
 <header>
-    <h1 class="page-header">Search Results</h1>
+    <h1 class="page-header">Search Books</h1>
 </header>
+
+<form ng-submit="vm.search()">
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search by title, author, etc" ng-model="vm.query">
+    </div>
+</form>
 
 <div class="col-md-10 col-md-offset-1 col-xs-12">
     <div class="msg" ng-show="vm.msg">{{ vm.msg }}</div>
 
     <div class="list-group" ng-repeat="book in vm.results">
-        <bc-book-list-item bc-book="book.id" bc-allow-selection="true" bc-on-select="vm.select()">
+        <bc-book-list-item bc-book="book.id" bc-allow-selection="vm.allowSelection" bc-on-select="vm.onSelect()">
         </bc-book-list-item>
         <div class="list-group-separator"></div>
     </div>
 
     <div class="text-center" ng-show="vm.results.length || vm.page > 1">
-        <ul class="pagination">
+        <ul class="pager">
             <li ng-class="{ 'disabled': vm.page === 1 }">
-                <a href="javascript:void(0)" ng-click="vm.prevPage()">Prev Page</a>
+                <a class="withripple" href="javascript:void(0)" ng-click="vm.prevPage()">Previous</a>
             </li>
             <li ng-class="{ 'disabled': !vm.results.length }">
-                <a href="javascript:void(0)" ng-click="vm.nextPage()">Next Page</a>
+                <a class="withripple" href="javascript:void(0)" ng-click="vm.nextPage()">Next</a>
             </li>
         </ul>
     </div>

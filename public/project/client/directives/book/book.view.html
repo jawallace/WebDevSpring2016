@@ -35,6 +35,10 @@
             <p>
                 {{ vm.book.description }}
             </p>
+
+            <p class="pull-right" ng-if="vm.includeFooter">
+                <button class="btn btn-primary" ng-click="vm.select()">Select this Book</button> 
+            </p>
         </div>
     </div>
 </div>

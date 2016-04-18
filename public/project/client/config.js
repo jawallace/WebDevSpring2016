@@ -30,7 +30,11 @@
                 url: '/search?q&page',
                 templateUrl: 'views/search/search.view.html',
                 controller: 'SearchController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                params: {
+                    selecting: false,
+                    onSelect: function() { }
+                }
             })
             .state('login', {
                 url: '/login',

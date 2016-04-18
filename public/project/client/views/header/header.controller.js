@@ -9,10 +9,7 @@
     function HeaderController($rootScope, $state, UserService) {
         var vm = this;
       
-        vm.searchQuery = ''; // ng-model
-
         vm.logout = logout;
-        vm.search = search;
 
         activate();
 
@@ -33,12 +30,6 @@
                     $rootScope.user = undefined; 
                     $state.go('home');
                 });
-        }
-
-        function search() {
-            if (vm.searchQuery) {
-                $state.go('search', { q: vm.searchQuery, page: 1 });
-            }
         }
     }
 

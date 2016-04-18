@@ -25,19 +25,16 @@
                 <li ui-sref-active="active" ng-show="user">
                     <a ui-sref="profile({ userId: user._id })">{{ user.firstName || user.username }}</a>
                 </li>
+                
+                <li ui-sref-active="active">
+                    <a ui-sref="search">Search</a>
+                </li>
 
                 <li ui-sref-active="active" ng-show="user">
                     <a href="javascript:void(0)" ng-click="vm.logout()">Logout</a>
                 </li>
-            </ul>
 
-            <!-- img src="https://books.google.com/googlebooks/images/poweredby.png" -->
-            <form class="navbar-form navbar-right" ng-submit="vm.search()">
-                <div class="form-group">
-                    <input type="text" class="form-control" ng-model="vm.searchQuery" placeholder="Search...">
-                    <span class="material-input">
-                </div>
-            </form>
+            </ul>
         </section>
     </div>
 </nav>
