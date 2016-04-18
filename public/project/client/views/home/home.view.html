@@ -15,7 +15,7 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h1 class="panel-title">
-                    <a ui-sref="group.detail({ id: group._id })">
+                    <a ui-sref="group.detail({ groupId: group._id })">
                         {{ group.name }}
                     </a>
                 </h1>
@@ -32,7 +32,7 @@
                         <h4>Discussions</h4>
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="discussion in group.currentReading.discussions">
-                                <a ui-sref="crud.discussions.details({ id: discussion.id })">
+                                <a ui-sref="crud.discussions.details({ id: discussion._id })">
                                     {{ discussion.topic }}
                                 </a>
                             </li>

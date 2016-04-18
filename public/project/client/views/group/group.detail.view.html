@@ -1,21 +1,79 @@
 <header>
-    <h1 class="page-header">{{ vm.group.name }}</h1>
+    <h1 class="page-header">{{ vm.group.name || "Test" }}</h1>
 </header>
 
-<ul class="nav nav-pills">
-    <li><a href="javascript:void(0)">Current Reading</a></li>
-    <li><a href="javascript:void(0)">Past Readings</a></li>
-    <li><a href="javascript:void(0)">Members</a></li>
+<ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a data-target="#current" data-toggle="tab">Current Reading</a></li>
+    <li role="presentation"><a data-target="#past" data-toggle="tab">Past Readings</a></li>
+    <li role="presentation"><a data-target="#members" data-toggle="tab">Members</a></li>
 </ul>
 
-<section class="col-md-6 col-xs-12">
-    <header>
-        <h3>Current Reading</h3>
-    </header>
-</section>
+<div class="tab-content">
+    
+    <!-- Current Reading -->
+    <section role="tabpanel" class="tab-pane active fade in" id="current">
 
-<section class="col-md-6 col-xs-12">
-</section>
+        <!-- Admin Controls -->
+        <header ng-if="vm.isAdmin" class="pull-right">
+            <div class="dropdown">
+                <button type="button" class="btn btn-default dropdown-toggle" title="Settings" data-toggle="dropdown">
+                    <i class="material-icons">settings</i>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <a href="javascript:void(0)"  ng-click="vm.addNewReading()">
+                            <i class="material-icons">add</i> Create a new reading
+                        </a>
+                    </li>
+                    <li ng-class="{ disabled: ! vm.currentReading }">
+                        <a href="javascript:void(0)" ng-click="vm.removeCurrentReading()">
+                            <i class="material-icons">delete</i> Remove this reading
+                        </a>
+                    </li>
+                    <li ng-class="{ disabled: ! vm.currentReading }">
+                        <a href="javascript:void(0)" ng-click="vm.toggleEditing()">
+                            <i class="material-icons">edit</i> 
+                            <span ng-show="vm.editingCurrentReading">Stop editing this reading</span>
+                            <span ng-hide="vm.editingCurrentReading">Edit this reading</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </header>
 
-<section class="col-md-6 col-xs-12">
-</section>
+        <div class="clearfix"></div>
+        
+        <!-- No Reading Message -->
+        <div class="text-center" ng-hide="vm.currentReading">
+            <p ng-show="vm.isAdmin">
+                No readings found. Start a new reading.    
+            </p>
+
+            <p ng-hide="vm.isAdmin">
+                No readings found. A group admin must start a new reading.
+            </p>
+        </div>
+
+        <!-- Current Reading Display -->
+        <div ng-if="vm.currentReading">
+            <bc-reading 
+                bc-loc="vm.getLoc()(vm.currentReading._id)" 
+                bc-reading="vm.currentReading"
+                bc-allow-editing="vm.editingCurrentReading">
+            </bc-reading>
+        </div>
+    </section>
+
+    <section role="tabpanel" class="tab-pane fade" id="past">
+        <header>
+            <h3>Past Readings</h3>
+        </header>
+    </section>
+
+    <section role="tabpanel" class="tab-pane fade" id="members">
+        <header>
+            <h3>Members</h3>
+        </header>
+    </section>
+</div>

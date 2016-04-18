@@ -1,0 +1,41 @@
+<section class="col-md-6 col-xs-12">
+    <!-- Book information -->
+    <h2>Book</h2>
+
+    <div class="text-center" ng-show="!vm.book">
+        Fetching book information...
+    </div>
+
+    <div ng-show="vm.book">
+        <div class="col-md-4 col-xs-12 text-center">
+            <img ng-src="{{ vm.book.cover.thumb }}" title="{{ vm.book.title }}">
+        </div>
+
+        <div class="col-md-8 col-xs-12">
+            <h3>{{ vm.book.title }} <small class="hidden-xs">{{ vm.book.authors.join(", ") }}</small></h3>
+            <h5 class="visible-xs">{{ vm.book.authors.join(", ") }}</h5>
+
+            <div ng-if="vm.book.rating" 
+                 bc-rating 
+                 bc-value="vm.book.rating" 
+                 bc-out-of="5" 
+                 bc-num-ratings="vm.book.numRatings">
+            </div>
+
+            <p>
+                <span ng-if="vm.book.publisher">{{ vm.book.publisher }}</span> 
+                <span ng-if="vm.book.publisher && (vm.book.date || vm.book.pages)"> | </span>
+                <span ng-if="vm.book.date">{{ vm.book.date | date }}</span>
+                <span ng-if="vm.book.date && vm.book.pages"> | </span>
+                <span ng-if="vm.book.pages">{{ vm.book.pages }} pages</span> 
+            </p>
+
+            <p>{{ vm.book.description }}</p>
+        </div>
+    </div>
+</section>
+
+<section class="col-md-6 col-xs-12">
+    <!-- Discussions -->
+    <div>TODO</div>
+</section>

@@ -10,17 +10,21 @@
        
         $urlRouterProvider.otherwise('/');
 
+        var resolveUser = {
+            user: isLoggedIn
+        };
+
+        var requireLogin = {
+            user: forceLogin
+        };
+
         $stateProvider
             .state('home', {
                 url: '/',
                 templateUrl: 'views/home/home.view.html',
                 controller: 'HomeController',
                 controllerAs: 'vm',
-                resolve: {
-                    user: function(UserService) {
-                        return UserService.isLoggedIn();
-                    }
-                }
+                resolve: resolveUser
             })
             .state('search', {
                 url: '/search?q&page',
@@ -44,21 +48,57 @@
                 url: '/profile/:userId',
                 templateUrl: 'views/users/profile.view.html',
                 controller: 'ProfileController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve: resolveUser
             })
             .state('group', {
                 url: '/group',
+                template: '<ui-view></ui-view>'
+            })
+            .state('group.create', {
+                url: '/',
                 templateUrl: 'views/group/group.view.html',
                 controller: 'GroupController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve: requireLogin 
             })
             .state('group.detail', {
-                url: '/group/:groupId',
+                url: '/:groupId',
                 templateUrl: 'views/group/group.detail.view.html',
                 controller: 'GroupDetailController',
-                controllerAs: 'vm'
+                controllerAs: 'vm',
+                resolve: requireLogin
             });
         ;
 
+        isLoggedIn.$inject = [ 'UserService' ];
+        function isLoggedIn(UserService) {
+            return UserService.isLoggedIn();
+        }
+
+        // This is a bit funky. Adapted from http://stackoverflow.com/a/28267504
+        forceLogin.$inject = [ '$q', 'UserService', '$timeout', '$state' ];
+        function forceLogin($q, UserService, $timeout, $state) {
+            var deferred = $q.defer();
+            UserService
+                .isLoggedIn()
+                .then(function(user) {
+                    if (user) {
+                        deferred.resolve(user);
+                    } else {
+                        deferred.reject({});
+                        $timeout(function() {
+                            $state.go('login');
+                        });
+                    }
+                }, function(err) {
+                    deferred.reject({});
+                    $timeout(function() {
+                        $state.go('login');
+                    });
+                });
+
+            return deferred.promise;
+        }
     }
 })();
