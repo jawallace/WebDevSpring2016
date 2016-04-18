@@ -5,72 +5,65 @@
         .module('TheBookClub')
         .factory('ReadingService', ReadingService);
 
-    ReadingService.$inject = [ '$http' ];
-    function ReadingService($http) {
-
-        var BASE_URL = '/api/project/reading';
+    ReadingService.$inject = [ '$http', 'UrlService' ];
+    function ReadingService($http, UrlService) {
 
         var service = {
-            updateReading: updateReading,
-            getAllReadings: getAllReadings,
+            createReading: createReading,
+            getReadingsForGroup: getReadingsForGroup,
             getReadingById: getReadingById,
-            getDiscussionsForReading: getDiscussionsForReading,
-            addDiscussionToReading: addDiscussionToReading,
-            removeDiscussionFromReading: removeDiscussionFromReading
+            updateReading: updateReading,
+            deleteReading: deleteReading 
         };
-
-        activate();
 
         return service;
 
         ////////////////////////////////////////
+       
+        function createReading(loc, book, endDate) {
+            return $http
+                .post(UrlService.formatUrl(loc) + '/reading', { book: book, endDate: endDate })
+                .then(function(res) {
+                    return res.data;
+                });
+        }
         
-        function activate() {
-        }
-
-        function updateReading(id, updated) {
+        function getReadingsForGroup(loc) {
             return $http
-                .put(BASE_URL + '/' + id, updated)
+                .get(UrlService.formatUrl(loc) + '/reading')
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function getAllReadings() {
+        function getReadingById(loc, reading) {
+            var newLoc = angular.copy(loc);
+            newLoc.reading = reading;
+            
             return $http
-                .get(BASE_URL)
+                .get(UrlService.formatUrl(newLoc))
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function getReadingById(id) {
+        function updateReading(loc, reading, updated) {
+            var newLoc = angular.copy(loc);
+            newLoc.reading = reading;
+
             return $http
-                .get(BASE_URL + '/' + id)
+                .put(UrlService.formatUrl(newLoc), updated)
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function addDiscussionToReading(id, discussion) {
-            return $http
-                .post(BASE_URL + '/' + id + '/discussion', discussion)
-                .then(function(res) {
-                    return res.data;
-                });
-        }
+        function deleteReading(loc, reading) {
+            var newLoc = angular.copy(loc);
+            newLoc.reading = reading;
 
-        function removeDiscussionFromReading(id, discussion) {
             return $http
-                .delete(BASE_URL + '/' + id + '/discussion/' + discussion)
-                .then(function(res) {
-                    return res.data;
-                });
-        }
-
-        function getDiscussionsForReading(id) {
-            return $http
-                .get(BASE_URL + '/' + id + '/discussion')
+                .delete(UrlService.formatUrl(newLoc))
                 .then(function(res) {
                     return res.data;
                 });

@@ -5,72 +5,65 @@
         .module('TheBookClub')
         .factory('DiscussionService', DiscussionService);
 
-    DiscussionService.$inject = [ '$http' ];
-    function DiscussionService($http) {
+    DiscussionService.$inject = [ '$http', 'UrlService' ];
+    function DiscussionService($http, UrlService) {
     
-        var baseUrl = '/api/project/discussion';
-
         var service = {
+            createDiscussion: createDiscussion,
+            getDiscussionsForReading: getDiscussionsForReading,
             getDiscussionById: getDiscussionById,
-            getAllDiscussions: getAllDiscussions,
             updateDiscussion: updateDiscussion,
-            getCommentsForDiscussion: getCommentsForDiscussion,
-            addCommentToDiscussion: addCommentToDiscussion,
-            removeCommentFromDiscussion: removeCommentFromDiscussion
+            deleteDiscussion: deleteDiscussion
         };
-
-        activate();
 
         return service;
 
         /////////////////////////////////////////////////////
+       
+        function createDiscussion(loc, topic) {
+            return $http
+                .post(UrlService.formatUrl(loc) + '/discussion', { topic: topic })
+                .then(function(res) {
+                    return res.data;
+                });
+        }
         
-        function activate() {
-        }
-
-        function getDiscussionById(id) {
+        function getDiscussionsForReading(loc) {
             return $http
-                .get(baseUrl + '/' + id)
+                .get(UrlService.formatUrl(loc) + '/discussion')
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function getAllDiscussions() {
+        function getDiscussionById(loc, discussion) {
+            var newLoc = angular.copy(loc);
+            newLoc.discussion = discussion;
+
             return $http
-                .get(baseUrl)
+                .get(UrlService.formatUrl(newLoc))
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function updateDiscussion(id, updatedDiscussion) {
+        function updateDiscussion(loc, discussion, updatedDiscussion) {
+            var newLoc = angular.copy(loc);
+            newLoc.discussion = discussion;
+
             return $http
-                .put(baseUrl + '/' + id, updateDiscussion)
+                .put(UrlService.formatUrl(newLoc), updatedDiscussion)
                 .then(function(res) {
                     return res.data;
                 });
         }
+        
+        function deleteDiscussion(loc, discussion) {
+            var newLoc = angular.copy(loc);
+            newLoc.discussion = discussion;
 
-        function getCommentsForDiscussion(id) {
             return $http
-                .get(baseUrl + '/' + id + '/comment')
-                .then(function(res) {
-                    return res.data;
-                });
-        }
-
-        function addCommentToDiscussion(id, comment) {
-            return $http
-                .post(baseUrl + '/' + id + '/comment', comment)
-                .then(function(res) {
-                    return res.data;
-                });
-        }
-
-        function removeCommentFromDiscussion(id, commentId) {
-            return $http
-                .delete(baseUrl + '/' + id + '/comment/' + commentId)
+                .delete(UrlService.formatUrl(newLoc))
                 .then(function(res) {
                     return res.data;
                 });

@@ -5,8 +5,8 @@
         .module('TheBookClub')
         .factory('GroupService', GroupService);
 
-    GroupService.$inject = [ '$http' ];
-    function GroupService($http) {
+    GroupService.$inject = [ '$http', 'UrlService' ];
+    function GroupService($http, UrlService) {
         var BASE_URL = '/api/project/group';
         
         var service = {
@@ -15,37 +15,29 @@
             getAllGroups: getAllGroups,
             updateGroup: updateGroup,
             deleteGroup: deleteGroup,
-            getReadingsForGroup: getReadingsForGroup,
             getMembersForGroup: getMembersForGroup,
             getAdminsForGroup: getAdminsForGroup,
-            addReadingToGroup: addReadingToGroup,
             addMemberToGroup: addMemberToGroup,
             addAdminToGroup: addAdminToGroup,
-            removeReadingFromGroup: removeReadingFromGroup,
             removeMemberFromGroup: removeMemberFromGroup,
             removeAdminFromGroup: removeAdminFromGroup
         };
-
-        activate();
 
         return service;
 
         //////////////////////////////////// 
 
-        function activate() {
-        }
-
         function createGroup(group) {
             return $http
-                .post(BASE_URL, group)
+                .post(UrlService.formatUrl(), group)
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function getGroupById(id) {
+        function getGroupById(loc) {
             return $http
-                .get(BASE_URL + '/' + id)
+                .get(UrlService.formatUrl(loc))
                 .then(function(res) {
                     return res.data;
                 });
@@ -53,95 +45,71 @@
 
         function getAllGroups() {
             return $http
-                .get(BASE_URL)
+                .get(UrlService.formatUrl())
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function updateGroup(id, updated) {
+        function updateGroup(loc, updated) {
             return $http
-                .put(BASE_URL + '/' + id, updated)
+                .put(UrlService.formatUrl(loc), updated)
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function deleteGroup(id) {
+        function deleteGroup(loc) {
             return $http
-                .delete(BASE_URL + '/' + id)
+                .delete(UrlService.formatUrl(loc))
                 .then(function(res) {
                     return res.data;
                 });
         }
         
-        function getReadingsForGroup(id) {
+        function getMembersForGroup(loc) {
             return $http
-                .get(BASE_URL + '/' + id + '/reading')
+                .get(UrlService.formatUrl(loc) + '/member')
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function getMembersForGroup(id) {
+        function getAdminsForGroup(loc) {
             return $http
-                .get(BASE_URL + '/' + id + '/member')
+                .get(UrlService.formatUrl(loc) + '/admin')
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function getAdminsForGroup(id) {
+        function addMemberToGroup(loc, member) {
             return $http
-                .get(BASE_URL + '/' + id + '/admin')
+                .post(UrlService.formatUrl(loc) + '/member', { id: member })
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function addReadingToGroup(id, reading) {
+        function addAdminToGroup(loc, admin) {
             return $http
-                .post(BASE_URL + '/' + id + '/reading', { id: reading })
+                .post(UrlService.formatUrl(loc) + '/admin', { id: admin })
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function addMemberToGroup(id, member) {
+        function removeMemberFromGroup(loc, member) {
             return $http
-                .post(BASE_URL + '/' + id + '/member', { id: member })
+                .delete(UrlService.formatUrl(loc) + '/member/' + member.id)
                 .then(function(res) {
                     return res.data;
                 });
         }
 
-        function addAdminToGroup(id, admin) {
+        function removeAdminFromGroup(loc, admin) {
             return $http
-                .post(BASE_URL + '/' + id + '/admin', { id: admin })
-                .then(function(res) {
-                    return res.data;
-                });
-        }
-
-        function removeReadingFromGroup(id, reading) {
-            return $http
-                .delete(BASE_URL + '/' + id + '/reading/' + reading.id)
-                .then(function(res) {
-                    return res.data;
-                });
-        }
-
-        function removeMemberFromGroup(id, member) {
-            return $http
-                .delete(BASE_URL + '/' + id + '/member/' + member.id)
-                .then(function(res) {
-                    return res.data;
-                });
-        }
-
-        function removeAdminFromGroup(id, admin) {
-            return $http
-                .delete(BASE_URL + '/' + id + '/admin/' + admin.id)
+                .delete(UrlService.formatUrl(loc) + '/admin/' + member.id)
                 .then(function(res) {
                     return res.data;
                 });

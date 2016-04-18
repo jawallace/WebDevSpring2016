@@ -5,38 +5,43 @@
         .module('TheBookClub')
         .factory('CommentService', CommentService);
 
-    CommentService.$inject = [ '$http' ];
-    function CommentService($http) {
-
-        var baseUrl = '/api/project/comment';
-
+    CommentService.$inject = [ '$http', 'UrlService' ];
+    function CommentService($http, UrlService) {
+        
         var service = {
-            getAllComments: getAllComments,
+            createComment: createComment,
+            getCommentsForDiscussion: getCommentsForDiscussion,
             getCommentById: getCommentById,
             getCommentsForUser: getCommentsForUser,
-            updateComment: updateComment
+            updateComment: updateComment,
+            deleteComment: deleteComment
         };
-
-        activate();
 
         return service;
 
         //////////////////// IMPLEMENTATION ////////////////////
 
-        function activate() {
+        function createComment(loc, text) {
+            return $http
+                .post(UrlService.formatUrl(loc) + '/comment', { text: text })
+                .then(function(res) {
+                    return res.data;
+                });
         }
 
-        function getAllComments() {
+        function getCommentsForDiscussion(loc) {
             return $http
-                .get(baseUrl)
+                .get(UrlService.formatUrl(loc) + '/comment')
                 .then(function(res) {
                     return res.data;
                 });
         }
        
-        function getCommentById(id) {
+        function getCommentById(loc, comment) {
+            var newLoc = angular.copy(loc);
+            newLog.comment = comment;
             return $http
-                .get(baseUrl + '/' + id)
+                .get(UrlService.formatUrl(newLoc))
                 .then(function(res) {
                     return res.data;
                 });
@@ -50,14 +55,26 @@
                 });
         }
         
-        function updateComment(commentId, newComment) {
+        function updateComment(loc, comment, newComment) {
+            var newLoc = angular.copy(loc);
+            newLog.comment = comment;
             return $http
-                .put(baseUrl + '/' + commentId, newComment)
+                .put(UrlService.formatUrl(newLoc), newComment)
                 .then(function(res) {
                     return res.data;
                 });
         }
         
+        function deleteComment(loc, comment, newComment) {
+            var newLoc = angular.copy(loc);
+            newLog.comment = comment;
+
+            return $http
+                .delete(UrlService.formatUrl(newLoc))
+                .then(function(res) {
+                    return res.data;
+                });
+        }
     }
 
 }());

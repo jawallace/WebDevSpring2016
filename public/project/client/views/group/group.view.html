@@ -1,0 +1,50 @@
+<header>
+    <h1 class="page-header">Join or Create a Group</h1>
+</header>
+
+<section class="col-md-6 col-sm-12">
+    <!-- Find a group -->
+    <div class="well">
+        <header>
+            <h3>Find a Group</h3>
+        </header>
+        
+        <div>TODO!</div>
+    </div>
+</section>
+
+<section class="col-md-6 col-sm-12">
+    <!-- Create a group -->
+    <div class="well">
+        <header>
+            <h3>Create a Group</h3>
+        </header>
+            
+        <form>
+            <div class="form-group label-floating is-empty ng-class: { 'has-error' : !vm.validation.name.valid }">
+                <label class="control-label" for="gname">Group Name</label>
+                <input type="text" id="gname" class="form-control" ng-model="vm.newGroup.name">
+                <p class="help-text" ng-if="!vm.validation.name.valid">{{ vm.validation.name.msg }}</p>
+            </div>
+
+            <div class="form-group is-focused">
+                <div class="col-sm-12">
+                    <div class="togglebutton">
+                        <label>
+                            <input type="checkbox" ng-model="vm.newGroup.public">
+                            <span class="toggle"></span>
+                            <span ng-if="vm.newGroup.public">Public</span>
+                            <span ng-if="! vm.newGroup.public">Public</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <p class="help-block" ng-if="vm.newGroup.public">Anyone can join this group</p>
+            <p class="help-block" ng-if="! vm.newGroup.public">Other users must ask to join this group</p>
+            
+            <div class="form-group">
+                <button class="btn btn-raised btn-primary" ng-click="vm.createGroup()">Create</button>
+            </div>
+        </form>
+    </div>
+</section>
