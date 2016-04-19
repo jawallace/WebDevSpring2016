@@ -5,8 +5,8 @@
         .module('TheBookClub')
         .controller('ProfileController', ProfileController);
 
-    ProfileController.$inject = [ 'UserService', '$stateParams', 'user' ];
-    function ProfileController(UserService, $stateParams, loggedInUser) {
+    ProfileController.$inject = [ 'UserService', '$stateParams', 'user', 'GroupService' ];
+    function ProfileController(UserService, $stateParams, loggedInUser, GroupService) {
         var vm = this;
 
         var userId = $stateParams.userId;
