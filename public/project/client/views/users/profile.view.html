@@ -53,9 +53,21 @@
 
         <div class="well">
             <ul class="list-group" ng-if="vm.user.groupInfo.length">
-                <li class="list-group-item" ng-repeat="group in vm.user.groupInfo">
-                    <a ui-sref="crud.groups.details({ id: group.id })">{{ group.name }}</a>
-                </li>
+                <div class="list-group-item" ng-repeat-start="group in vm.user.groupInfo">
+                    <div class="row-action-primary">
+                        <i class="material-icons">{{ group.admin ? "supervisor_account" : "person" }}</i>
+                    </div>
+                    <div class="row-content">
+                        <div class="action-secondary" ng-if="vm.isLoggedInUser">
+                            <i class="material-icons" ng-click="vm.leaveGroup(group)" title="Leave group">clear</i>
+                        </div>
+                        <h4 class="list-group-item-heading">
+                            <a ui-sref="group.detail({ groupId: group._id })">{{ group.name }}</a>
+                        </h4>
+                        <p class="list-group-item-text">Status: {{ group.admin ? "Admin" : "Member" }}</p>
+                    </div>
+                </div>
+                <div class="list-group-separator" ng-repeat-end></div>
             </ul>
 
             <div class="text-center" ng-if="!vm.user.groups.length">

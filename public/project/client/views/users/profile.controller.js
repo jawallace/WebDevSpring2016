@@ -5,8 +5,8 @@
         .module('TheBookClub')
         .controller('ProfileController', ProfileController);
 
-    ProfileController.$inject = [ 'UserService', '$stateParams' ];
-    function ProfileController(UserService, $stateParams) {
+    ProfileController.$inject = [ 'UserService', '$stateParams', 'user' ];
+    function ProfileController(UserService, $stateParams, loggedInUser) {
         var vm = this;
 
         var userId = $stateParams.userId;
@@ -17,6 +17,7 @@
         vm.verifyPassword;
 
         vm.updateUser = updateUser;
+        vm.leaveGroup = leaveGroup;
 
         activate();
 
@@ -29,15 +30,18 @@
                     UserService
                         .getGroupsForUser(userId)
                         .then(function(groups) {
-                            user.groupInfo = groups;
+                            groups.admin.forEach(function(g) {
+                                g.admin = true; 
+                            });
+                            
+                            groups.member.forEach(function(g) {
+                                g.admin = false; 
+                            });
+
+                            user.groupInfo = [].concat(groups.admin).concat(groups.member);
                             vm.user = user;
+                            vm.isLoggedInUser = loggedInUser._id === userId;
                         });
-                });
-            
-            UserService
-                .isLoggedIn()
-                .then(function(user) {
-                    vm.isLoggedInUser = user._id === userId;
                 });
         }
 
@@ -55,6 +59,30 @@
                 });
         }
 
+        function leaveGroup(group) {
+            var loc = { group: group._id };
+            if (group.admin) {
+                GroupService
+                    .removeAdminFromGroup(loc, loggedInUser._id)
+                    .then(function() {
+                        activate();
+                    })
+                    .catch(function(err) {
+                        //TODO
+                        console.log(err);
+                    });
+            } else {
+                GroupService
+                    .removeMemberFromGroup(loc, loggedInUser._id)
+                    .then(function() {
+                        activate();
+                    })
+                    .catch(function(err) {
+                        //TODO
+                        console.log(err);
+                    });
+            }
+        }
     }
 
 }());
