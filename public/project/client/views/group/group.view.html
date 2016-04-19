@@ -22,8 +22,13 @@
                        class="material-icons pointer" ng-click="vm.joinGroup(group)" title="Join group">
                         group_add
                     </i>
-                    <i class="material-icons" ng-if="!group.joinable">
-                        group
+                    <i ng-if="group.requestable" 
+                       class="material-icons pointer" ng-click="vm.requestToJoinGroup(group)" title="Request to join group">
+                        message
+                    </i>
+                    <i ng-if="! group.requestable && ! group.joinable" 
+                       class="material-icons" title="You are already a member of this group">
+                        person 
                     </i>
                 </div>
                 <div class="row-content">

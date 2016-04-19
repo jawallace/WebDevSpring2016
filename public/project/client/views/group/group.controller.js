@@ -18,6 +18,7 @@
         vm.createGroup = createGroup;
         vm.searchForGroup = searchForGroup;
         vm.joinGroup = joinGroup;
+        vm.requestToJoinGroup = requestToJoinGroup;
 
         /////////////////////////////////
 
@@ -51,8 +52,8 @@
                 .searchForGroups(vm.groupQuery)
                 .then(function(groups) {
                     groups.forEach(function(g) {
-                        console.log(vm.user);
                         g.joinable = (g.visibility === 'PUBLIC' && vm.user.groups.indexOf(g._id) < 0);
+                        g.requestable = (g.visibility === 'PRIVATE' && vm.user.groups.indexOf(g._id) < 0);
                     });
 
                     vm.searchResults = groups; 
@@ -68,6 +69,20 @@
 
             GroupService
                 .addMemberToGroup(loc, user._id)
+                .then(function() {
+                    $state.go('group.detail', { groupId: group._id });
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err); 
+                });
+        }
+        
+        function requestToJoinGroup(group) {
+            var loc = { group: group._id };
+
+            GroupService
+                .addRequesterToGroup(loc, user._id)
                 .then(function() {
                     $state.go('group.detail', { groupId: group._id });
                 })

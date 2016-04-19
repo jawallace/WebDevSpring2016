@@ -21,7 +21,10 @@
             addMemberToGroup: addMemberToGroup,
             addAdminToGroup: addAdminToGroup,
             removeMemberFromGroup: removeMemberFromGroup,
-            removeAdminFromGroup: removeAdminFromGroup
+            removeAdminFromGroup: removeAdminFromGroup,
+            getRequestersForGroup: getRequestersForGroup,
+            addRequesterToGroup: addRequesterToGroup,
+            removeRequesterFromGroup: removeRequesterFromGroup
         };
 
         return service;
@@ -119,6 +122,30 @@
         function removeAdminFromGroup(loc, admin) {
             return $http
                 .delete(UrlService.formatUrl(loc) + '/admin/' + admin)
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+        
+        function getRequestersForGroup(loc) {
+            return $http
+                .get(UrlService.formatUrl(loc) + '/requester')
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+        
+        function addRequesterToGroup(loc, requester) {
+            return $http
+                .post(UrlService.formatUrl(loc) + '/requester', { id: requester })
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+        
+        function removeRequesterFromGroup(loc, requester) {
+            return $http
+                .delete(UrlService.formatUrl(loc) + '/requester/' + requester)
                 .then(function(res) {
                     return res.data;
                 });

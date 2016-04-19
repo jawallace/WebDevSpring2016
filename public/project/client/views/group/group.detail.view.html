@@ -170,6 +170,33 @@
                 </div>
             </div>
         </div>
+        
+        <div class="col-md-6 col-xs-12 top-margin" ng-if="vm.isAdmin && vm.group.visibility === 'PRIVATE'">
+            <div class="well">
+                <header>
+                    <h4>Requests</h4>
+                </header>
+                
+                <div class="list-group top-margin">
+                    <div class="list-group-item" ng-repeat-start="requester in vm.requesters">
+                        <div class="row-action-primary">
+                            <i class="material-icons pointer" ng-click="vm.approveRequest(requester)">check</i>
+                        </div>
+                        <div class="row-content">
+                            <div class="action-secondary">
+                                <i class="material-icons" ng-click="vm.rejectRequest(requester)">delete</i>
+                            </div>
+                            <h4 class="list-group-item-heading">
+                                <a ui-sref="profile({ userId: requester._id })">
+                                    {{ requester.firstName || requester.username }} {{ requester.firstName ? requester.lastName : "" }}
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="list-group-separator" ng-repeat-end></div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 

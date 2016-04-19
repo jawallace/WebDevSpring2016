@@ -11,6 +11,8 @@ module.exports = function(app, GroupModel, UserModel, security) {
     var ADMIN_ID_URL = ADMIN_URL + '/:userId';
     var MEMBER_URL = GROUP_ID_URL + '/member';
     var MEMBER_ID_URL = MEMBER_URL + '/:userId';
+    var REQUESTER_URL = GROUP_ID_URL + '/requester';
+    var REQUESTER_ID_URL = REQUESTER_URL + '/:userId';
     var USER_URL = '/api/project/user/:userId/group';
 
     app.get(    BASE_URL,                                               getAllGroups);
@@ -31,6 +33,10 @@ module.exports = function(app, GroupModel, UserModel, security) {
     
     app.get(    MEMBER_ID_URL,                                          getMember);
     app.delete( MEMBER_ID_URL,  security.auth, security.adminOrSelf,    removeMember);
+    
+    app.get(    REQUESTER_URL,                                          getRequesters);
+    app.post(   REQUESTER_URL, security.auth,                           addRequester);
+    app.delete( REQUESTER_ID_URL,  security.auth, security.adminOrSelf, removeRequester);
 
     app.get(    USER_URL,                                               getGroupsForUser);
 
@@ -246,6 +252,64 @@ module.exports = function(app, GroupModel, UserModel, security) {
             .catch(function(err) {
                 res.status(500).json(err);
             });
+    }
+
+    function getRequesters(req, res) {
+        var requesters = req.target.group.requests.map(function(requester) {
+            return UserModel.findById(requester);
+        });
+        
+        q.all(requesters)
+            .then(function(requesters) {
+                if (requesters.some(function(m) { return !m; })) {
+                    res.status(500).send('INCONSISTENT SERVER STATE');
+                } else {
+                    res.json(requesters);
+                }
+            })
+            .catch(function(err) {
+                res.status(500).json(err);
+            });
+    }
+    
+    function addRequester(req, res) {
+        var requesters = req.target.group.requests;
+        var requester = req.body.id;
+
+        var i = requesters.indexOf(requester);
+        if (i > -1) {
+            res.json(req.target.group);
+        } else {
+            requesters.push(requester);
+            GroupModel
+                .update(req.target.group._id, { requests: requesters })
+                .then(function(group) {
+                    res.json(group);
+                })  
+                .catch(function(err) {
+                    res.status(500).json(err);
+                });
+        }
+    }
+
+    function removeRequester(req, res) {
+        var requesters = req.target.group.requests;
+        var requester = req.target.user._id;
+
+        var i = requesters.indexOf(requester);
+        if (i < 0) {
+            res.json(req.target.group);
+        } else {
+            requesters.splice(i, 1);
+            GroupModel
+                .update(req.target.group._id, { requests: requesters })
+                .then(function(group) {
+                    res.json(group);
+                })  
+                .catch(function(err) {
+                    res.status(500).json(err);
+                });
+        }
     }
 
     function getGroupsForUser(req, res) {

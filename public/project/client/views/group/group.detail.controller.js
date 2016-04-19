@@ -14,6 +14,7 @@
         vm.pastReadings;
         vm.admins;
         vm.members;
+        vm.requesters;
         vm.isAdmin;
         vm.editingCurrentReading = false;
         vm.newReading;
@@ -31,7 +32,8 @@
 
         vm.removeMember = removeMember;
         vm.promoteMember = promoteMember;
-
+        vm.approveRequest = approveRequest;
+        vm.rejectRequest = rejectRequest;
         activate();
 
         /////////////////////////////////
@@ -160,6 +162,35 @@
                 });
         }
 
+        function approveRequest(requester) {
+            var loc = { group: $stateParams.groupId };
+            GroupService
+                .removeRequesterFromGroup(loc, requester._id)
+                .then(function() {
+                    return GroupService.addMemberToGroup(loc, requester._id);
+                })
+                .then(function() {
+                    _getUsers(loc); 
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
+        }
+        
+        function rejectRequest(requester) {
+            var loc = { group: $stateParams.groupId };
+            GroupService
+                .removeRequesterFromGroup(loc, requester._id)
+                .then(function() {
+                    _getUsers(loc); 
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
+        }
+
         function _getGroup(loc) {
             GroupService
                 .getGroupById(loc)
@@ -217,6 +248,16 @@
                 .getMembersForGroup(loc)
                 .then(function(members) {
                     vm.members = members;
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
+           
+           GroupService
+                .getRequestersForGroup(loc)
+                .then(function(requesters) {
+                    vm.requesters = requesters;
                 })
                 .catch(function(err) {
                     //TODO
