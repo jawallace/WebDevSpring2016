@@ -32,8 +32,8 @@
                         <h4>Discussions</h4>
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="discussion in group.currentReading.discussions">
-                                <a ui-sref="crud.discussions.details({ id: discussion._id })">
-                                    {{ discussion.topic }}
+                                <a ng-click="vm.goToDiscussion(group, discussion)">
+                                    {{ discussion.topic | limitTo:30 }}
                                 </a>
                             </li>
                         </ul>

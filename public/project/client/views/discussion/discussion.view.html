@@ -1,8 +1,15 @@
-<section class="col-md-6 col-md-offset-3 col-xs-12 col-xs-offset-0">
+<header>
+    <a ui-sref="group.detail({ groupId: vm.groupId })">
+        <i class="material-icons">keyboard_backspace</i>
+        Back to Group
+    </a>
+</header>
+
+<section class="col-md-6 col-md-offset-3 col-xs-12 col-xs-offset-0 top-margin">
     <div class="well">
         <div class="row">
             <p class="lead">{{ vm.discussion.topic }}</p>
-            <div>
+            <div class="pull-left">
                 <i class="material-icons">person</i> 
                 <a ui-sref="profile({ userId: vm.discussion.user })">{{ vm.discussion.userDetails.name }}</a>
                 @ {{ vm.discussion.posted | date }}

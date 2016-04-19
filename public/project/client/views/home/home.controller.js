@@ -5,11 +5,13 @@
         .module('TheBookClub')
         .controller('HomeController', HomeController);
 
-    HomeController.$inject = [ 'UserService', 'DiscussionService', 'BookService', 'ReadingService', 'user', '$q'];
-    function HomeController(UserService, DiscussionService, BookService, ReadingService, user, $q) {
+    HomeController.$inject = [ 'UserService', 'DiscussionService', 'BookService', 'ReadingService', 'user', '$q', '$state', ];
+    function HomeController(UserService, DiscussionService, BookService, ReadingService, user, $q, $state) {
         var vm = this;
 
         vm.groups;
+        
+        vm.goToDiscussion = goToDiscussion;
 
         activate();
 
@@ -24,6 +26,12 @@
                         vm.groups = groupArray.map(getLatestReading);
                     });
             }
+        }
+
+        function goToDiscussion(group, discussion) {
+            var loc = { group: group._id, reading: group.currentReading._id };
+
+            $state.go('discussion', { discussionId: discussion._id, loc: loc });
         }
 
         function getLatestReading(group) {

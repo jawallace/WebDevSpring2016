@@ -1,5 +1,5 @@
 <header>
-    <h1 class="page-header">{{ vm.group.name || "Test" }}</h1>
+    <h1 class="page-header">{{ vm.group.name }}</h1>
 </header>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -58,7 +58,8 @@
             ng-if="vm.currentReading"
             bc-loc="vm.currentReading.loc"
             bc-reading="vm.currentReading"
-            bc-allow-editing="vm.editingCurrentReading">
+            bc-allow-editing="vm.editingCurrentReading"
+            bc-allow-adding-discussion="vm.isGroupMember">
         </bc-reading> 
     </section>
 

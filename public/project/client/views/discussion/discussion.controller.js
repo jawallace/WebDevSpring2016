@@ -12,7 +12,8 @@
         var loc = $stateParams.loc;
         var locWithDiscussion = angular.copy(loc);
         locWithDiscussion.discussion = $stateParams.discussionId;
-
+    
+        vm.groupId = loc.group;
         vm.discussion;
         vm.comments = [];
         vm.newCommentText;

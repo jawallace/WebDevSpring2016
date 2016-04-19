@@ -11,7 +11,8 @@
             scope: {
                 bcLoc: '=',
                 bcReading: '=',
-                bcAllowEditing: '='
+                bcAllowEditing: '=',
+                bcAllowAddingDiscussion: '='
             },
             controller: 'ReadingController',
             controllerAs: 'vm',

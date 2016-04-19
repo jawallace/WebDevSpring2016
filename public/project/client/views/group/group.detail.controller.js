@@ -16,6 +16,7 @@
         vm.members;
         vm.requesters;
         vm.isAdmin;
+        vm.isGroupMember;
         vm.editingCurrentReading = false;
         vm.newReading;
         vm.activePastReading;
@@ -198,6 +199,7 @@
                     vm.group = group;
                     
                     vm.isAdmin = group.admins.indexOf(user._id) > -1;
+                    vm.isGroupMember = vm.isAdmin || group.members.indexOf(user._id) > -1;
                 })
                 .catch(function(err) {
                     //TODO
