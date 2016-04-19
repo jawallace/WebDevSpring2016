@@ -5,14 +5,19 @@
         .module('TheBookClub')
         .controller('GroupController', GroupController);
 
-    GroupController.$inject = [ 'GroupService' ];
-    function GroupController(GroupService) {
+    GroupController.$inject = [ 'GroupService', 'user', '$state' ];
+    function GroupController(GroupService, user, $state) {
         var vm = this;
 
         vm.newGroup = { name: '', public: true };
         vm.validation = { name: { valid: true } };
+        vm.groupQuery;
+        vm.searchResults = [];
+        vm.user = user;
 
         vm.createGroup = createGroup;
+        vm.searchForGroup = searchForGroup;
+        vm.joinGroup = joinGroup;
 
         /////////////////////////////////
 
@@ -34,6 +39,41 @@
                 })
                 .catch(function(res) {
                     console.log('err!', res);   
+                });
+        }
+
+        function searchForGroup() {
+            if (! vm.groupQuery) {
+                return;
+            }
+
+            GroupService
+                .searchForGroups(vm.groupQuery)
+                .then(function(groups) {
+                    groups.forEach(function(g) {
+                        console.log(vm.user);
+                        g.joinable = (g.visibility === 'PUBLIC' && vm.user.groups.indexOf(g._id) < 0);
+                    });
+
+                    vm.searchResults = groups; 
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);  
+                });
+        }
+
+        function joinGroup(group) {
+            var loc = { group: group._id };
+
+            GroupService
+                .addMemberToGroup(loc, user._id)
+                .then(function() {
+                    $state.go('group.detail', { groupId: group._id });
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err); 
                 });
         }
 

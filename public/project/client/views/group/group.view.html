@@ -8,8 +8,35 @@
         <header>
             <h3>Find a Group</h3>
         </header>
-        
-        <div>TODO!</div>
+   
+        <form ng-submit="vm.searchForGroup()">
+            <div class="form-group">
+                <input type="text" class="form-control" ng-model="vm.groupQuery" placeholder="Search for a group...">
+            </div>
+        </form>
+
+        <div class="list-group">
+            <div class="list-group-item" ng-repeat-start="group in vm.searchResults">
+                <div class="row-action-primary">
+                    <i ng-if="group.joinable" 
+                       class="material-icons pointer" ng-click="vm.joinGroup(group)" title="Join group">
+                        group_add
+                    </i>
+                    <i class="material-icons" ng-if="!group.joinable">
+                        group
+                    </i>
+                </div>
+                <div class="row-content">
+                    <div class="least-content">
+                        <i class="material-icons">{{ group.visibility === "PUBLIC" ? "lock_open" : "lock_outline" }}</i>
+                    </div>
+                    <h4 class="list-group-item-heading">
+                        <a ui-sref="group.detail({ groupId: group._id })">{{ group.name }}</a>
+                    </h4>
+                </div>
+            </div>
+            <div class="list-group-separator" ng-repeat-end></div>
+        </div>
     </div>
 </section>
 

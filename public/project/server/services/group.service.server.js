@@ -69,7 +69,22 @@ module.exports = function(app, GroupModel, UserModel, security) {
         GroupModel
             .create(group)
             .then(function(group) {
-                res.json(group);
+
+                UserModel
+                    .addGroup(req.user._id, group._id)
+                    .then(function(user) {
+                        req.login(user, function(err) {
+                            if (err) {
+                                res.status(500).json(err);
+                            } else {
+                                res.json(group);
+                            }
+                        });
+                    })
+                    .catch(function(err) {
+                        res.status(400).json(err);
+                    });
+
             })
             .catch(function(err) {
                 res.status(400).json(err);

@@ -13,6 +13,7 @@
             createGroup: createGroup,
             getGroupById: getGroupById,
             getAllGroups: getAllGroups,
+            searchForGroups: searchForGroups,
             updateGroup: updateGroup,
             deleteGroup: deleteGroup,
             getMembersForGroup: getMembersForGroup,
@@ -46,6 +47,14 @@
         function getAllGroups() {
             return $http
                 .get(UrlService.formatUrl())
+                .then(function(res) {
+                    return res.data;
+                });
+        }
+
+        function searchForGroups(q) {
+            return $http
+                .get(UrlService.formatUrl(), { params: { q: q } })
                 .then(function(res) {
                     return res.data;
                 });

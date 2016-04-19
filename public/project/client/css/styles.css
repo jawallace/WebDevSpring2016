@@ -153,3 +153,7 @@ a {
 body .material-icons {
     vertical-align: middle;
 }
+
+.pointer {
+    cursor: pointer;
+}
