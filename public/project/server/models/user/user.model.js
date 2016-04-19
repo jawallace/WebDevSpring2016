@@ -175,4 +175,41 @@ module.exports = function(mongoose) {
             });
         });
     }
+
+    function addLikeToUser(resolve, reject, userId, commentId) {
+        User.findById(userId, function(err, user) {
+            if (err) {
+                return reject(err);
+            }
+
+            if (user.likes.indexOf(commentId) > -1) {
+                return resolve(user);
+            }
+
+            user.likes.push(commentId);
+
+            user.save(function(err, updatedUser) {
+                return err ? reject(err) : resolve(user);
+            });
+        });
+    }
+    
+    function removeLikeFromUser(resolve, reject, userId, commentId) {
+        User.findById(userId, function(err, user) {
+            if (err) {
+                return reject(err);
+            }
+
+            var i = user.likes.indexOf(commentId);
+            if (i < 0) {
+                return resolve(user);
+            }
+
+            user.likes.splice(i, 1);
+
+            user.save(function(err, updatedUser) {
+                return err ? reject(err) : resolve(user);
+            });
+        });
+    }
 }

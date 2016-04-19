@@ -9,6 +9,8 @@ module.exports = function(app, UserModel, authenticate, security) {
 
     var BASE_URL = '/api/project/user';
     var ID_PARAM_URL = BASE_URL + '/:userId';
+    var LIKE_URL = ID_PARAM_URL + '/like';
+    var LIKE_ID_URL = LIKE_ID_URL + '/:likeId';
     var ERROR_MSG = 'User not found';
     
     app.post(LOGIN_URL,      authenticate,                           login);

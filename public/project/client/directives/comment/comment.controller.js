@@ -29,8 +29,6 @@
             vm.canModify = (vm.bcComment.user === vm.bcUser._id) || vm.bcIsAdmin;
             vm.editing = false;
             vm.editedText = vm.bcComment.text;
-            //TODO
-            if (! vm.bcUser.likes) vm.bcUser.likes = [];
             vm.hasLiked = vm.bcUser.likes.indexOf(vm.bcComment._id) > -1;
             _getUser();
         }
@@ -61,18 +59,37 @@
             if (vm.hasLiked) {
                 return;
             }
-            
-            console.log('TODO');
-            vm.hasLiked = true;
+       
+            vm.bcUser.likes.push(vm.bcComment._id);
+            UserService
+                .updateUser(vm.bcUser._id, { likes: vm.bcUser.likes })
+                .then(function(updated) {
+                    vm.hasLiked = true;
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
         }
         
         function unlikeComment() {
             if (! vm.hasLiked) {
                 return;
             }
+           
+            var i = vm.bcUser.likes.indexOf(vm.bcComment._id);
+            vm.bcUser.likes.splice(i, 1);
+
+            UserService
+                .updateUser(vm.bcUser._id, { likes: vm.bcUser.likes })
+                .then(function(updated) {
+                    vm.hasLiked = false;
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
             
-            console.log('TODO');
-            vm.hasLiked = false;
         }
 
         function cancelEdit() {

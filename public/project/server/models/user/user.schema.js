@@ -11,7 +11,8 @@ module.exports = function(mongoose) {
         firstName: String,
         lastName: String,
         groups: [mongoose.Schema.ObjectId],
-        sudo: { type: Boolean, default: false }
+        sudo: { type: Boolean, default: false },
+        likes: [mongoose.Schema.ObjectId]
     }, { collection: 'project.user' });
     
     UserSchema.plugin(uniqueValidator);
