@@ -27,20 +27,24 @@
         }
 
         function getLatestReading(group) {
+            var loc = { group: group._id };
             ReadingService 
-                .getReadingsForGroup({ group: group._id })
+                .getReadingsForGroup(loc)
                 .then(function(readings) {
                     if (! readings.length) {
                         return;
                     }
 
-                    group.currentReading = resolveReading(readings[0]);
+                    resolveReading(loc, readings[0])
+                        .then(function(reading) {
+                            group.currentReading = reading;
+                        });
                 });
 
             return group;
         }
 
-        function resolveReading(reading) {
+        function resolveReading(loc, reading) {
             var bookDeferred = $q.defer();
             BookService
                 .getBookById(reading.book)
@@ -50,8 +54,9 @@
                 });
 
             var discussionDeferred = $q.defer();
+            loc.reading = reading._id;
             DiscussionService
-                .getDiscussionsForReading(reading._id)
+                .getDiscussionsForReading(loc)
                 .then(function(discussions) {
                     reading.discussions = discussions;
                     discussionDeferred.resolve();
