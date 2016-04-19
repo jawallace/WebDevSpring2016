@@ -1,0 +1,43 @@
+<div class="list-group-item">
+    <div class="row-action-primary">
+        <i class="material-icons">comment</i>
+    </div>
+
+    <div class="row-content">
+        <div class="action-secondary">
+            <i class="material-icons" ng-if="vm.canModify" ng-click="vm.removeComment()" title="Delete comment">delete</i>
+            <i class="material-icons" ng-if="vm.canModify && !vm.editing" ng-click="vm.toggleEdit()" title="Edit comment">
+                edit
+            </i>
+            <i class="material-icons" 
+               ng-if="vm.canModify && vm.editing" 
+               ng-click="vm.toggleEdit()" 
+               title="Stop editing comment">
+                cancel 
+            </i>
+        </div>
+
+        <div class="list-group-item-text" ng-hide="vm.editing">
+            <p> {{ vm.bcComment.text }}</p>
+            <div class="pull-left">
+                <i class="material-icons pointer" ng-hide="vm.hasLiked" title="like" ng-click="vm.likeComment()">mood</i>
+                <i class="material-icons pointer" ng-show="vm.hasLiked" title="unlike" ng-click="vm.unlikeComment()">mood_bad</i>
+            </div>
+            <div class="pull-right">
+                <i class="material-icons">person</i> {{ vm.bcComment.userDetails.name }}
+            </div>
+        </div>
+
+        <div class="list-group-item-text" ng-show="vm.editing">
+            <form ng-submit="vm.commitEdit()">
+                <div class="form-group">
+                    <textarea class="form-control" ng-model="vm.editedText"></textarea>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-default" ng-click="vm.cancelEdit()">Cancel</button>
+                    <button class="btn btn-primary" ng-click="vm.commitEdit()">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

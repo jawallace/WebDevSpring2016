@@ -65,7 +65,7 @@
                 });
         }
         
-        function deleteComment(loc, comment, newComment) {
+        function deleteComment(loc, comment) {
             var newLoc = angular.copy(loc);
             newLog.comment = comment;
 
