@@ -157,3 +157,7 @@ body .material-icons {
 .pointer {
     cursor: pointer;
 }
+
+.edit-comment .form-control {
+    display: inline-block;
+}

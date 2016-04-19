@@ -83,10 +83,11 @@
         function commitEdit() {
             var updated = { text: vm.editedText };
 
-            CommentModel
-                .update(vm.bcLoc, vm.bcComment._id, updated)
+            CommentService
+                .updateComment(vm.bcLoc, vm.bcComment._id, updated)
                 .then(function(comment) {
-                    vm.bcComment = comment;
+                    vm.bcComment.text = comment.text;
+                    vm.editing = false;
                 })
                 .catch(function(err) {
                     //TODO
@@ -96,7 +97,7 @@
 
         function _getUser() {
             UserService
-                .getUserById(vm.bcComment.user)
+                .findUserById(vm.bcComment.user)
                 .then(function(user) {
                     user.name = user.firstName ? user.firstName + ' ' + user.lastName : user.username;
                     vm.bcComment.userDetails = user;

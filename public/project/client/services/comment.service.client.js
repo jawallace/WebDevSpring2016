@@ -39,7 +39,7 @@
        
         function getCommentById(loc, comment) {
             var newLoc = angular.copy(loc);
-            newLog.comment = comment;
+            newLoc.comment = comment;
             return $http
                 .get(UrlService.formatUrl(newLoc))
                 .then(function(res) {
@@ -57,7 +57,7 @@
         
         function updateComment(loc, comment, newComment) {
             var newLoc = angular.copy(loc);
-            newLog.comment = comment;
+            newLoc.comment = comment;
             return $http
                 .put(UrlService.formatUrl(newLoc), newComment)
                 .then(function(res) {
@@ -67,7 +67,7 @@
         
         function deleteComment(loc, comment) {
             var newLoc = angular.copy(loc);
-            newLog.comment = comment;
+            newLoc.comment = comment;
 
             return $http
                 .delete(UrlService.formatUrl(newLoc))

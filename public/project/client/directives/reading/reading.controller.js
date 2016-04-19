@@ -16,6 +16,7 @@
         vm.selectBook = selectBook;
         vm.addNewDiscussion = addNewDiscussion;
         vm.removeDiscussion = removeDiscussion;
+        vm.goToDiscussion = goToDiscussion;
 
         $scope.$watch(function() {
             return vm.bcReading;
@@ -79,6 +80,10 @@
                     // TODO
                     console.log(err);
                 });
+        }
+
+        function goToDiscussion(discussion) {
+            $state.go('discussion', { discussionId: discussion._id, loc: vm.bcLoc });
         }
 
         function _getBook() {

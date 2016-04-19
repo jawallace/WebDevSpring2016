@@ -1,0 +1,46 @@
+<section class="col-md-6 col-md-offset-3 col-xs-12 col-xs-offset-0">
+    <div class="well">
+        <div class="row">
+            <p class="lead">{{ vm.discussion.topic }}</p>
+            <div>
+                <i class="material-icons">person</i> 
+                <a ui-sref="profile({ userId: vm.discussion.user })">{{ vm.discussion.userDetails.name }}</a>
+                @ {{ vm.discussion.posted | date }}
+            </div>
+        </div>
+    </div>
+
+    <div class="well">
+        <div class="row">
+            <div class="text-center" ng-hide="vm.comments.length">
+                No comments found.
+            </div>
+
+            <div class="list-group">
+                <bc-comment 
+                    ng-repeat-start="comment in vm.comments" 
+                    bc-comment="comment" 
+                    bc-loc="comment.loc"
+                    bc-is-admin="vm.isAdmin" 
+                    bc-user="vm.user"
+                    bc-on-remove="vm.onRemove">
+                </bc-comment>
+                <div class="list-group-separator" ng-repeat-end></div>
+            </div>
+
+            <hr>
+
+            <div>
+                <h3>Add New Comment</h3>
+                <form>
+                    <div class="form-group">
+                        <textarea class="form-control" ng-model="vm.newCommentText"></textarea>
+                    </div>
+                    <div class="form-group pull-right">
+                        <button class="btn btn-primary" ng-click="vm.addComment()">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

@@ -72,6 +72,16 @@
                 controller: 'GroupDetailController',
                 controllerAs: 'vm',
                 resolve: requireLogin
+            })
+            .state('discussion', {
+                url: '/discussion/:discussionId',
+                templateUrl: 'views/discussion/discussion.view.html',
+                controller: 'DiscussionController',
+                controllerAs: 'vm',
+                resolve: requireLogin,
+                params: {
+                    loc: { group: undefined, reading: undefined }
+                }
             });
         ;
 

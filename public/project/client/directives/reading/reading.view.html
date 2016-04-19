@@ -86,7 +86,11 @@
 
                         <div class="row-content">
                             <div class="least-content">{{ discussion.posted | date }}</div>
-                            <h4 class="list-group-item-heading">{{ discussion.topic | limitTo:30 }}</h4>
+                            <h4 class="list-group-item-heading">
+                                <a ng-click="vm.goToDiscussion(discussion)">
+                                    {{ discussion.topic | limitTo:30 }}
+                                </a>
+                            </h4>
                             <p class="list-group-item-text">
                                 <i class="material-icons">person</i> 
                                 <a ui-sref="profile({ userId: discussion.user })">
