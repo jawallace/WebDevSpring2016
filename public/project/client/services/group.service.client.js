@@ -110,7 +110,7 @@
 
         function removeMemberFromGroup(loc, member) {
             return $http
-                .delete(UrlService.formatUrl(loc) + '/member/' + member.id)
+                .delete(UrlService.formatUrl(loc) + '/member/' + member)
                 .then(function(res) {
                     return res.data;
                 });
@@ -118,7 +118,7 @@
 
         function removeAdminFromGroup(loc, admin) {
             return $http
-                .delete(UrlService.formatUrl(loc) + '/admin/' + member.id)
+                .delete(UrlService.formatUrl(loc) + '/admin/' + admin)
                 .then(function(res) {
                     return res.data;
                 });

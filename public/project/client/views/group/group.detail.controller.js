@@ -100,7 +100,7 @@
         function removeMember(member) {
             var loc = { group: $stateParams.groupId };
             GroupService
-                .removeMemberFromGruop(loc, member._id)
+                .removeMemberFromGroup(loc, member._id)
                 .then(function() {
                     _getUsers(loc);    
                 })
@@ -113,7 +113,7 @@
         function promoteMember(member) {
             var loc = { group: $stateParams.groupId };
             GroupService
-                .removeMemberFromGruop(loc, member._id)
+                .removeMemberFromGroup(loc, member._id)
                 .then(function() {
                     return GroupService.addAdminToGroup(loc, member._id);
                 })
