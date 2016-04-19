@@ -12,7 +12,7 @@
     <div class="msg" ng-show="vm.msg">{{ vm.msg }}</div>
 
     <div class="list-group" ng-repeat="book in vm.results">
-        <bc-book-list-item bc-book="book.id" bc-allow-selection="vm.allowSelection" bc-on-select="vm.onSelect()">
+        <bc-book-list-item bc-book="book.id" bc-allow-selection="vm.allowSelection" bc-on-selection="vm.onSelect">
         </bc-book-list-item>
         <div class="list-group-separator"></div>
     </div>

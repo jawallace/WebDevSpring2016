@@ -36,7 +36,8 @@
         }
 
         function select() {
-            vm.bcOnSelection()(vm.book._id); 
+            var id = vm.book.id;
+            vm.bcOnSelection()(id); 
         }
     }
 

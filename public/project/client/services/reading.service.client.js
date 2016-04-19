@@ -20,9 +20,9 @@
 
         ////////////////////////////////////////
        
-        function createReading(loc, book, endDate) {
+        function createReading(loc, reading) {
             return $http
-                .post(UrlService.formatUrl(loc) + '/reading', { book: book, endDate: endDate })
+                .post(UrlService.formatUrl(loc) + '/reading', reading)
                 .then(function(res) {
                     return res.data;
                 });
