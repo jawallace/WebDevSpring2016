@@ -17,12 +17,18 @@
         vm.isAdmin;
         vm.editingCurrentReading = false;
         vm.newReading;
+        vm.activePastReading;
+        vm.page = 1;
 
         vm.getLoc = getLocation;
         vm.removeCurrentReading = removeCurrentReading;
         vm.selectBookForNewReading = selectBookForNewReading;
         vm.toggleEditing = toggleEditing;
-        
+       
+        vm.nextPage = nextPage;
+        vm.prevPage = prevPage;
+        vm.removePastReading = removePastReading;
+
         vm.removeMember = removeMember;
         vm.promoteMember = promoteMember;
 
@@ -97,6 +103,34 @@
             vm.editingCurrentReading = !vm.editingCurrentReading;
         }
 
+        function nextPage() {
+            vm.page = vm.page + 1;
+            vm.activePastReading = vm.pastReadings[vm.page - 1];
+        }
+
+        function prevPage() {
+            vm.page = vm.page - 1;
+            vm.activePastReading = vm.pastReadings[vm.page - 1];
+        }
+
+        function removePastReading() {
+            if (! vm.activePastReading) {
+                return;
+            }
+            
+            var loc = { group: $stateParams.groupId };
+            ReadingService
+                .deleteReading(loc, vm.activePastReading._id)
+                .then(function() {
+                    vm.page = 1;
+                    _getReadings(loc); 
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
+        }
+
         function removeMember(member) {
             var loc = { group: $stateParams.groupId };
             GroupService
@@ -144,18 +178,22 @@
             ReadingService
                 .getReadingsForGroup(loc)
                 .then(function(readings) {
+                    console.log('_getReadings', readings);
                     readings.forEach(function(r) {
                         r.loc =  { group: loc.group, reading: r._id };
                     });
+
                     vm.currentReading = undefined;
+                    vm.activePastReading = undefined;
                     vm.pastReadings = [];
                     if (readings.length) {
                         vm.currentReading = readings[0];
                     }
                     
-                    if (readings.length > 2) {
+                    if (readings.length > 1) {
                         readings.shift();
                         vm.pastReadings = readings;
+                        vm.activePastReading = vm.pastReadings[0];
                     }
                 })
                 .catch(function(err) {

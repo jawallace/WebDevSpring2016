@@ -5,12 +5,11 @@
         .module('TheBookClub')
         .controller('ReadingController', ReadingController);
 
-    ReadingController.$inject = [ 'BookService', 'ReadingService', 'DiscussionService', 'UserService', '$state' ];
-    function ReadingController(BookService, ReadingService, DiscussionService, UserService, $state) {
+    ReadingController.$inject = [ 'BookService', 'ReadingService', 'DiscussionService', 'UserService', '$state', '$scope' ];
+    function ReadingController(BookService, ReadingService, DiscussionService, UserService, $state, $scope) {
         var vm = this;
 
         vm.book;
-        vm.reading = vm.bcReading;
         vm.discussions;
         vm.newDiscussionTopic;
 
@@ -18,11 +17,18 @@
         vm.addNewDiscussion = addNewDiscussion;
         vm.removeDiscussion = removeDiscussion;
 
+        $scope.$watch(function() {
+            return vm.bcReading;
+        }, function() {
+            activate();
+        });
+
         activate();
 
         //////////////////////////////////////
 
         function activate() {
+            vm.reading = vm.bcReading;
             _getBook();
             _getDiscussions();
         }

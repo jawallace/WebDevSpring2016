@@ -54,7 +54,7 @@
             <button 
                 class="btn btn-default" 
                 data-toggle="modal" 
-                data-target="#newDiscussionModal" 
+                data-target="#newDiscussionModal-{{ vm.reading._id }}" 
                 title="Add a new discussion">
                 <i class="material-icons">add</i>
             </button>
@@ -102,7 +102,7 @@
     </div>
 </section>
 
-<div class="modal fade" id="newDiscussionModal">
+<div class="modal fade" id="newDiscussionModal-{{ vm.reading._id }}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

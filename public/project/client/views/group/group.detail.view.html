@@ -64,9 +64,54 @@
 
     <!-- Past Readings -->
     <section role="tabpanel" class="tab-pane fade" id="past">
-        <header>
-            <h3>Past Readings</h3>
+        <header ng-if="vm.isAdmin" class="pull-right">
+            <div class="dropdown">
+                <button type="button" class="btn btn-default dropdown-toggle" title="Settings" data-toggle="dropdown">
+                    <i class="material-icons">settings</i>
+                    <span class="caret"></span>
+                </button>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li ng-class="{ disabled: ! vm.activePastReading}">
+                        <a ng-click="vm.removePastReading()">
+                            <i class="material-icons">delete</i> Remove this reading
+                        </a>
+                    </li>
+                    <li ng-class="{ disabled: ! vm.activePastReading }">
+                        <a ng-click="vm.toggleEditing()">
+                            <i class="material-icons">edit</i> 
+                            <span ng-show="vm.editingCurrentReading">Stop editing this reading</span>
+                            <span ng-hide="vm.editingCurrentReading">Edit this reading</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </header>
+
+        <div class="text-center" ng-hide="vm.pastReadings.length">
+            No past readings.
+        </div>
+
+        <div class="row">
+            <bc-reading 
+                ng-if="vm.activePastReading"
+                bc-loc="vm.activePastReading.loc"
+                bc-reading="vm.activePastReading"
+                bc-allow-editing="vm.editingCurrentReading">
+            </bc-reading> 
+        </div>
+
+        <div class="text-center" ng-show="vm.pastReadings.length > 1">
+            <ul class="pager">
+                <li ng-class="{ 'disabled': vm.page === 1 }">
+                    <a class="withripple" href="javascript:void(0)" ng-click="vm.prevPage()">Previous</a>
+                </li>
+                <li ng-class="{ 'disabled': vm.page === vm.pastReadings.length }">
+                    <a class="withripple" href="javascript:void(0)" ng-click="vm.nextPage()">Next</a>
+                </li>
+            </ul>
+        </div>
+
     </section>
 
     <section role="tabpanel" class="tab-pane fade" id="members">
