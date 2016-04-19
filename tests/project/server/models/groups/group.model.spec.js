@@ -306,4 +306,67 @@ describe('GroupModel', function() {
         });
     });
 
+    describe('#search()', function() {
+        var testGroup = {
+            name: 'culture group',
+            admins: [mongoose.Types.ObjectId()],
+            visibility: 'PUBLIC'
+        };
+        var testGroup2 = {
+            name: 'the culture book club',
+            admins: [mongoose.Types.ObjectId()],
+            visibility: 'PUBLIC'
+        };
+        
+        before(function(done) {
+            GroupModel
+                .create(testGroup)
+                .then(function() {
+                    GroupModel
+                        .create(testGroup2)
+                        .then(function() {
+                            done();
+                        })
+                        .catch(done);
+                })
+                .catch(done);
+        });
+
+        it('should find all matches', function(done) {
+            GroupModel
+                .search('culture')
+                .then(function(groups) {
+                    expect(groups).to.have.lengthOf(2);
+                    groups.forEach(function(g) {
+                        expect(g.name).to.be.oneOf([ testGroup.name, testGroup2.name ]);
+                    });
+                    done();
+                })
+                .catch(done);
+        });
+        
+        it('should find all matches regardless of case', function(done) {
+            GroupModel
+                .search('CULTURE')
+                .then(function(groups) {
+                    expect(groups).to.have.lengthOf(2);
+                    groups.forEach(function(g) {
+                        expect(g.name).to.be.oneOf([ testGroup.name, testGroup2.name ]);
+                    });
+                    done();
+                })
+                .catch(done);
+        });
+        
+        it('should not return other groups', function(done) {
+            GroupModel
+                .search('FOObar')
+                .then(function(groups) {
+                    expect(groups).to.have.lengthOf(0);
+                    done();
+                })
+                .catch(done);
+        });
+    });
+
 });

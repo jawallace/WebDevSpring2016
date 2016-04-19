@@ -62,6 +62,20 @@ describe('GroupService', function() {
                 })
                 .end(done);
         });
+
+        it('GET with a q parameter should return groups that match the name', function(done) {
+            request(app)
+                .get('/api/project/group')
+                .query({ q: 'search' })
+                .expect(200)
+                .expect(function(res) {
+                    expect(res.body).to.have.lengthOf(2);
+                    res.body.forEach(function(g) {
+                        expect(g.name).to.be.oneOf([ testData.group4.name, testData.group5.name ]);
+                    });
+                })
+                .end(done);
+        });
         
         it('POST should create a group', function(done) {
             authenticatedAgent
@@ -402,13 +416,13 @@ function initData(done) {
     });
 
     var group4 = new Group({
-        name: 'group 4',
+        name: 'group 4 search',
         admins: [ testUser2._id ],
         visibility: 'PRIVATE'
     });
 
     var group5 = new Group({
-        name: 'group 5',
+        name: 'group SEARCH 5',
         admins: [ testUser._id ],
         members: [ testUser2._id, testUser3._id ], 
         visibility: 'PUBLIC'

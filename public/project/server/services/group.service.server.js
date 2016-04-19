@@ -39,14 +39,25 @@ module.exports = function(app, GroupModel, UserModel, security) {
     var GROUP_ERR_MSG = 'Group not found.';
 
     function getAllGroups(req, res) {
-        GroupModel
-            .findAll()
-            .then(function(groups) {
-                res.json(groups);
-            })
-            .catch(function(err) {
-                res.status(500).json(err);
-            });
+        if (req.query.q) {
+            GroupModel
+                .search(req.query.q)
+                .then(function(groups) {
+                    res.json(groups);
+                })
+                .catch(function(err) {
+                    res.status(500).json(err);
+                });
+        } else {
+            GroupModel
+                .findAll()
+                .then(function(groups) {
+                    res.json(groups);
+                })
+                .catch(function(err) {
+                    res.status(500).json(err);
+                });
+        }
     }
     
     function createGroup(req, res) {

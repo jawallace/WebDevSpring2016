@@ -8,6 +8,7 @@ module.exports = function(mongoose) {
         create: createGroup,
         findById: getGroupById,
         findAll: getAllGroups,
+        search: searchForGroups,
         update: updateGroup,
         delete: deleteGroup,
         addMember: addMemberToGroup,
@@ -36,6 +37,13 @@ module.exports = function(mongoose) {
     function getAllGroups(resolve, reject) {
         GroupModel.find(function(err, group) {
             return err ? reject(err) : resolve(group); 
+        });
+    }
+
+    function searchForGroups(resolve, reject, query) {
+        var q = GroupModel.find({ name: new RegExp(query, 'i') }).limit(10); 
+        q.exec(function(err, groups) {
+            return err ? reject(err) : resolve(groups);
         });
     }
 
