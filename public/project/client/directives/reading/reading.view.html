@@ -85,7 +85,6 @@
                         </div>
 
                         <div class="row-content">
-                            <div class="least-content">{{ discussion.posted | date }}</div>
                             <h4 class="list-group-item-heading">
                                 <a ng-click="vm.goToDiscussion(discussion)">
                                     {{ discussion.topic | limitTo:30 }}
@@ -96,6 +95,7 @@
                                 <a ui-sref="profile({ userId: discussion.user })">
                                     {{ discussion.userDetails.firstName || discussion.userDetails.username }}
                                 </a>
+                                @ {{ discussion.posted | date }}
                             </p>
                         </div>
                     </div>
