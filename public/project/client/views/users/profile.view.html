@@ -75,6 +75,30 @@
             </div>
         </div>
     </section>
+    
+    <section class="col-md-6">
+        <header>
+            <h3>Likes</h3>
+        </header>
+
+        <div class="well">
+            <ul class="list-group" ng-if="vm.user.likeInfo.length">
+                <bc-comment 
+                    ng-repeat-start="comment in vm.user.likeInfo"
+                    bc-comment="comment"
+                    bc-loc="comment.loc"
+                    bc-is-admin="false"
+                    bc-user="vm.user"
+                    bc-on-remove="vm.noop">
+                </bc-comment>
+                <div class="list-group-separator" ng-repeat-end></div>
+            </ul>
+
+            <div class="text-center" ng-if="!vm.user.groupInfo.length">
+                No groups    
+            </div>
+        </div>
+    </section>
 </div>
 
 <section ng-if="! vm.user" class="col-md-8 col-md-offset-2 text-center">

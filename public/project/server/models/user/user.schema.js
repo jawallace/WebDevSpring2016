@@ -5,6 +5,13 @@ var SALT_WORK_FACTOR = 10;
 
 module.exports = function(mongoose) {
 
+    var LikeSchema = mongoose.Schema({
+        group: { type: mongoose.Schema.ObjectId, required: true },
+        reading: { type: mongoose.Schema.ObjectId, required: true },
+        discussion: { type: mongoose.Schema.ObjectId, required: true },
+        comment: { type: mongoose.Schema.ObjectId, required: true }
+    });
+
     var UserSchema = mongoose.Schema({
         username: { type: String, required: true, unique: true, uniqueCaseInsensitive: true },
         password: { type: String, required: true },
@@ -12,7 +19,7 @@ module.exports = function(mongoose) {
         lastName: String,
         groups: [mongoose.Schema.ObjectId],
         sudo: { type: Boolean, default: false },
-        likes: [mongoose.Schema.ObjectId]
+        likes: { type: [LikeSchema], default: [ ] }
     }, { collection: 'project.user' });
     
     UserSchema.plugin(uniqueValidator);

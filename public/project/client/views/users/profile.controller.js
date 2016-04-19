@@ -5,8 +5,8 @@
         .module('TheBookClub')
         .controller('ProfileController', ProfileController);
 
-    ProfileController.$inject = [ 'UserService', '$stateParams', 'user', 'GroupService' ];
-    function ProfileController(UserService, $stateParams, loggedInUser, GroupService) {
+    ProfileController.$inject = [ 'UserService', '$stateParams', 'user', 'GroupService', 'CommentService' ];
+    function ProfileController(UserService, $stateParams, loggedInUser, GroupService, CommentService) {
         var vm = this;
 
         var userId = $stateParams.userId;
@@ -18,7 +18,7 @@
 
         vm.updateUser = updateUser;
         vm.leaveGroup = leaveGroup;
-
+        vm.noop = function() {};
         activate();
 
         //////////////////////////////////////////
@@ -42,6 +42,19 @@
                             vm.user = user;
                             vm.isLoggedInUser = loggedInUser._id === userId;
                         });
+
+                    user.likeInfo = [];
+                    user.likes.forEach(function(l) {
+                        CommentService
+                            .getCommentById(l, l.comment)
+                            .then(function(comment) {
+                                comment.loc = l;
+                                user.likeInfo.push(comment);
+                            })
+                            .catch(function(err) {
+                                console.log(err);
+                            });
+                    });
                 });
         }
 

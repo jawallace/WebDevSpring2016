@@ -29,7 +29,9 @@
             vm.canModify = (vm.bcComment.user === vm.bcUser._id) || vm.bcIsAdmin;
             vm.editing = false;
             vm.editedText = vm.bcComment.text;
-            vm.hasLiked = vm.bcUser.likes.indexOf(vm.bcComment._id) > -1;
+            var l = angular.copy(vm.bcLoc);
+            l.comment = vm.bcComment._id;
+            vm.hasLiked = UserService.likesComment(vm.bcUser, l);
             _getUser();
         }
 
@@ -59,10 +61,11 @@
             if (vm.hasLiked) {
                 return;
             }
-       
-            vm.bcUser.likes.push(vm.bcComment._id);
+      
+            var l = angular.copy(vm.bcLoc);
+            l.comment = vm.bcComment._id;
             UserService
-                .updateUser(vm.bcUser._id, { likes: vm.bcUser.likes })
+                .likeComment(vm.bcUser, l)
                 .then(function(updated) {
                     vm.hasLiked = true;
                 })
@@ -77,11 +80,11 @@
                 return;
             }
            
-            var i = vm.bcUser.likes.indexOf(vm.bcComment._id);
-            vm.bcUser.likes.splice(i, 1);
+            var l = angular.copy(vm.bcLoc);
+            l.comment = vm.bcComment._id;
 
             UserService
-                .updateUser(vm.bcUser._id, { likes: vm.bcUser.likes })
+                .unlikeComment(vm.bcUser, l)
                 .then(function(updated) {
                     vm.hasLiked = false;
                 })
