@@ -38,7 +38,7 @@
                     resetNewGroup();
                 })
                 .catch(function(res) {
-                    console.log('err!', res);   
+                    console.log('err!', res);
                 });
         }
 

@@ -41,7 +41,13 @@ module.exports = function(app, UserModel, authenticate, security) {
         var user = UserModel
             .create(req.body)
             .then(function(user) {
-                utils.sendOr404(user, res, ERROR_MSG);
+                req.login(user, function(err) {
+                    if (err) {
+                        res.status(500).json(err);
+                    } else {
+                        utils.sendOr404(user, res, ERROR_MSG);
+                    }
+                });
             })
             .catch(function(err) {
                 res.status(400).json(err);
@@ -66,7 +72,13 @@ module.exports = function(app, UserModel, authenticate, security) {
         UserModel
             .update(req.target.user._id, req.body)
             .then(function(user) {
-                utils.sendOr404(user, res, ERROR_MSG);
+                req.login(user, function(err) {
+                    if (err) {
+                        res.status(500).json(err);
+                    } else {
+                        utils.sendOr404(user, res, ERROR_MSG);
+                    }
+                });
             })
             .catch(function(err) {
                 res.status(400).json(err);
@@ -77,6 +89,10 @@ module.exports = function(app, UserModel, authenticate, security) {
         UserModel
             .delete(req.target.user._id)
             .then(function(users) {
+                if (req.target.user._id.toString() === req.user._id.toString()) {
+                    req.logOut();
+                }
+
                 utils.sendOr404(users, res, ERROR_MSG);
             })
             .catch(function(err) {
