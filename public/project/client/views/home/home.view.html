@@ -10,7 +10,12 @@
     </div>
 </section>
 
-<section ng-if="user">
+<section ng-if="user" class="top-margin">
+    <div ng-hide="vm.groups.length" class="text-center lead">
+        You do not belong to any groups. 
+        <a ui-sref="group.create">Join or start a group.</a>
+    </div>
+
     <div ng-repeat="group in vm.groups" class="col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
