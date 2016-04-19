@@ -54,13 +54,15 @@
         </div>
 
         <!-- Current Reading Display -->
-        <bc-reading 
-            ng-if="vm.currentReading"
-            bc-loc="vm.currentReading.loc"
-            bc-reading="vm.currentReading"
-            bc-allow-editing="vm.editingCurrentReading"
-            bc-allow-adding-discussion="vm.isGroupMember">
-        </bc-reading> 
+        <div class="row">
+            <bc-reading 
+                ng-if="vm.currentReading"
+                bc-loc="vm.currentReading.loc"
+                bc-reading="vm.currentReading"
+                bc-allow-editing="vm.editingCurrentReading"
+                bc-allow-adding-discussion="vm.isGroupMember">
+            </bc-reading> 
+        </div>
     </section>
 
     <!-- Past Readings -->
