@@ -1,41 +1,131 @@
+
+<section class="col-md-12">
+    <h3>{{ vm.reading.startDate | date }} - {{ vm.reading.endDate | date }}</h3>
+</section>
+
 <section class="col-md-6 col-xs-12">
     <!-- Book information -->
-    <h2>Book</h2>
+    <div class="well">
+        <div class="pull-right" ng-if="vm.bcAllowEditing">
+            <button class="btn btn-default" ng-click="vm.selectBook()" title="Select a new book">
+                <i class="material-icons">edit</i>
+            </button>
+        </div>
+        
+        <h2>Book</h2>
 
-    <div class="text-center" ng-show="!vm.book">
-        Fetching book information...
-    </div>
-
-    <div ng-show="vm.book">
-        <div class="col-md-4 col-xs-12 text-center">
-            <img ng-src="{{ vm.book.cover.thumb }}" title="{{ vm.book.title }}">
+        <div class="text-center" ng-show="!vm.book">
+            Fetching book information...
         </div>
 
-        <div class="col-md-8 col-xs-12">
-            <h3>{{ vm.book.title }} <small class="hidden-xs">{{ vm.book.authors.join(", ") }}</small></h3>
-            <h5 class="visible-xs">{{ vm.book.authors.join(", ") }}</h5>
-
-            <div ng-if="vm.book.rating" 
-                 bc-rating 
-                 bc-value="vm.book.rating" 
-                 bc-out-of="5" 
-                 bc-num-ratings="vm.book.numRatings">
+        <div class="row" ng-show="vm.book">
+            <div class="col-md-4 col-xs-12 text-center top-margin">
+                <img ng-src="{{ vm.book.cover.thumb }}" title="{{ vm.book.title }}">
             </div>
 
-            <p>
-                <span ng-if="vm.book.publisher">{{ vm.book.publisher }}</span> 
-                <span ng-if="vm.book.publisher && (vm.book.date || vm.book.pages)"> | </span>
-                <span ng-if="vm.book.date">{{ vm.book.date | date }}</span>
-                <span ng-if="vm.book.date && vm.book.pages"> | </span>
-                <span ng-if="vm.book.pages">{{ vm.book.pages }} pages</span> 
-            </p>
+            <div class="col-md-8 col-xs-12">
+                <h3>{{ vm.book.title }} <small class="hidden-xs">{{ vm.book.authors.join(", ") }}</small></h3>
+                <h5 class="visible-xs">{{ vm.book.authors.join(", ") }}</h5>
 
-            <p>{{ vm.book.description }}</p>
+                <div ng-if="vm.book.rating" 
+                     bc-rating 
+                     bc-value="vm.book.rating" 
+                     bc-out-of="5" 
+                     bc-num-ratings="vm.book.numRatings">
+                </div>
+
+                <p>
+                    <span ng-if="vm.book.publisher">{{ vm.book.publisher }}</span> 
+                    <span ng-if="vm.book.publisher && (vm.book.date || vm.book.pages)"> | </span>
+                    <span ng-if="vm.book.date">{{ vm.book.date | date }}</span>
+                    <span ng-if="vm.book.date && vm.book.pages"> | </span>
+                    <span ng-if="vm.book.pages">{{ vm.book.pages }} pages</span> 
+                </p>
+
+                <p hm-read-more hm-text="{{ vm.book.description }}" hm-limit="1000"></p>
+            </div>
         </div>
     </div>
 </section>
 
 <section class="col-md-6 col-xs-12">
-    <!-- Discussions -->
-    <div>TODO</div>
+    <div class="well">
+        <div class="pull-right">
+            <button 
+                class="btn btn-default" 
+                data-toggle="modal" 
+                data-target="#newDiscussionModal" 
+                title="Add a new discussion">
+                <i class="material-icons">add</i>
+            </button>
+        </div>
+
+        <!-- Discussions -->
+        <h2>Discussions</h2>
+        
+        <div class="row">
+            <div class="text-center" ng-show="vm.discussions === undefined">
+                Fetching discussions...
+            </div>
+
+            <div class="text-center" ng-show="vm.discussions !== undefined && !vm.discussions.length">
+                No discussions found. 
+            </div>
+
+            <div ng-show="vm.discussions !== undefined && vm.discussions.length">
+                <div class="list-group">
+                    <div ng-repeat-start="discussion in vm.discussions" class="list-group-item">
+                        <div class="row-action-primary">
+                            <a ui-sref="home" ng-if="! vm.bcAllowEditing">
+                                <i class="material-icons">mode_comment</i>
+                            </a>
+                            <a ng-click="vm.removeDiscussion(discussion)" ng-if="vm.bcAllowEditing">
+                                <i class="material-icons">delete</i>
+                            </a>
+                        </div>
+
+                        <div class="row-content">
+                            <div class="least-content">{{ discussion.posted | date }}</div>
+                            <h4 class="list-group-item-heading">{{ discussion.topic | limitTo:30 }}</h4>
+                            <p class="list-group-item-text">
+                                <i class="material-icons">person</i> 
+                                <a ui-sref="profile({ userId: discussion.user })">
+                                    {{ discussion.userDetails.firstName || discussion.userDetails.username }}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <div ng-repeat-end class="list-group-separator"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+<div class="modal fade" id="newDiscussionModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Discussion</h4>
+            </div>
+            
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <textarea 
+                            class="form-control" 
+                            ng-model="vm.newDiscussionTopic" 
+                            placeholder="Discussion topic...">
+                        </textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="vm.addNewDiscussion()">Add</button>
+            </div>
+        </div>
+    </div>
+</div>

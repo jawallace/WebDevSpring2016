@@ -43,6 +43,17 @@
             if (! vm.currentReading) {
                 return;
             }
+            
+            var loc = { group: $stateParams.groupId };
+            ReadingService
+                .deleteReading(loc, vm.currentReading._id)
+                .then(function() {
+                    _getReadings(loc); 
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
         }
 
         function selectBookForNewReading() {
@@ -98,6 +109,9 @@
             ReadingService
                 .getReadingsForGroup(loc)
                 .then(function(readings) {
+                    readings.forEach(function(r) {
+                        r.loc =  { group: loc.group, reading: r._id };
+                    });
                     vm.currentReading = undefined;
                     vm.pastReadings = [];
                     if (readings.length) {

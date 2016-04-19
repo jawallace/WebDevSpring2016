@@ -11,7 +11,7 @@
             scope: {
                 bcLoc: '=',
                 bcReading: '=',
-                bcIsAdmin: '='
+                bcAllowEditing: '='
             },
             controller: 'ReadingController',
             controllerAs: 'vm',

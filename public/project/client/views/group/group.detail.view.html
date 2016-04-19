@@ -42,8 +42,6 @@
             </div>
         </header>
 
-        <div class="clearfix"></div>
-        
         <!-- No Reading Message -->
         <div class="text-center" ng-hide="vm.currentReading">
             <p ng-show="vm.isAdmin">
@@ -56,13 +54,12 @@
         </div>
 
         <!-- Current Reading Display -->
-        <div ng-if="vm.currentReading">
-            <bc-reading 
-                bc-loc="vm.getLoc()(vm.currentReading._id)" 
-                bc-reading="vm.currentReading"
-                bc-allow-editing="vm.editingCurrentReading">
-            </bc-reading>
-        </div>
+        <bc-reading 
+            ng-if="vm.currentReading"
+            bc-loc="vm.currentReading.loc"
+            bc-reading="vm.currentReading"
+            bc-allow-editing="vm.editingCurrentReading">
+        </bc-reading> 
     </section>
 
     <section role="tabpanel" class="tab-pane fade" id="past">
