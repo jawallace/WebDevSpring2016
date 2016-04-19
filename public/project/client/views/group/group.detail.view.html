@@ -62,6 +62,7 @@
         </bc-reading> 
     </section>
 
+    <!-- Past Readings -->
     <section role="tabpanel" class="tab-pane fade" id="past">
         <header>
             <h3>Past Readings</h3>
@@ -69,9 +70,57 @@
     </section>
 
     <section role="tabpanel" class="tab-pane fade" id="members">
-        <header>
-            <h3>Members</h3>
-        </header>
+        <div class="col-md-6 col-xs-12 top-margin">
+            <div class="well">
+                <header>
+                    <h4>Group Admins</h4>
+                </header>
+                
+                <div class="list-group top-margin">
+                    <div class="list-group-item" ng-repeat-start="admin in vm.admins">
+                        <div class="row-action-primary">
+                            <i class="material-icons">person</i>
+                        </div>
+                        <div class="row-content">
+                            <h4 class="list-group-item-heading">
+                                <a ui-sref="profile({ userId: admin._id })">
+                                    {{ admin.firstName || admin.username }} {{ admin.firstName ? admin.lastName : "" }}
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="list-group-separator" ng-repeat-end></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xs-12 top-margin">
+            <div class="well">
+                <header>
+                    <h4>Group Members</h4>
+                </header>
+                
+                <div class="list-group top-margin">
+                    <div class="list-group-item" ng-repeat-start="member in vm.members">
+                        <div class="row-action-primary">
+                            <i class="material-icons">person</i>
+                        </div>
+                        <div class="row-content">
+                            <div class="action-secondary" ng-if="vm.isAdmin">
+                                <i class="material-icons" title="Remove member" ng-click="vm.removeMember(member)">delete</i>
+                                <i class="material-icons" title="Promote to admin" ng-click="vm.promoteMember(member)">arrow_upward</i>
+                            </div>
+                            <h4 class="list-group-item-heading">
+                                <a ui-sref="profile({ userId: member._id })">
+                                    {{ member.firstName || member.username }} {{ member.firstName ? member.lastName : "" }}
+                                </a>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="list-group-separator" ng-repeat-end></div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 

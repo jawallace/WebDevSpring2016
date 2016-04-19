@@ -12,6 +12,8 @@
         vm.group;
         vm.currentReading;
         vm.pastReadings;
+        vm.admins;
+        vm.members;
         vm.isAdmin;
         vm.editingCurrentReading = false;
         vm.newReading;
@@ -20,6 +22,9 @@
         vm.removeCurrentReading = removeCurrentReading;
         vm.selectBookForNewReading = selectBookForNewReading;
         vm.toggleEditing = toggleEditing;
+        
+        vm.removeMember = removeMember;
+        vm.promoteMember = promoteMember;
 
         activate();
 
@@ -30,6 +35,7 @@
 
             _getGroup(loc);
             _getReadings(loc);
+            _getUsers(loc);
         }
 
         function getLocation(reading) {
@@ -91,6 +97,35 @@
             vm.editingCurrentReading = !vm.editingCurrentReading;
         }
 
+        function removeMember(member) {
+            var loc = { group: $stateParams.groupId };
+            GroupService
+                .removeMemberFromGruop(loc, member._id)
+                .then(function() {
+                    _getUsers(loc);    
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
+        }
+
+        function promoteMember(member) {
+            var loc = { group: $stateParams.groupId };
+            GroupService
+                .removeMemberFromGruop(loc, member._id)
+                .then(function() {
+                    return GroupService.addAdminToGroup(loc, member._id);
+                })
+                .then(function() {
+                    _getUsers(loc);
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
+        }
+
         function _getGroup(loc) {
             GroupService
                 .getGroupById(loc)
@@ -122,6 +157,28 @@
                         readings.shift();
                         vm.pastReadings = readings;
                     }
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
+        }
+
+        function _getUsers(loc) {
+            GroupService
+                .getAdminsForGroup(loc)
+                .then(function(admins) {
+                    vm.admins = admins;                    
+                })
+                .catch(function(err) {
+                    //TODO
+                    console.log(err);
+                });
+            
+           GroupService
+                .getMembersForGroup(loc)
+                .then(function(members) {
+                    vm.members = members;
                 })
                 .catch(function(err) {
                     //TODO
