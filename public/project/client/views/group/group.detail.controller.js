@@ -81,7 +81,8 @@
             };
 
             // not ideal at all, but it works.
-            $(".modal-backdrop").hide();
+            $(".modal-backdrop").remove();
+            $('body').removeClass('modal-open');
 
             $state.go('search', params);
         }
